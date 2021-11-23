@@ -11,8 +11,8 @@
 ## API
 
 ## TEAM CodeButlers
-|이름|Position|
-|---|---|
+|Name|Position|Github|
+|----|--------|------|
 |박종환(팀장)|Back-end|
 |홍순상|Full-stack|
 |양예솔|Back-end|
