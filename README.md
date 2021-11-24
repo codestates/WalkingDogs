@@ -12,12 +12,10 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 - 카카오 지도 API를 활용해 모임 위치를 지도 위에 표시해주기 때문에 모임들을 한눈에 확인할 수 있습니다!
 - 동적인 애니메이션을 적극 활용하여 다채로운 유저 경험을 제공합니다.
 
-### 👉 WalkingDogs 사용해보기 ###
+### 👉 WalkingDogs 사용해보기 (배포링크)
 
 ## Tech Stack
 ![image](https://cdn.discordapp.com/attachments/912245935197802554/912986676865949696/2021-11-24_5.42.06_1.png)
-
-## Architecture
 
 ## DB Schema
 [DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
@@ -26,8 +24,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ## API
 [API Documents](https://0402abcd.gitbook.io/walkingdogs-api/)
 
-
-
+## 기능별 시연 gif (프로젝트 후 넣을 예정)
 
 ## TEAM CodeButlers
 |Role|Name|Position|Github|
@@ -36,3 +33,10 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 |팀원|홍순상|Full-stack|[ZerniaMarle](https://github.com/ZerniaMarle)|
 |팀원|양예솔|Back-end|[yy1234928](https://github.com/yy1234928)|
 |팀원|이진희|Front-end|[JinHeeZeeniiLee](https://github.com/JinHeeZeeniiLee)|
+
+## More Info
+Team Notion(추후에 넣을 예정)
+
+Wiki (위키로 이동 -> 추후에 넣을 예쩡)
+
+FlowChart (추후에 시간이 되면 넣을 예정)
