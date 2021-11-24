@@ -20,12 +20,12 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ## Architecture
 
 ## DB Schema
-https://dbdiagram.io/d/619c2ad102cf5d186b6315ef
+[DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
 ![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-11-24-19_12_43](https://user-images.githubusercontent.com/71960647/143218947-ba40dc62-fbd0-4f03-b2fb-e344853e32a7.png)
 
 ## API
-https://0402abcd.gitbook.io/walkingdogs-api/
-![walkingDogs_API_2](https://user-images.githubusercontent.com/71960647/143217832-9b36d42c-01db-4005-a398-ff910f08e1f0.png)
+[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/)
+
 
 
 
