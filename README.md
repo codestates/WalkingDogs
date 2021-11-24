@@ -23,7 +23,8 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 
 ## API
 https://0402abcd.gitbook.io/walkingdogs-api/
-![screencapture-app-gitbook-s-F0MTURl2pqFUCAUg48Kz-reference-api-reference-2021-11-24-18_54_27](https://user-images.githubusercontent.com/71960647/143215881-5df2ec85-7e45-4dbe-8844-5e853e1199c4.png)
+![screencapture-app-gitbook-s-F0MTURl2pqFUCAUg48Kz-reference-api-reference-2021-11-24-18_54_27](https://user-images.githubusercontent.com/71960647/143217502-0bbe28e5-d21d-4669-b8c0-0a8ae27b5799.png)
+
 
 ## TEAM CodeButlers
 |Role|Name|Position|Github|
