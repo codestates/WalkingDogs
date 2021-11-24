@@ -21,9 +21,9 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ## API
 
 ## TEAM CodeButlers
-|Name|Position|Github|
-|----|--------|------|
-|박종환(팀장)|Back-end|
-|홍순상|Full-stack|
-|양예솔|Back-end|
-|이진희|Front-end|
+role|Name|Position|Github|
+|---|----|--------|------|
+|팀장|박종환(팀장)|Back-end|jhpark9007|
+|팀원|홍순상|Full-stack|zernia765|
+|팀원|양예솔|Back-end|pine9093|
+|팀원|이진희|Front-end|zniilee|
