@@ -22,7 +22,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ## DB Schema
 
 ## API
-https://0402abcd.gitbook.io/final-project-api-1/
+https://app.gitbook.com/s/F0MTURl2pqFUCAUg48Kz/
 ## TEAM CodeButlers
 |Role|Name|Position|Github|
 |----|----|--------|------|
