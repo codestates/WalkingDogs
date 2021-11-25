@@ -34,8 +34,8 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ## More Info
 [API Documents](https://0402abcd.gitbook.io/walkingdogs-api/reference/api-reference)
 
-Team Notion(추후에 넣을 예정)
+[Team Notion](https://www.notion.so/CodeButlers-WalkingDogs-8e1788a6fe494819b61950c82709ced0)
 
-Wiki (위키로 이동 -> 추후에 넣을 예쩡)
+[Wiki](https://github.com/codestates/WalkingDogs/wiki)
 
 FlowChart (추후에 시간이 되면 넣을 예정)
