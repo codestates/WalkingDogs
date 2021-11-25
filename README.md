@@ -21,9 +21,6 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 [DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
 ![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-11-25-13_06_27](https://user-images.githubusercontent.com/71960647/143378172-94eb71b3-fded-4e35-b72a-f2270be406dc.png)
 
-## API
-[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/)
-
 ## 기능별 시연 gif (프로젝트 후 넣을 예정)
 
 ## TEAM CodeButlers
@@ -35,6 +32,8 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 |팀원|이진희|Front-end|[JinHeeZeeniiLee](https://github.com/JinHeeZeeniiLee)|
 
 ## More Info
+[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/)
+
 Team Notion(추후에 넣을 예정)
 
 Wiki (위키로 이동 -> 추후에 넣을 예쩡)
