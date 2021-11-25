@@ -32,7 +32,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 |팀원|이진희|Front-end|[JinHeeZeeniiLee](https://github.com/JinHeeZeeniiLee)|
 
 ## More Info
-[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/)
+[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/reference/api-reference)
 
 Team Notion(추후에 넣을 예정)
 
