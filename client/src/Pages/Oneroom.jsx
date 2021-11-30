@@ -17,6 +17,7 @@ export const ImageBox = styled.div`
     width: 20%;
     height: 70%;
     border-radius:50%;
+    object-fit: fill;
 `
 
 export const RoominfoBox = styled.div`
@@ -31,26 +32,32 @@ export const RoominfoBox = styled.div`
 `
 
 
-export const InfoBox = styled.div`
+export const UsernameBox = styled.div`
     border: 1px solid green;
     min-width: 30%;
     height: 30px;
     margin: 5px;
 `
+
+export const ContentsBox = styled.div`
+    border: 1px solid green;
+    min-width: 96%;
+    height: 30rem;
+    margin: 5px;
+`
+
 // styled-component Boundary
 const Oneroom = () => {
     return(
         <>
         <OneroomContainer>
-            <ImageBox >
-                <img src='image/puppy-test.jpeg'/>
-            </ImageBox>
+            <ImageBox src='../puppy-test.jpeg'/>
             <RoominfoBox>
-            <InfoBox className='username'>
-                        유저네임</InfoBox>
-            <InfoBox className='address'>
+            <UsernameBox className='username'>
+                        유저네임</UsernameBox>
+            <ContentsBox className='address'>
                         내용
-                </InfoBox>
+                </ContentsBox>
             </RoominfoBox>
         </OneroomContainer>
         </>
