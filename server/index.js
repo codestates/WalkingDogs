@@ -3,10 +3,12 @@ require('dotenv').config();
 const https = require('https');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
 const express = require('express');
-const https = require('https');
+const options = require('./config').options;
 const app = express();
+const port = 80;
+const httpsPort = 443;
+const httpsServer = https.createServer(options, app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,10 +20,6 @@ app.use(
   }),
 );
 app.use(cookieParser());
-
-const options = require('./config').options;
-const port = 80;
-const httpsPort = 443;
 
 app.use((req, res, next) => {
   if (req.secure) {
@@ -52,11 +50,12 @@ app.get('/', (req, res) => {
 //   httpsServer = app.listen(HTTPS_PORT);
 // }
 
-module.exports = httpsServer;
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
-https.createServer(options, app).listen(httpsPort, () => {
+httpsServer.listen(httpsPort, () => {
   console.log(`Example app listening at https://localhost:${httpsPort}`);
 });
+
+module.exports = httpsServer;
