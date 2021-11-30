@@ -14,13 +14,23 @@ export const NavbarContainer = styled.nav`
 
 ` 
 
+export const NavbarTitle = styled.div`
+    color: white; 
+    font-size: 35px;
+    text-decoration: none;
+    margin-left: 10px;
+    font-family: "Playfair Display", serif;
+    font-family: "Rammetto One", cursive;
+`
 
 
+
+// styled-component Boundary
 
 const Nav = () => {
   return (
     <NavbarContainer>
-      <div className="navbar_title_container">
+      <NavbarTitle>
         <div className='nav_logo'>
           <img src='./logo.ico' 
                 style={{width: '50px', 
@@ -36,7 +46,7 @@ const Nav = () => {
             WalkingDogs
           </Link>
         </div>
-      </div>
+      </NavbarTitle>
 
       <div className="navbar_mypage">
         <Link to="/mypage" className="mypage_icon" render={(props)=><Mypage/>}>

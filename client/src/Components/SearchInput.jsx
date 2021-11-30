@@ -1,9 +1,25 @@
 import React ,{useRef}from 'react';
 import styled from 'styled-components'
+import media from 'styled-media-query'
 
 
 const InputWrapper = styled.label`
     height:100%;
+    ${media.greaterThan('medium')`
+        min-width: ${(props) => {
+            if(props.sort === '지역') return '9rem';
+            if(props.sort === '날짜') return '11.5rem';
+            if(props.sort === '시간') return '5rem';
+                return '6.5rem';
+        }};
+
+        max-width: ${(props) => {
+            if(props.sort === '지역') return '12rem';
+            if(props.sort === '날짜') return '15rem';
+            if(props.sort === '시간') return '8rem';
+                return '10rem';
+        }};
+    `}
     display: flex;
     position: relative;
 `

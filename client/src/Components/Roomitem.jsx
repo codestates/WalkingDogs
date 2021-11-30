@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components'
+import {Link} from 'react-router-dom'
 
 
 export const ItemContainer = styled.div`
     display: flex;
     justify-content: center;
     border: 1px solid #000000;
-    width: 25%;
-    height: 230px;
-    margin: 10px 10px;
+    width: auto;
+    height: 200px;
+    margin: 5px 5px;
     border-radius: 30px;
     align-items: center;
 `
@@ -18,7 +19,7 @@ export const ImageBox = styled.div`
     border: 1px solid #000000;
     margin-left: 3px;
     width: 30%;
-    height: 60%;
+    height: 40%;
     align-items: center;
     border-radius: 100%;
     
@@ -58,16 +59,16 @@ export const RoomContentBox = styled.div`
 
 const Roomitem = () => {
     return(
-        <>
+        <Link to='/oneroom'>
         <ItemContainer>
             <ImageBox> 사진 </ImageBox>
-                <Roominfo>정보
+                <Roominfo>
                     <UsernameBox>유저 네임</UsernameBox>
                     <AddressesBox> Address </AddressesBox>
                     <RoomContentBox>Contents</RoomContentBox>
                 </Roominfo>
         </ItemContainer>
-        </>
+        </Link>
 
     );
 };
