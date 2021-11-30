@@ -9,6 +9,8 @@ const app = express();
 const port = 80;
 const httpsPort = 443;
 const httpsServer = https.createServer(options, app);
+const controllers = require('./controllers');
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,6 +37,12 @@ app.get('/', (req, res) => {
 });
 
 // router
+app.post('/login', controllers.user.login);
+app.post('/logout', controllers.user.logout);
+app.post('/signup', controllers.user.signup);
+
+app.post('/kakao', controllers.oauth.kakao);
+app.post('/google', controllers.oauth.google);
 
 // const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
@@ -58,4 +66,6 @@ httpsServer.listen(httpsPort, () => {
   console.log(`Example app listening at https://localhost:${httpsPort}`);
 });
 
+
 module.exports = httpsServer;
+
