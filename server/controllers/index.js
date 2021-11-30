@@ -4,8 +4,16 @@ module.exports = {
     logout: require('./user/logout'),
     signup: require('./user/signup'),
   },
-  mypage: {},
+  oauth: {
+    kakao: require('./oauth/kakao'),
+    google: require('./oauth/google'),
+  },
+  mypage: {
+    doglist: require('./mypage/dog-list'),
+    myroom: require('./mypage/myroom'),
+    password: require('./mypage/password'),
+    profile: require('./mypage/profile'),
+  },
   room: {},
-  roomDetail: {},
   map: {},
 };
