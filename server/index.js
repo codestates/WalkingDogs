@@ -8,6 +8,8 @@ const express = require('express');
 const https = require('https');
 const app = express();
 
+const controllers = require('./controllers');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -37,6 +39,12 @@ app.get('/', (req, res) => {
 });
 
 // router
+app.post('/login', controllers.user.login);
+app.post('/logout', controllers.user.logout);
+app.post('/signup', controllers.user.signup);
+
+app.post('/kakao', controllers.oauth.kakao);
+app.post('/google', controllers.oauth.google);
 
 // const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
