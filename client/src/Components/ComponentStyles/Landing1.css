@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+  }
+  
+  .lading1_background {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .landing1_script {
+    border: 1px solid #000000;
+    font-size: 45px;
+    margin-left: 10px;
+  }
+  
+  .landing1_image {
+    border: 2px solid #000000;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
