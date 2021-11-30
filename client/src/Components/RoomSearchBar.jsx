@@ -1,7 +1,7 @@
 import React from "react";
 import styled from 'styled-components'
 import SearchInput from "./SearchInput";
-import InputDatepicker from "./InputDatapicker";
+import InputDatepicker from "./InputDatepicker";
 
 const InputContainer = styled.form`
     margin-bottom: 2rem;
