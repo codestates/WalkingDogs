@@ -27,10 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     breed: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    gender: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'dog',
+    tableName: 'dog'
   });
   return dog;
 };
