@@ -43,6 +43,11 @@ app.post('/signup', controllers.user.signup);
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
 
+app.get('/dog-list', controllers.mypage.dogList);
+app.get('/myroom', controllers.mypage.myroom);
+app.patch('/profile', controllers.mypage.profile);
+app.post('/password', controllers.mypage.password);
+
 // const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 // let httpsServer;

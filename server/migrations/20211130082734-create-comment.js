@@ -20,6 +20,7 @@ module.exports = {
       },
       room_id: {
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         references: {
           model: 'room',
           key: 'id',

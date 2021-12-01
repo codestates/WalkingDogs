@@ -9,7 +9,7 @@ module.exports = {
     google: require('./oauth/google'),
   },
   mypage: {
-    doglist: require('./mypage/dog-list'),
+    dogList: require('./mypage/dogList'),
     myroom: require('./mypage/myroom'),
     password: require('./mypage/password'),
     profile: require('./mypage/profile'),
