@@ -1,6 +1,7 @@
 const { user } = require('../../models');
 require('dotenv').config();
 
+// 2021.12.1 완료
 module.exports = async (req, res) => {
   const { email, password, username, image } = req.body;
 
@@ -17,9 +18,9 @@ module.exports = async (req, res) => {
         email: email,
         password: password,
         username: username,
-        image: image,
+        image: image ? image : null,
       });
-      return res.status(201).send(newUser);
+      return res.status(201).json(newUser);
     }
   }
 };

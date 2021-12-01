@@ -1,25 +1,24 @@
-const { user, room } = require('../../models');
+const { user, dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
-
 module.exports = async (req, res) => {
     const userInfo = await isAuthorized(req);
+    console.log(userInfo);
     if(!userInfo) {
+        
         res.status(401).send({ message: 'this token is not authorized' });
     } else {
+       
         const id = userInfo.id;
-        const roomList = await user.findOne({
+        const dogList = await user.findOne({
             where: {
                 id: id
             },
-            include: room
+            include: dog
         })
-        if (!roomList) {
+        if (!dogList) {
             res.status(401).send({message: 'no such user in the database' });
         } else {
-            console.log(roomList.dataValues);
-            res.status(200).send({ data: {
-                rooms: roomList.dataValues.rooms, message: 'ok' }
-            });
+            res.status(200).send({ dogs: dogList.dataValues.dogs, message: 'ok' });
         }
     }
 };
