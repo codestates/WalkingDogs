@@ -17,9 +17,9 @@ module.exports = async (req, res) => {
         email: email,
         password: password,
         username: username,
-        image: image,
+        image: image ? image : null,
       });
-      return res.status(201).send(newUser);
+      return res.status(201).json(newUser);
     }
   }
 };
