@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
         username: username,
         image: image ? image : null,
       });
-      return res.status(201).send(newUser);
+      return res.status(201).json(newUser);
     }
   }
 };

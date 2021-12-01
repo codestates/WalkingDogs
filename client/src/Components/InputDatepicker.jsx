@@ -12,7 +12,9 @@ const InputDatepicker = () => {
 
 const [date, setDate] = useState(new Date());
 
-
+    const handleClearClick = () => {
+        
+    }
 
     return(
         <Container>

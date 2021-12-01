@@ -49,6 +49,12 @@ app.get('/room/:room_id', controllers.room.roomInfo);
 app.post('/new-room', controllers.room.newRoom);
 app.post('/room/:room_id/join', controllers.room.joinRoom);
 
+// mypage
+app.get('/dogList', controllers.mypage.dogList);
+app.get('/myroom', controllers.mypage.myroom);
+app.patch('/profile', controllers.mypage.profile);
+app.post('/password', controllers.mypage.password);
+
 // const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 // let httpsServer;
