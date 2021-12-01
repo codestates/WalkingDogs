@@ -11,7 +11,6 @@ const httpsPort = 443;
 const httpsServer = https.createServer(options, app);
 const controllers = require('./controllers');
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -71,6 +70,4 @@ httpsServer.listen(httpsPort, () => {
   console.log(`Example app listening at https://localhost:${httpsPort}`);
 });
 
-
 module.exports = httpsServer;
-

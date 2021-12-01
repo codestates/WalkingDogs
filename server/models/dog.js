@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class dog extends Model {
     /**
@@ -14,25 +12,27 @@ module.exports = (sequelize, DataTypes) => {
       models.dog.hasMany(models.room_dog, {
         foreignKey: 'dog_id',
         targetKey: 'id',
-      })
+      });
 
       models.dog.belongsTo(models.user, {
-        foreignKey: { name: "user_id", allowNull: false },
-        targetKey: "id",
-        onDelete: "CASCADE",
-      })
+        foreignKey: { name: 'user_id', allowNull: false },
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+      });
     }
-  };
-  dog.init({
-    user_id: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    breed: DataTypes.STRING,
-    image: DataTypes.STRING,
-    gender: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'dog',
-    tableName: 'dog'
-  });
+  }
+  dog.init(
+    {
+      user_id: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      breed: DataTypes.STRING,
+      image: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'dog',
+      tableName: 'dog',
+    },
+  );
   return dog;
 };

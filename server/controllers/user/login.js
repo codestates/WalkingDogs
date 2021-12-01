@@ -21,8 +21,12 @@ module.exports = async (req, res) => {
     const copy = Object.assign({}, userInfo);
     delete copy.dataValues.email;
     delete copy.dataValues.password;
-    console.log(copy.dataValues);
     const token = generateAccessToken(copy.dataValues);
-    return res.status(200).json({ data: { accessToken: token, user_image: './test.img' }, message: 'ok' });
+    return res
+      .status(200)
+      .json({
+        data: { accessToken: token, user_image: './test.img' },
+        message: 'ok',
+      });
   }
 };

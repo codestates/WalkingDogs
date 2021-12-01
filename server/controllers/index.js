@@ -14,6 +14,10 @@ module.exports = {
     password: require('./mypage/password'),
     profile: require('./mypage/profile'),
   },
-  room: {},
+  room: {
+    create: require('./room/create'),
+    info: require('./room/info'),
+    join: require('./room/join'),
+  },
   map: {},
 };

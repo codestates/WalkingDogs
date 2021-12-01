@@ -3,7 +3,7 @@ const { sign, verify } = require('jsonwebtoken');
 
 module.exports = {
   generateAccessToken: data => {
-    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
+    return sign(data, process.env.ACCESS_SECRET, { expiresIn: '3h' });
   },
 
   generateRefreshToken: data => {
@@ -22,6 +22,7 @@ module.exports = {
 
     // 전달받은 JWT 토큰
     const accessToken = req.cookies['jwt'];
+
     
     // 토큰 정보 
     const result = await verify(accessToken, process.env.ACCESS_SECRET, (err, decoded) => {
@@ -35,6 +36,5 @@ module.exports = {
       return null;
     } 
     return { ...result }
-
   },
 };
