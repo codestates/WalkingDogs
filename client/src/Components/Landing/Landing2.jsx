@@ -1,6 +1,11 @@
 import React from "react";
 import "../ComponentStyles/Landing2.css";
 
+import styled from 'styled-components'
+
+
+// styled-component Boundary
+
 const Landing2 = () => {
   return (
     <>
