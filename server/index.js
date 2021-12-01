@@ -35,15 +35,22 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// router
+// routers
+
+// user
 app.post('/login', controllers.user.login);
 app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
-
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
 
-app.get('/dog-list', controllers.mypage.dogList);
+// room
+app.get('/room/:room_id', controllers.room.roomInfo);
+app.post('/new-room', controllers.room.newRoom);
+app.post('/room/:room_id/join', controllers.room.joinRoom);
+
+// mypage
+app.get('/dogList', controllers.mypage.dogList);
 app.get('/myroom', controllers.mypage.myroom);
 app.patch('/profile', controllers.mypage.profile);
 app.post('/password', controllers.mypage.password);

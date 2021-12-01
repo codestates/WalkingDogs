@@ -15,9 +15,9 @@ module.exports = {
     profile: require('./mypage/profile'),
   },
   room: {
-    create: require('./room/create'),
-    info: require('./room/info'),
-    join: require('./room/join'),
+    joinRoom: require('./room/joinRoom'),
+    newRoom: require('./room/newRoom'),
+    roomInfo: require('./room/roomInfo'),
   },
   map: {},
 };

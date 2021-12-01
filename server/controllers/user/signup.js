@@ -1,6 +1,7 @@
 const { user } = require('../../models');
 require('dotenv').config();
 
+// 2021.12.1 완료
 module.exports = async (req, res) => {
   const { email, password, username, image } = req.body;
 

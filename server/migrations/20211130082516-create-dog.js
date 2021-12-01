@@ -6,39 +6,39 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       user_id: {
         type: Sequelize.INTEGER,
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
         references: {
           model: 'user',
           key: 'id',
-        }
+        },
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       breed: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       gender: {
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('dog');
-  }
+  },
 };

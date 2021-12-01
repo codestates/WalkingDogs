@@ -6,17 +6,18 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       message: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       user_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'user',
           key: 'id',
-        }
+        },
       },
       room_id: {
         type: Sequelize.INTEGER,
@@ -24,19 +25,19 @@ module.exports = {
         references: {
           model: 'room',
           key: 'id',
-        }
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('comment');
-  }
+  },
 };
