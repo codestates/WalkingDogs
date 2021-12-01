@@ -17,6 +17,7 @@ module.exports = {
       leader_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         references: {
           model: 'user',
           key: 'id',

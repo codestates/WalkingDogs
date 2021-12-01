@@ -10,6 +10,7 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         references: {
           model: 'user',
           key: 'id',
@@ -22,6 +23,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       image: {
+        type: Sequelize.STRING
+      },
+      gender: {
         type: Sequelize.STRING
       },
       createdAt: {
