@@ -55,6 +55,9 @@ app.get('/myroom', controllers.mypage.myroom);
 app.patch('/profile', controllers.mypage.profile);
 app.post('/password', controllers.mypage.password);
 
+// map
+app.get('/location', controllers.map.location);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
