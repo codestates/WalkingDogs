@@ -1,47 +1,96 @@
 // import { faBuilding } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Footer.css";
+import styled from 'styled-components'
+
+
+export const FooterContainer = styled.footer`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000;
+  padding: 0 20px;
+  text-decoration:none;
+  height: auto;
+`
+
+export const FooterLogo = styled.div`
+  width: auto !important;
+`
+
+export const FooterIntro = styled.div`
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+  width:auto;
+`
+
+export const IntroTitle = styled.div`
+  color: #ffffff;
+  font-size: 35px;
+`
+
+export const Li = styled.li`
+  padding: 6px 12px;
+  text-align: center;
+  font-size: 20px;
+`
+
+export const MemberBox = styled.div`
+  list-style: none;
+  text-align: center;
+`
+
+export const MemberA = styled.a`
+  color: #ffffff;
+  text-decoration: none;
+`
+
+// styled-component Boundary
 
 const Footer = () => {
   return (
-    <footer className="footer_container">
-      <div className="footer_logo">
+    <FooterContainer>
+      <FooterLogo>
         {/* <FontAwesomeIcon icon={faBuilding} className="footer_icon" /> */}
-        <img src='./mainlogo.png' style={{width: '30%', height: '30%', objectFit:'cover'}}/>
-      </div>
+        <img src='./mainlogo.png' 
+              style={{width: '30%', 
+                      height: '30%', 
+                      objectFit:'cover'}}/>
+      </FooterLogo>
 
-      <div className="footer_introduce">
-        <div className="footer_introduce_title">About us</div>
-        <li>
+      <FooterIntro>
+        <IntroTitle>About us</IntroTitle>
+        <Li>
           <a href="https://github.com/codestates/WalkingDogs"
               style={{color:'white',textDecoration:'none'}}>Repository</a>
-        </li>
-        <li>
+        </Li>
+        <Li>
           <a href="https://github.com/codestates/WalkingDogs/wiki"
               style={{color:'white',textDecoration:'none'}}> WIKI </a>
-        </li>
-      </div>
+        </Li>
+      </FooterIntro>
 
-      <div className="footer_member_box">
+      <MemberBox>
         <div className="footer_member_title">Members</div>
-        <li>
+        <Li>
           <a href=""
               style={{color:'white',textDecoration:'none'}}> 박종환 </a>
-        </li>
-        <li>
+        </Li>
+        <Li>
           <a href=""
               style={{color:'white',textDecoration:'none'}}> 양예솔 </a>
-        </li>
-        <li>
+        </Li>
+        <Li>
           <a href=""
               style={{color:'white',textDecoration:'none'}}> 이진희 </a>
-        </li>
-        <li>
+        </Li>
+        <Li>
           <a href=""
               style={{color:'white',textDecoration:'none'}}> 홍순상 </a>
-        </li>
-      </div>
-    </footer>
+        </Li>
+      </MemberBox>
+    </FooterContainer>
   );
 };
 
