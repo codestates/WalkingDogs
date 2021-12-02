@@ -2,25 +2,79 @@ import React, {useEffect, useState} from "react"
 import { faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useHistory } from 'react-router'
 import Mypage from '../Pages/Mypage'
-import styled from 'styled-components'
+import styled,{css} from 'styled-components'
+import media from 'styled-media-query';
+import { signinAction,
+         signinModalOnAction,
+         signupAction,
+         signupModalOnAction } from "../store/actions";
 
-export const NavbarContainer = styled.nav`
+import { useDispatch, useSelector } from "react-redux";
+
+
+export const HeaderStyle = styled.header`
+  background-color: #646fcb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+`
+
+
+export const NavContainer = styled.nav`
     display: flex;
+    flex: 1;
     justify-content: space-between;
     align-items: center;
     background-color: #646fcb;
-    padding: 7px 20px;
+    padding: 1rem 0.5rem;
+    ${media.lessThan("medium")`
+      padding: 1rem;
+    `}
 ` 
 
 export const NavbarTitle = styled.div`
     color: white; 
-    font-size: 35px;
     text-decoration: none;
-    margin-left: 10px;
-    font-family: "Playfair Display", serif;
-    font-family: "Rammetto One", cursive;
+    margin-left: 1px;
 `
+
+export const NavLink = styled(Link)`
+  margin-right: 1rem;
+  height:1rem;
+`;
+
+export const NavTitleImg = styled.img`
+  margin-right: 1rem;
+  display:block;
+  object-fit: scale-down;
+
+  ${({isLogin}) => 
+    !isLogin && 
+    css`
+      ${media.lessThan("medium")`
+        display: block;
+      `}
+    `}
+`;
+
+export const NavShortImg = styled.img`
+margin-right: 1rem;
+display:none;
+object-fit: scale-down;
+
+${({isLogin}) => 
+  !isLogin && 
+  css`
+    ${media.lessThan("small")`
+      display: block;
+    `}
+  `}
+`;
+
+
 
 export const LoginModalBtn = styled.button`
   border: 0.5px solid white;
@@ -42,6 +96,12 @@ export const SignupBtn = styled.button`
 `
 
 export const ModalContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex: 2;
+`
+
+export const userBox = styled.div`
   display: flex;
   justify-content: flex-end;
   flex: 2;
@@ -109,14 +169,14 @@ export const LoginModalView = styled.div.attrs({role: 'dialog'})`
  `
 
 export const SignupModalView = styled.div.attrs({role: 'dialog'})`
-display: flex;
-justify-content: center;
-flex-direction: column;
-align-items: center;
-border-radius: 15px;
-background-color: white;
-width: 30rem;
-height: 40rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  background-color: white;
+  width: 30rem;
+  height: 40rem;
 
 > div.close.btn {
  margin-top: 15px;
@@ -167,10 +227,25 @@ export const UserImg = styled.img`
 
 const InputContainer = styled.div`
   height: auto;
+  flex-direction: column;
 `;
 
 
 const Input = styled.input`
+  height: 2rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-black);
+  &:focus{
+    outline: 1px solid #ffffff;
+    border: hidden;
+  }
+  ::placeholder {
+    color: var(--color-gray);
+  }
+`;
+
+const PWInput = styled.input.attrs({type: 'password'})`
   height: 2rem;
   padding: 0 0.5rem;
   font-size: 0.875rem;
@@ -195,43 +270,31 @@ const Input = styled.input`
 
 // styled-component Boundary
 
-function Nav({ isLogin, setIsLogin, isUser, setIsUser }) {
+function Nav({ }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
-  
-  const openModalHandler = () => {
-    setIsOpen(!isOpen);
-  };
-  
-  const openSignupHandeler = () => {
-    setIsSignUpOpen(!isSignUpOpen);
-  }
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
   
 
 
   return (
-    <NavbarContainer>
+    <NavContainer>
       <NavbarTitle>
-        <div className='nav_logo'>
-          <img src='./logo.ico'
-            style={{
-              width: '50px',
-              height: '50px',
-              objectFit: 'cover'
-            }} />
-          <Link to="/"
-            style={{
-              color: '#ffffff',
-              fontSize: '40px',
-              textDecoration: 'none',
-              fontFamily: 'Rammetto One',
-              marginLeft: '10px'
-            }}>
-            WalkingDogs
-          </Link>
-        </div>
+          <NavLink to='/'>
+            <NavTitleImg 
+              src='img/WalkingDogsTitleLogo.jpeg'
+              alt='WalkingDogsTitleLogo'
+              isLogin={isLogin}/>
+            <NavShortImg 
+            src='img/WalkingDogsShort.jpeg'
+            alt='WalkingDogsShort'
+            isLogin={isLogin}
+            />
+          </NavLink>
       </NavbarTitle>
 
       <CommunityContainer>
@@ -240,15 +303,37 @@ function Nav({ isLogin, setIsLogin, isUser, setIsUser }) {
         </Link>
       </CommunityContainer>
 
-      <ModalContainer>
-        {isLogin ? (
-          '') : (
-          <LoginModalBtn onClick={openModalHandler}> 로그인 </LoginModalBtn>
+      {!isLogin && (
+        <ModalContainer>
+          <LoginModalBtn className='nav-btn' onClick={()=>dispatch(signinModalOnAction)}> 
+          로그인 
+          </LoginModalBtn>
+          <SignupBtn className='nav-btn' onClick={()=>dispatch(signupModalOnAction)}>
+          회원가입 
+          </SignupBtn>
+        </ModalContainer>
+      )}
+
+      {isLogin && (
+        <userBox>
+          <UserImg src='img/puppy-test.jpeg' />
+        </userBox>
         )}
-        {isOpen === true ? (
-          <LoginModalBackdrop onClick={openModalHandler}>
-              <LoginModalView onClick={(e)=> e.stopPropagation()}>
-                <CloseBtn onClick={openModalHandler}>
+
+      {/* <CommunityContainer>
+        <Link to="community">
+            <CommunityBtn> 커뮤니티 </CommunityBtn>
+        </Link>
+      </CommunityContainer>
+
+      <ModalContainer>
+        
+          <LoginModalBtn > 로그인 </LoginModalBtn>
+        
+        
+          <LoginModalBackdrop >
+              <LoginModalView >
+                <CloseBtn>
                   <FontAwesomeIcon icon={faTimes}/>
                 </CloseBtn>
                   <ModalTitleBox>
@@ -256,28 +341,29 @@ function Nav({ isLogin, setIsLogin, isUser, setIsUser }) {
                   </ModalTitleBox>
                 <InputContainer>
                   <Input name='email' placeholder='이메일'></Input>
+                  <PWInput name='password' placeholder='비밀번호'></PWInput>
                 </InputContainer>
               </LoginModalView>
 
           </LoginModalBackdrop>
-        ) : (null)}
+        
 
-          {isUser ? '' : <SignupBtn onClick={openSignupHandeler}> 회원가입 </SignupBtn>}
-          {isSignUpOpen === true ? (
+          <SignupBtn > 회원가입 </SignupBtn>
+          
             <SignUpModalBackdrop>
                 <SignupModalView onClick={(e)=> e.stopPropagation()}>
-                  <CloseBtn onClick={openSignupHandeler}>
+                  <CloseBtn >
                     <FontAwesomeIcon icon={faTimes}/>
                   </CloseBtn>
                 </SignupModalView>
             </SignUpModalBackdrop> 
-          ) : (null)}
+          
       </ModalContainer>
  
         <Link to="/mypage" className="mypage_icon" render={(props) => <Mypage />}>
           <UserImg src='img/puppy-test.jpeg' />
-        </Link>      
-    </NavbarContainer>
+        </Link>       */}
+    </NavContainer>
   );
 }
 

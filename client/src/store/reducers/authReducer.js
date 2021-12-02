@@ -3,6 +3,7 @@ import { SIGN_IN, SIGN_OUT, UPDATE_INFO } from "../actions/actionTypes";
 const initialState = {
     id:'',
     isLogin: false,
+    email: '',
     username: '',
     image:'',
     breed:'',
