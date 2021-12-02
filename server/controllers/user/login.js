@@ -7,7 +7,7 @@ require('dotenv').config();
 // logout 된 유저 검증 미완
 module.exports = async (req, res) => {
   const { email, password } = req.body;
-
+  
   if (!email || !password) {
     return res.status(400).json({ message: 'Bad Request' });
   }

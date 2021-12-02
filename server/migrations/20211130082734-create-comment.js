@@ -12,6 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       user_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
@@ -20,6 +21,7 @@ module.exports = {
         },
       },
       room_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: "CASCADE",
         references: {

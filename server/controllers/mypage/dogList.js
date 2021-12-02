@@ -1,5 +1,6 @@
 const { user, dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
+
 module.exports = async (req, res) => {
     const userInfo = await isAuthorized(req);
     console.log(userInfo);

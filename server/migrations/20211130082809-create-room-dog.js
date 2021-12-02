@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       dog_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: "CASCADE",
         references: {
@@ -17,6 +18,7 @@ module.exports = {
         },
       },
       room_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: "CASCADE",
         references: {

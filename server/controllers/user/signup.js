@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
       console.log(hashedPass)
 
-      const newUser = await user.create({
+      await user.create({
         email: email,
         password: hashedPass,
         username: username,
