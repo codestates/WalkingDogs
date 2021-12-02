@@ -1,5 +1,6 @@
 'use strict';
-
+var wkx = require('wkx');
+var geometry = wkx.Geometry.parse('POINT(1 2)');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     /**
@@ -18,8 +19,7 @@ module.exports = {
         title : "room" + (idx + 1),
         member_limit: Math.floor(Math.random() * 5 + 1),
         leader_id : Math.floor(Math.random() * 29 + 1),
-        latitude : '33.450701',
-        longitude : '126.570667',
+        coordinates: Sequelize.fn('ST_GeomFromText', 'POINT(52.458415 16.904740)'),
         address : 'address',
         meeting_time : new Date(),
         createdAt : new Date(),
