@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 import styled from 'styled-components'
 import {useHistory} from 'react-router-dom'
 import {modalOffAction, 
+        signinAction,
         signinModalOnAction, 
         signupModalOnAction} from '../store/actions';
 
@@ -120,10 +121,10 @@ const [isOnVerification, setIsVerification] = useState(false);
 const handleTypeChange = () => {
     if(type === '로그인'){
         dispatch(modalOffAction);
-        dispatch(signinModalOnAction);
+        dispatch(signupModalOnAction);
     } 
         dispatch(modalOffAction);
-        dispatch(signupModalOnAction);
+        dispatch(signinModalOnAction);
 }
 
 const handleInputChange = debounce(async(e) => {
@@ -143,17 +144,27 @@ const handleInputChange = debounce(async(e) => {
             const emailValue = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i.test(value);
             setValidated({...validated, [name]: emailValue});
             if(value === "") setErrMsg("");
-            else if (emailValue) {
-                setErrMsg("");
-                try {
-                  //api email  
-                } catch (error) {
-                    // set api errMsg
+
+        else if(name === "password") {
+            const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
+            setValidated({...validated, [name]: passwordValue});
+             if (value === "") setErrMsg("");
+              else if (passwordValue) setErrMsg("");
+                } else {
+                    setErrMsg("6-20정도 길이의 숫자 혹은 문자, 특수문자를 포함해야 합니다.")
                 }
-            }
-        }
+        } else if(name === 'passwordConfirm'){
+            const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
+            const passwordConfirmValue = value === inputValue.password;
+             if(value === "") setErrMsg("");
+             else if (passwordValue && passwordConfirmValue){
+                 setErrMsg("");
+             } else {
+                 setErrMsg("비밀번호가 일치하지 않습니다");
+             }
+        } 
     }
-})
+}, 200);
 
     return isOnVerification ? (
         <>
@@ -169,11 +180,16 @@ const handleInputChange = debounce(async(e) => {
         <Form>
             <Logo src='img/WalkingDogsTitleLogo'/>
                 <InputContainer type={type}>
-                    <Input name='email' placeholder='이메일'></Input>
+                    <Input 
+                    name='email' 
+                    placeholder='이메일'
+                    onChange={handleInputChange}
+                    ></Input>
                     <Input
                         name='password'
                         type='password'
                         placeholder='비밀번호'
+                        onChange={handleInputChange}
                     ></Input>
                 {type === '로그인' && <ErrMessage>{errMsg}</ErrMessage>}
                 {type === '회원가입' && (
@@ -182,6 +198,7 @@ const handleInputChange = debounce(async(e) => {
                         name='passwordConfirm'
                         type='password'
                         placeholder='비밀번호 재입력'
+                        onChange={handleInputChange}
                     ></Input>
                     <Input name='username' placeholder='닉네임'></Input>
                     <ErrMessage>{errMsg}</ErrMessage>
