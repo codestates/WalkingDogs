@@ -19,5 +19,7 @@ module.exports = {
     newRoom: require('./room/newRoom'),
     roomInfo: require('./room/roomInfo'),
   },
-  map: {},
+  map: {
+    location: require('./map/location')
+  },
 };
