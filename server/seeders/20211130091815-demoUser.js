@@ -10,13 +10,17 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
-
+     */
+    const bcrypt = require('bcrypt')
+    const password = '1234'
+    
     const userData = new Array(30).fill(0).map((_,idx) => {
+      const hashedPass = bcrypt.hashSync(password, 10)
+
       let obj = {
         username : "name" + (idx + 1), 
         email : "test" + (idx + 1) + "@wd.link",
-        password : "1234", 
+        password : hashedPass, 
         image: './test.img',
         createdAt : new Date(),
         updatedAt : new Date(),
