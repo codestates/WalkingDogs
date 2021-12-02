@@ -31,10 +31,11 @@ module.exports = {
       else
         return decoded
     });
-    console.log('isAuthorized함수 안', result);
+    
     if (result instanceof Error) {
       return null;
     } 
+    
     return { ...result }
   },
 };
