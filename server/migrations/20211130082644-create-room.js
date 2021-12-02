@@ -23,9 +23,17 @@ module.exports = {
           key: 'id',
         },
       },
-      coordinates: {
+      // coordinates: {
+      //   allowNull: false,
+      //   type: Sequelize.GEOMETRY('POINT')
+      // },
+      latitude: {
         allowNull: false,
-        type: Sequelize.GEOMETRY('POINT')
+        type: Sequelize.STRING
+      },
+      longitude: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       address: {
         allowNull: false,

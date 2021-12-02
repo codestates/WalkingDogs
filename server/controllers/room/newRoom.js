@@ -1,7 +1,7 @@
-const { room } = require("../../models");
-const { room_dog } = require("../../models");
-const { isAuthorized } = require("../tokenFunctions");
-const axios = require("axios");
+const { room } = require('../../models');
+const { room_dog } = require('../../models');
+const { isAuthorized } = require('../tokenFunctions');
+const axios = require('axios');
 
 // 남은 것
 
@@ -20,67 +20,66 @@ const axios = require("axios");
 // 2 - 1. address 저장할 때, 도, 시, 동 등 행정구역별로 나누어서 저장할 지 결정하기 -> 통째로 저장하기
 
 module.exports = async (req, res) => {
-  
   const {
     latitude,
     longitude,
+    address,
     selected_dogs,
     room_title,
     member_limit,
     meeting_time,
   } = req.body;
-  let address= '';
-  const userInfo = await isAuthorized(req);
-  const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}&input_coord=WGS84`;
 
-  // await axios
-  //   .({
-  //     url:url,
-  //     method: 'get',
-  //     headers: { 'Authorization', 'KakaoAK 8be48eec2d2c935c58e770b9b8039956'}
-  //   })
-  //   .then((result) => {
-  //     console.log("kako result: ", result);
-  //   })
-  //   .catch((err) => {
-  //     console.log("kakao error: ", err);
-  //   });
+  // let address= '';
+  const userInfo = await isAuthorized(req);
+
+  //-------------------------------------
+  // 카카오 api 요청 보내는 수정 전 코드
+  //--------------------------------------
+  // const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}&input_coord=WGS84`;
+
+  // if (!userInfo) {
+  //   return res.status(401).json({ message: "Unauthorized" });
+  // }
+  // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `${process.env.KAKAO_REST_API_KEY}` }})
+  // // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `8be48eec2d2c5c58e770b9b8039956` }})
+  // .then((result) => {
+  //   if (result.data.documents) {
+  //     console.log(result.data.documents[0]);
+  //     address = result.data.documents[0];
+  //   } else {
+  //     res.status(400).json({ message: 'not an appropriate coordinate'})
+  //   }
+
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  //   res.status(500).json({ message: 'server error' });
+  // })
 
   if (!userInfo) {
-    return res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: 'unauthorized' });
   }
-  await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `${process.env.KAKAO_REST_API_KEY}` }})
-  // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `8be48eec2d2c5c58e770b9b8039956` }})
-  .then((result) => {
-    if (result.data.documents) {
-      console.log(result.data.documents[0]);
-      address = result.data.documents[0];
-    } else {
-      res.status(400).json({ message: 'not an appropriate coordinate'})
-    }
-    
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).json({ message: 'server error' });
-  }) //the token is a variable which holds the token } })
-  // console.log('test');
-  const createdRoom = await room.create({
-    title: room_title,
-    member_limit: member_limit ? member_limit : 4,
-    leader_id: userInfo.id,
-    latitude: latitude, 
-    longitude: longitude,
-    meeting_time: meeting_time,
-    address: address.address.address_name,
-  });
 
-  for (let i = 0; i < selected_dogs.length; i++) {
-    await room_dog.create({
-      dog_id: selected_dogs[i].id,
-      room_id: createdRoom.dataValues.id,
+  try {
+    const createdRoom = await room.create({
+      title: room_title,
+      member_limit: member_limit ? member_limit : 4,
+      leader_id: userInfo.id,
+      latitude: latitude,
+      longitude: longitude,
+      meeting_time: meeting_time,
+      address: address,
     });
+    for (let i = 0; i < selected_dogs.length; i++) {
+      await room_dog.create({
+        dog_id: selected_dogs[i].id,
+        room_id: createdRoom.dataValues.id,
+      });
+    }
+    return res.status(200).json({ message: 'ok' });
+  } catch (err) {
+    console.error;
+    res.status(400).json({ message: 'bad request' });
   }
-
-  return res.status(200).json({ message: "ok" });
 };
