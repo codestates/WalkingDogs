@@ -76,13 +76,13 @@ ${({isLogin}) =>
 
 
 
-export const LoginModalBtn = styled.button`
+export const LoginBtn = styled.button`
   border: 0.5px solid white;
   background-color: #5156bf;
   color: white;
   border-radius: 10px;
   cursor: pointer;
-  font-size:30px;
+  font-size:2.4rem;
 `
 
 export const SignupBtn = styled.button`
@@ -147,26 +147,6 @@ export const SignUpModalBackdrop = styled.div`
   place-items: center;
 `;
 
-export const LoginModalView = styled.div.attrs({role: 'dialog'})`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 15px;
-  background-color: #646fcb;
-  width: 30rem;
-  height: 40rem;
-
-  > div.close.btn {
-   margin-top: 15px;
-   cursor: pointer;
- }
- 
-  > div.desc{
-   margin-top: 25px;
-   color: #646fcb;
- }
- `
 
 export const SignupModalView = styled.div.attrs({role: 'dialog'})`
   display: flex;
@@ -305,9 +285,9 @@ function Nav({ }) {
 
       {!isLogin && (
         <ModalContainer>
-          <LoginModalBtn className='nav-btn' onClick={()=>dispatch(signinModalOnAction)}> 
+          <LoginBtn className='nav-btn' onClick={()=>dispatch(signinModalOnAction)}> 
           로그인 
-          </LoginModalBtn>
+          </LoginBtn>
           <SignupBtn className='nav-btn' onClick={()=>dispatch(signupModalOnAction)}>
           회원가입 
           </SignupBtn>
