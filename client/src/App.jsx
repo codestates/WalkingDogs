@@ -31,16 +31,17 @@ function App() {
         {/* Hello World<br/> */}
         <Nav/>
         <Switch>
-          <Route exact path='/' conponent={Landingpage}/>
-          <Route path='/mypage' conponent={Mypage}/>
-          <Route path='/mypagechange' conponent={Mypagechg}/>
-          <Route path='/roomlist' conponent={Roomlist}/>
-          <Route path='/oneroom' conponent={Oneroom}/>
-          <Route path='/community' conponent={Community}/>
+          <Route path='/' exact component={Landingpage}/>
+          <Route path='/mypage' component={Mypage}/>
+          <Route path='/mypagechange' component={Mypagechg}/>
+          <Route path='/roomlist' component={Roomlist}/>
+          <Route path='/oneroom' component={Oneroom}/>
+          <Route path='/community' component={Community}/>
           <Redirect from='*' to='/'/>
         </Switch>
         {isModal && (
           <Modal bgColor={isCreateDetailModal && 'var(--color-darkwhite)'}>
+            {isCreateGatherModal}
             {isSignupModal && <Signs type={"회원가입"}/>}
             {isSigninModal && <Signs type={"로그인"}/>}
           </Modal>
