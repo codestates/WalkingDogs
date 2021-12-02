@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ['https://localhost:3000'],
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   }),
@@ -47,27 +47,13 @@ app.post('/google', controllers.oauth.google);
 // room
 app.get('/room/:room_id', controllers.room.roomInfo);
 app.post('/new-room', controllers.room.newRoom);
-app.post('/room/:room_id/join', controllers.room.joinRoom);
+app.put('/room/:room_id/join', controllers.room.joinRoom);
 
 // mypage
-app.get('/dogList', controllers.mypage.dogList);
+app.get('/dog-list', controllers.mypage.dogList);
 app.get('/myroom', controllers.mypage.myroom);
 app.patch('/profile', controllers.mypage.profile);
 app.post('/password', controllers.mypage.password);
-
-// const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
-
-// let httpsServer;
-// if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
-//   const privateKey = fs.readFileSync(__dirname + '/key.pem', 'utf8');
-//   const certificate = fs.readFileSync(__dirname + '/cert.pem', 'utf8');
-//   const credentials = { key: privateKey, cert: certificate };
-
-//   httpsServer = https.createServer(credentials, app);
-//   httpsServer.listen(HTTPS_PORT, () => console.log('server runnning'));
-// } else {
-//   httpsServer = app.listen(HTTPS_PORT);
-// }
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
