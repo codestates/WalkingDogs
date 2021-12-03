@@ -6,14 +6,15 @@ const { kakao } = window;
 
 export const Container = styled.div`
     border: 1px solid black;
-    width: 100%;
-    height: 100px;
+    width: auto;
+    height: auto;
     display: flex;
+    justify-content: space-around;
 `
 
 export const Box = styled.div`
     border: 1px solid green;
-    width: 11%;
+    width: auto;
     height: auto;
     margin: 10px;
 `
@@ -39,14 +40,22 @@ export const Minimap = styled.div`
 
 const Roommap = () => {
 
-    const container = useRef(null);
+    // const container = useRef(null);
 
     // const options = {
     //     center: new kakao.maps.LatLng(33.450701, 126.570667),
     //     level: 3,
     // };
 
-    useEffect(()=>{}, []);
+
+        useEffect(() => {
+        const container = document.querySelector('#map')
+        const options = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level: 3,
+        };
+        const map = new kakao.maps.Map(container, options)
+    }, []);
 
 
     return(
@@ -54,9 +63,9 @@ const Roommap = () => {
             <Box>
                 <H3>모임장소가 어디일까요?</H3>
                     <Place> 장소 </Place>
+                <Minimap id='map'></Minimap>
             </Box>
             
-                <div id='map' style={{width: '300px',height: '200px;'}}></div>
 
         </Container>
     )

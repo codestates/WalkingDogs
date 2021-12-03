@@ -1,6 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import Roomitem from '../Components/Roomitem'
+import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
@@ -19,6 +19,8 @@ export const RoomlistContainer = styled.div`
 `
 
 export const LocationBox = styled.div`
+    display: flex;
+    flex-direction: column;
     border: 1px solid #000000;
     margin-top: 5px;
     width: 99%;
@@ -93,18 +95,18 @@ const Roomlist = () => {
                         <RoomSearchBar/>
 
                         <BtnContainer>
-                        <CreateRoomBtn> 새로운 모임 만들기</CreateRoomBtn>
-                        <MapBtn> 지도로 찾기</MapBtn>
+                            <CreateRoomBtn> 새로운 모임 만들기</CreateRoomBtn>
+                            <MapBtn> 지도로 찾기</MapBtn>
                         </BtnContainer>
                 </LocationBox>
 
                 <ItemlistContainer>
-                <Roomitem/>
-                <Roomitem/>
-                <Roomitem/>
-                <Roomitem/>
-                <Roomitem/>
-                <Roomitem/>
+                <Roomcard/>
+                <Roomcard/>
+                <Roomcard/>
+                <Roomcard/>
+                <Roomcard/>
+                <Roomcard/>
                 </ItemlistContainer>
         </RoomlistContainer>
         </>

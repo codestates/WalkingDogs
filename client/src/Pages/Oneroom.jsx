@@ -25,7 +25,7 @@ export const RoomBox = styled.div`
 `
     
 
-export const RoonBtnBox = styled.div`
+export const RoomBtnBox = styled.div`
     border: 1px solid blue;
     display: flex;
     min-width: 100rem;
@@ -122,9 +122,9 @@ const Oneroom = () => {
                                 </AllianceBox>
                         </RoominfoBox>
                 </RoomBox>
-            <RoonBtnBox>
+            <RoomBtnBox>
                 
-            </RoonBtnBox>
+            </RoomBtnBox>
         </OneroomContainer>
     <Roommap/>
         </>

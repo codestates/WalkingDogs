@@ -14,12 +14,10 @@ const InputContainer = styled.form`
 const Inputlist = styled.div`
     flex: 1 1 auto;
     display: flex;
-    align-items: center;
+    justify-content: space-around;
 `
 
-
-
-
+// styled-component Boundary
 
 const RoomSearchBar = () => {
     return(
