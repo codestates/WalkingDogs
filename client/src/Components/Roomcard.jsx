@@ -57,9 +57,9 @@ export const RoomContentBox = styled.div`
 
 //styled-component boundary
 
-const Roomitem = () => {
+const Roomcard = () => {
     return(
-        <Link to='/oneroom'>
+        <Link to='/oneroom' style={{textDecoration:'none', color:'black'}}>
         <ItemContainer>
             <ImageBox> 사진 </ImageBox>
                 <Roominfo>
@@ -73,4 +73,4 @@ const Roomitem = () => {
     );
 };
 
-export default Roomitem;
+export default Roomcard;

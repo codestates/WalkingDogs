@@ -1,7 +1,7 @@
 import React , {useEffect} from 'react';
 import styled, {css} from 'styled-components'
 import {useDispatch} from 'react-redux'
-import {modalOffAction} from '../store/actions'
+import { modalOffAction } from '../store/actions'
 import { faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ const ModalBackdrop = styled.div`
   overflow: auto;
   outline: none;
   z-index: 1000;
+  background-color: #80808097;
 `;
 
 const ModalOverlay = styled.div`
@@ -27,6 +28,7 @@ const ModalOverlay = styled.div`
   right: 0;
   bottom: 0;
   z-index: 999;
+  background-color: #80808097;
 `
 
 const ModalContainer = styled.div`
@@ -37,8 +39,8 @@ const ModalContainer = styled.div`
   width: fit-content;
   height: fit-content;
   border-radius: 1rem;
-  color: var(--color-darkgray);
-  background-color: var(--color-white);
+  color: darkgray;
+  background-color: #646fcb;
   ${(props) => {
     props.bgColor &&
       css`
@@ -51,7 +53,7 @@ const ModalContainer = styled.div`
     left: 0;
     bottom: 0;
     right: 0;
-    transform: translateY(0);
+    transform: translateY(0)
     min-height: 100%;
     min-width: 100%;
     border-radius: 0;
@@ -77,9 +79,10 @@ border-radius: 0.5rem;
     height: 2rem;
     font-size: 1.5rem;
   `};
-  color: var(--color-gray);
+  color: black;
+  cursor: pointer;
   :hover {
-    color: var(--color-black);
+    color: gray;
     background-color: var(--color-lightgray);
     opacity: 0.8;
   }
@@ -93,10 +96,10 @@ const Modal = ({children, bgColor}) => {
   const dispatch = useDispatch();
 
   const handleBgClick = (e)=> {
-    if(e.target === e.currentTarget) dispatch(modalOffAction)
+    if(e.target === e.currentTarget) dispatch(modalOffAction())
   };
   const handleCloseClick = () => {
-    dispatch(modalOffAction);
+    dispatch(modalOffAction());
   };
 
   useEffect (() => {
@@ -114,14 +117,14 @@ const Modal = ({children, bgColor}) => {
         left: unset;
         right: unset;
       `
-      window.scrollY(0, parseInt(scrollY || "0") * -1);
+      window.scrollTo(0, parseInt(scrollY || "0") * 1);
     }
   },[]);
 
     return(
       <ModalOverlay>
         <ModalBackdrop onClick={handleBgClick} tabIndex='-1'>
-          <ModalContainer tabIndex='0' bgColor={bgColor}>
+          <ModalContainer tabIndex='0'>
             <CloseBtn onClick={handleCloseClick}>
               <FontAwesomeIcon icon={faTimes}/>
             </CloseBtn>

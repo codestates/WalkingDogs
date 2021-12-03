@@ -31,4 +31,11 @@ module.exports = {
     editComment: require('./comment/editComment'),
     deleteComment: require('./comment/deleteComment'),
   },
+  comment: {
+    newComment: require('./comment/newComment'),
+    allComment: require('./comment/allComment'),
+    myComment: require('./comment/myComment'),
+    editComment: require('./comment/editComment'),
+    deleteComment: require('./comment/deleteComment')
+  }
 };

@@ -285,12 +285,12 @@ function Nav({ }) {
 
       {!isLogin && (
         <ModalContainer>
-          <LoginBtn className='nav-btn' onClick={()=>dispatch(signinModalOnAction)}> 
-          로그인 
-          </LoginBtn>
-          <SignupBtn className='nav-btn' onClick={()=>dispatch(signupModalOnAction)}>
-          회원가입 
-          </SignupBtn>
+            <LoginBtn className='nav-btn' onClick={()=>dispatch(signinModalOnAction())}> 
+              로그인 
+            </LoginBtn>
+            <SignupBtn className='nav-btn' onClick={()=>dispatch(signupModalOnAction())}>
+            회원가입 
+            </SignupBtn>
         </ModalContainer>
       )}
 

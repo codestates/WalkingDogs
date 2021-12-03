@@ -8,22 +8,26 @@ import {modalOffAction,
         signinModalOnAction, 
         signupModalOnAction} from '../store/actions';
 
+import userApi from '../api/users'
+
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;   
     justify-content: center;
-    width: auto;
+    width: 25rem;
     height: auto;
-    margin: 4rem 2rem 0rem 2rem;
+    margin: 3rem 2rem;
+    background-color: #646fcb;
+    border-radius: 4%;
     *{
-      width: 20rem;
+      width: 23rem;
       height: 3rem;
       margin: 0.5rem 0rem;
     }
     input{
-        height: 2.3rem;
-        border: 1px solid var(--color-gray);
+        height: 2.4rem;
+        border: 1px solid #000000;
         border-radius: 0.4rem;
         :first-of-type{
             margin-top: 1rem;
@@ -38,9 +42,9 @@ export const Form = styled.form`
 `
 
 export const Logo = styled.img`
-    width: calc(5.36 * 2.5rem);
-    height: 2.5rem;
-    object-fit: fill;
+    height: 5rem;
+    object-fit: scale-down;
+    background-color: #646fcb;
 `
 
 export const InputContainer = styled.div`
@@ -49,11 +53,11 @@ export const InputContainer = styled.div`
 
 export const Input = styled.input`
     height: 2rem;
-    padding: 0 0.5rem;
+    padding: 0;
     font-size: 0.875rem;
-    color: var(--color-black);
+    color: black;
     ::placeholder{
-        color: var(--color-gray);
+        color: grey;
     }
 `
 
@@ -89,6 +93,8 @@ export const Button = styled.button`
     min-height: 3rem;
     font-size: 1rem;
     border: 1.5px solid var(--color-violet--100);
+    border-radius: 30px;
+    cursor:pointer;
     * {
         font-size:0.5rem;
     }
@@ -116,7 +122,7 @@ const [validated, setValidated] = useState({
 });
 
 const [errMsg, setErrMsg] = useState("");
-const [isOnVerification, setIsVerification] = useState(false);
+const [isOnVerification, setIsOnVerification] = useState(false);
 
 const handleTypeChange = () => {
     if(type === '로그인'){
@@ -129,7 +135,7 @@ const handleTypeChange = () => {
 
 const handleInputChange = debounce(async(e) => {
     const {name, value} = e.target;
-    setInputValue({...inputValue, [name]: value});
+    setInputValue({...inputValue, [name]: value });
     if(type === '로그인'){
         if(name === 'email'){
             const emailValue = 
@@ -143,54 +149,99 @@ const handleInputChange = debounce(async(e) => {
         if (name === 'email') {
             const emailValue = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i.test(value);
             setValidated({...validated, [name]: emailValue});
-            if(value === "") setErrMsg("");
-
-        else if(name === "password") {
-            const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
-            setValidated({...validated, [name]: passwordValue});
-             if (value === "") setErrMsg("");
-              else if (passwordValue) setErrMsg("");
-                } else {
-                    setErrMsg("6-20정도 길이의 숫자 혹은 문자, 특수문자를 포함해야 합니다.")
-                }
-        } else if(name === 'passwordConfirm'){
-            const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
-            const passwordConfirmValue = value === inputValue.password;
-             if(value === "") setErrMsg("");
-             else if (passwordValue && passwordConfirmValue){
-                 setErrMsg("");
-             } else {
-                 setErrMsg("비밀번호가 일치하지 않습니다");
-             }
-        } 
+            if(value === "") setErrMsg("");  
+            else if (emailValue){
+                // setErrMsg("");
+                // try {
+                //     const res = await userApi.loginApi(value);
+                //     res.status === 200 && setErrMsg("");
+                // } catch (error) {
+                //     setErrMsg("가입된 이메일 입니다.");
+                // }
+            } 
+            // else {
+            //     setErrMsg("이메일 형식이 올바르지 않습니다.");
+            // }  
+    } else if (name === "password"){
+        const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
+        setValidated({...validated, [name]: passwordValue});
+        if (value === "") setErrMsg("");
+        else if (passwordValue) {
+            setErrMsg("");
+          } 
+          else {
+              setErrMsg("6-20정도 길이의 숫자 혹은 문자, 특수문자를 포함해야 합니다.")
+          }
+    } else if(name === 'passwordConfirm'){
+        const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
+        const passwordConfirmValue = value === inputValue.password;
+        if(value === "") setErrMsg("");
+        else if (passwordValue && passwordConfirmValue){
+            setErrMsg("");
+        } else {
+            setErrMsg("비밀번호가 일치하지 않습니다");
+        }
+      }   
     }
-}, 200);
+},200);
+
+const handleSign = async (e) => {
+    e.preventDefault();
+    if(type === '로그인'){
+        const valueResult = validated.email && validated.password;
+        if(valueResult){
+            const signInputValue = {...inputValue};
+            delete signInputValue.passwordConfirm;
+            delete signInputValue.userName;
+            try {
+                const res = await userApi.loginApi(signInputValue);
+                if(res.status === 200){
+                    dispatch(signinAction(res.data));
+                    dispatch(modalOffAction);
+                    history.push('/roomlist');
+                    // dispatch(modalOffAction) 1st, history.push('/')
+                }
+            } catch (error) {
+                setErrMsg("입력 정보를 확인해 주세요.")
+            }
+        } 
+    } else {
+        const valueResult = Object.values(validated).every((el)=> el === true);
+        if(valueResult){
+            const signInputValue = {...inputValue};
+            delete signInputValue.passwordConfirm;
+            try {
+                const res = userApi.signupApi(signInputValue);
+                res.status === 201 && setIsOnVerification(true);
+            } catch (error) {
+                setErrMsg("정보를 확인해 주세요.")
+            }
+        } else {
+            setErrMsg("정보를 다시 확인해 주세요.")
+        }
+      }
+    };
 
     return isOnVerification ? (
         <>
             <VerifiedMessage>
-                <Logo src='img/WalkingDogsTitleLogo'/>
-                <div>
-
-                </div>
+                <Logo src='img/WalkingDogsTitleLogo.png'/>
             </VerifiedMessage>
         </>
     ) : (
         <>
         <Form>
-            <Logo src='img/WalkingDogsTitleLogo'/>
+            <Logo src='img/WalkingDogsTitleLogo.png'/>
                 <InputContainer type={type}>
                     <Input 
                     name='email' 
                     placeholder='이메일'
-                    onChange={handleInputChange}
-                    ></Input>
+                    onChange={handleInputChange}></Input>
                     <Input
                         name='password'
                         type='password'
                         placeholder='비밀번호'
-                        onChange={handleInputChange}
-                    ></Input>
+                        onChange={handleInputChange}></Input>
                 {type === '로그인' && <ErrMessage>{errMsg}</ErrMessage>}
                 {type === '회원가입' && (
                     <>
@@ -206,9 +257,9 @@ const handleInputChange = debounce(async(e) => {
                 )}
                 </InputContainer>
                 <Button
-                    bgColor={"var(--color-white)"}
-                    color={"var(--color-violet-100) !important"}
-                    >
+                    type='button'
+                    style={{backgroundColor:""}}
+                    onClick={(e)=>handleSign(e)}>
                     {type === '로그인' ? '로그인' : '회원가입'}
                 </Button>
         </Form>

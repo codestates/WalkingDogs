@@ -9,7 +9,7 @@ export const FooterContainer = styled.footer`
   justify-content: space-between;
   align-items: center;
   background-color: #000000;
-  padding: 0 20px;
+  padding: 0;
   text-decoration:none;
   height: auto;
 `

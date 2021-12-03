@@ -18,7 +18,10 @@ module.exports = async (req, res) => {
     }
     await room_join_req.destroy({
       where: { user_id: candidate_id, room_id: room_id },
-    });
+    })
+    .then((result) => {
+      console.log(result);
+    })
     res.status(200).json({ message: 'ok' });
   } catch (err) {
     console.error;

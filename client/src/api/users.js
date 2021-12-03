@@ -1,6 +1,6 @@
 import api from './index';
 
-const loginApi = async(userInfo) => {
+const loginApi = async( userInfo ) => {
     console.log(userInfo);
     const result = await api({method: 'POST',
             url:`/login`, 
@@ -14,17 +14,25 @@ const loginApi = async(userInfo) => {
 
 const logoutApi = () => {
     const result = api({method: 'POST',
-            url: `/logout`, 
+            url: `/logout`,
+            data: null
             })
+            return result;
 }
 
-const signupApi = () => {
-    const result = api({method: 'POST', 
-                        url: `/signup`,
-                    })
-                    
-}
+const signupApi = async ( userInfo ) => {
+    const result = await api({method: 'POST', 
+                url: `/signup`,
+                data:{
+                    email: userInfo.email,
+                    password: userInfo.password,
+                    username: userInfo.username,
+                    image: userInfo.image,
+                }
+            });
+            return result;        
+        };
 
 
 
-export default {loginApi,logoutApi};
+export default {loginApi,logoutApi,signupApi};
