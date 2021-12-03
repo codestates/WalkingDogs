@@ -1,5 +1,4 @@
 const { room } = require('../../models');
-const { Sequelize } = require('sequelize');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {

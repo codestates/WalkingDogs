@@ -74,20 +74,20 @@ const Footer = () => {
       <MemberBox>
         <div className="footer_member_title">Members</div>
         <Li>
-          <a href=""
-              style={{color:'white',textDecoration:'none'}}> 박종환 </a>
+          <MemberA href=""
+              style={{color:'white',textDecoration:'none'}}> 박종환 </MemberA>
         </Li>
         <Li>
-          <a href=""
-              style={{color:'white',textDecoration:'none'}}> 양예솔 </a>
+          <MemberA href=""
+              style={{color:'white',textDecoration:'none'}}> 양예솔 </MemberA>
         </Li>
         <Li>
-          <a href=""
-              style={{color:'white',textDecoration:'none'}}> 이진희 </a>
+          <MemberA href=""
+              style={{color:'white',textDecoration:'none'}}> 이진희 </MemberA>
         </Li>
         <Li>
-          <a href=""
-              style={{color:'white',textDecoration:'none'}}> 홍순상 </a>
+          <MemberA href=""
+              style={{color:'white',textDecoration:'none'}}> 홍순상 </MemberA>
         </Li>
       </MemberBox>
     </FooterContainer>

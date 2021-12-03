@@ -1,9 +1,11 @@
-import React from 'react';
+import React ,{useEffect, useState}from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
+import {createGatherRoomModalOnAction, signinAction,singoutAction} from 'react-redux'
+import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
@@ -65,7 +67,8 @@ export const CreateRoomBtn = styled.button`
     font-size: 20px;
 `
 
-export const MapBtn = styled.button`
+
+export const MapBtn = styled(Link)`
     border: 1px solid #000000;
     border-radius: 30px;
     width: auto;
@@ -82,6 +85,13 @@ const Roomlist = () => {
 
 // const {testDummys} = testState;
 
+const [isListLoading, setIsListLoading] = useState(false);
+
+const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
+const dispatch = useDispatch();
+const history = useHistory();
+
+
     return(
         <>
         <RoomlistContainer>
@@ -96,7 +106,7 @@ const Roomlist = () => {
 
                         <BtnContainer>
                             <CreateRoomBtn> 새로운 모임 만들기</CreateRoomBtn>
-                            <MapBtn> 지도로 찾기</MapBtn>
+                            <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                         </BtnContainer>
                 </LocationBox>
 

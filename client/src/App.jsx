@@ -16,7 +16,7 @@ import Signs from './Components/Signs';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { signinAction } from './store/actions';
-
+import Maps from './Pages/Maps'
 
 function App() {
   const [cookies, setCookie] = useCookies(['jwt']);
@@ -47,6 +47,7 @@ function App() {
           <Route path='/roomlist' component={Roomlist}/>
           <Route path='/oneroom' component={Oneroom}/>
           <Route path='/community' component={Community}/>
+          <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
         </Switch>
         {isModal && (

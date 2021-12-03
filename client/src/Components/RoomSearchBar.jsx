@@ -1,7 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from 'styled-components'
+import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
 import InputDatepicker from "./InputDatepicker";
+import {useDispatch} from 'react-redux'
+import { searchGatherAction } from "../store/actions";
+import roomApi from '../api/room';
 
 const InputContainer = styled.form`
     margin-bottom: 2rem;

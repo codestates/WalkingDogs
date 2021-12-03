@@ -1,7 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
-const axios = require('axios');
 
 // 남은 것
 
@@ -62,22 +61,33 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const createdRoom = await room.create({
-      title: room_title,
-      member_limit: member_limit ? member_limit : 4,
-      leader_id: userInfo.id,
-      latitude: latitude,
-      longitude: longitude,
-      meeting_time: meeting_time,
-      address: address,
+    const roomInfo = await room.findAll({
+      where: {
+        title: room_title,
+      },
     });
-    for (let i = 0; i < selected_dogs.length; i++) {
-      await room_dog.create({
-        dog_id: selected_dogs[i].id,
-        room_id: createdRoom.dataValues.id,
+    console.log(roomInfo)
+    //! room_title이 데이터베이스에 이미 존재할 경우 조건문을 통해서 분기시켰습니다.
+    if (roomInfo.length !== 0) {
+      res.status(409).json({ message: 'conflict' });
+    } else {
+      const createdRoom = await room.create({
+        title: room_title,
+        member_limit: member_limit ? member_limit : 4,
+        leader_id: userInfo.id,
+        latitude: latitude,
+        longitude: longitude,
+        meeting_time: meeting_time,
+        address: address,
       });
+      for (let i = 0; i < selected_dogs.length; i++) {
+        await room_dog.create({
+          dog_id: selected_dogs[i].id,
+          room_id: createdRoom.dataValues.id,
+        });
+      }
+      return res.status(200).json({ message: 'ok' });
     }
-    return res.status(200).json({ message: 'ok' });
   } catch (err) {
     console.error;
     res.status(400).json({ message: 'bad request' });

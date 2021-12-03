@@ -198,7 +198,7 @@ const Signs = ({ type }) => {
     }
   }, 200);
 
-  const handleSign = async e => {
+const handleSign = async (e) => {
     e.preventDefault();
     if (type === '로그인') {
       const valueResult = validated.email && validated.password;
