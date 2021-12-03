@@ -78,21 +78,22 @@ ${({isLogin}) =>
 
 export const LoginBtn = styled.button`
   border: 0.5px solid white;
-  background-color: #5156bf;
+  background-color: #646fcb;
   color: white;
   border-radius: 10px;
   cursor: pointer;
-  font-size:2.4rem;
+  font-size:1.8rem;
 `
 
 export const SignupBtn = styled.button`
-    border: 1px solid #646fcb;
+    border: 0.1rem solid white;
     background-color: white;
     color: #646fcb;
     border-radius: 10px;
     cursor: pointer;
-    font-size:30px;
+    font-size:1.8rem;
     margin: 0 1.1rem;
+    
 `
 
 export const ModalContainer = styled.div`
@@ -147,27 +148,6 @@ export const SignUpModalBackdrop = styled.div`
   place-items: center;
 `;
 
-
-export const SignupModalView = styled.div.attrs({role: 'dialog'})`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 15px;
-  background-color: white;
-  width: 30rem;
-  height: 40rem;
-
-> div.close.btn {
- margin-top: 15px;
- cursor: pointer;
-}
-
-> div.desc{
- margin-top: 25px;
- color: #5156bf;
-}
-`
 
 export const CloseBtn = styled.span`
   background-color: #000000;

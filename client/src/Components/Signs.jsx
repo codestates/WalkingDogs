@@ -186,6 +186,7 @@ const handleInputChange = debounce(async(e) => {
 },200);
 
 const handleSign = async (e) => {
+    console.log('test00000')
     e.preventDefault();
     if(type === '로그인'){
         const valueResult = validated.email && validated.password;

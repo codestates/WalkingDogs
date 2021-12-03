@@ -13,6 +13,7 @@ import {BrowserRouter as Brouter, Route, Switch, Redirect} from 'react-router-do
 import {useSelector} from 'react-redux';
 import Modal from './Components/Modal';
 import Signs from './Components/Signs'; 
+import Maps from './Pages/Maps'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route path='/roomlist' component={Roomlist}/>
           <Route path='/oneroom' component={Oneroom}/>
           <Route path='/community' component={Community}/>
+          <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
         </Switch>
         {isModal && (
