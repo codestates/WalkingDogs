@@ -48,7 +48,7 @@ app.post('/google', controllers.oauth.google);
 app.get('/room/:room_id', controllers.room.roomInfo);
 app.post('/new-room', controllers.room.newRoom);
 app.put('/room/:room_id/join', controllers.room.joinRoom);
-app.post('/room/reqPermission', controllers.room.reqPermission);
+app.post('/reqPermission', controllers.room.reqPermission);
 app.get('/request', controllers.room.request);
 
 // mypage
@@ -62,10 +62,10 @@ app.get('/location', controllers.map.location);
 
 // comment
 app.post('/comment', controllers.comment.newComment);
-app.get('/all-comment', controllers.comment.allComment);
-app.get('/my-comment', controllers.comment.myComment);
-app.put('/comment', controllers.comment.editComment);
-app.delete('/comment', controllers.comment.deleteComment);
+app.get('all-comment', controllers.comment.allComment);
+app.get('my-comment', controllers.comment.myComment);
+app.put('/comment/', controllers.comment.editComment);
+app.delete('/comment/', controllers.comment.deleteComment);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

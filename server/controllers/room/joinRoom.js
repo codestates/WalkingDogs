@@ -1,4 +1,3 @@
-const { room } = require('../../models');
 const { room_join_req } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
@@ -7,7 +6,7 @@ const { isAuthorized } = require('../tokenFunctions');
 // 3. 그럼 누르자마자 바로 수락되면 안된다...?
 // 4. 그럼 DB 스키마에 모임방 Req Table이 있어야 함.
 module.exports = async (req, res) => {
-  const roomId = req.params.room_id
+  const roomId = req.params.room_id;
   const userInfo = await isAuthorized(req);
 
   if (!userInfo) {
@@ -15,21 +14,20 @@ module.exports = async (req, res) => {
   }
 
   const reqInfo = await room_join_req.findOne({
-      where: {
-        user_id: userInfo.id,
-        room_id: roomId,
-      },
-  })
+    where: {
+      user_id: userInfo.id,
+      room_id: roomId,
+    },
+  });
 
-  if(!reqInfo){
+  if (!reqInfo) {
     await room_join_req.create({
-        user_id: userInfo.id,
-        room_id: roomId,
-    })
+      user_id: userInfo.id,
+      room_id: roomId,
+    });
 
-    return res.status(200).json({ message: 'ok' })
+    return res.status(200).json({ message: 'ok' });
   }
 
-  return res.status(400).json({ message: 'You Already Sended Join Request' })
-
+  return res.status(400).json({ message: 'You Already Sended Join Request' });
 };
