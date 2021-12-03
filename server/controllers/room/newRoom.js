@@ -1,7 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
-const axios = require('axios');
 
 // 남은 것
 
