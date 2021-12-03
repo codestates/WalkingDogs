@@ -8,10 +8,9 @@ module.exports = async (req, res) => {
     res.status(401).send('this is an invalid token');
   } else {
     const { username, dogs, image } = req.body;
-    console.log(req.body);
 
     if (username) {
-      const userData = await user.update(
+      await user.update(
         { username },
         {
           where: {
@@ -19,10 +18,9 @@ module.exports = async (req, res) => {
           },
         },
       );
-      console.log('userData', userData);
     }
     if (image) {
-      const userData = await user.update(
+      await user.update(
         { image },
         {
           where: {
@@ -30,21 +28,19 @@ module.exports = async (req, res) => {
           },
         },
       );
-      console.log('userData', userData);
     }
-    // console.log(userInfo);
+
     if (dogs) {
       const stack = [];
       for (let i = 0; i < dogs.length; i++) {
         stack.push(dogs[i].id);
         const selectedDog = await dog.findOne({
           where: {
-            id: dogs[i].id
+            id: dogs[i].id,
           },
         });
 
         if (selectedDog) {
-            // console.log('selectedDog', selectedDog);
           await dog.update(
             {
               name: dogs[i].name,
@@ -59,16 +55,17 @@ module.exports = async (req, res) => {
             },
           );
         } else {
-          await dog.create({
-            user_id: userInfo.id,
-            name: dogs[i].name,
-            breed: dogs[i].breed,
-            image: dogs[i].image,
-            gender: dogs[i].gender,
-          })
-          .then((result) => {
+          await dog
+            .create({
+              user_id: userInfo.id,
+              name: dogs[i].name,
+              breed: dogs[i].breed,
+              image: dogs[i].image,
+              gender: dogs[i].gender,
+            })
+            .then(result => {
               stack.push(result.dataValues.id);
-          })
+            });
         }
       }
 
@@ -77,18 +74,17 @@ module.exports = async (req, res) => {
           user_id: userInfo.id,
         },
       });
-      console.log(stack);
-      console.log(dogList);
       for (let i = 0; i < dogList.length; i++) {
         if (!stack.includes(dogList[i].dataValues.id)) {
-          await dog.destroy({
-            where: {
-              id: dogList[i].dataValues.id,
-            },
-          })
-          .catch((err) => {
+          await dog
+            .destroy({
+              where: {
+                id: dogList[i].dataValues.id,
+              },
+            })
+            .catch(err => {
               console.log(err);
-          })
+            });
         }
       }
     } else {
