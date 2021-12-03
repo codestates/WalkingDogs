@@ -6,13 +6,14 @@ import {SIGN_IN,
         CREATE_GATHER_ROOM_MODAL_ON,
         CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
         SEARCH_GATHER,
+        GATHER_INFO,
         MODAL_OFF } from './actionTypes'
 
 //AUTH ACTIONS
 export const signinAction = (data) => ({
     type: SIGN_IN,
     payload: { ...data },
-})
+}) 
 
 export const singoutAction = (data) => ({
     type: SIGN_OUT,
@@ -25,14 +26,15 @@ export const updateInfoAction = (data) => ({
     },
 });
 
+
 //MODAL ACTIONS
 
 export const createGatherRoomModalOnAction = (data) => ({
     type: CREATE_GATHER_ROOM_MODAL_ON,
 })
-export const createGatherRoomDetailModalOnAction =(gatering) => ({
+export const createGatherRoomDetailModalOnAction =(gathering) => ({
     type: CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
-    payload: {...gatering}
+    payload: {...gathering}
 })
 
 export const signupModalOnAction = (data) => ({
@@ -53,3 +55,10 @@ export const searchGatherAction = ({conditions, gatherings}) => ({
     type: SEARCH_GATHER,
     payload: {conditions, gatherings}
 })
+
+export const gatherInfoAction = ({data}) => ({
+    type: GATHER_INFO,
+    payload: {...data}
+})
+
+console.log(gatherInfoAction);

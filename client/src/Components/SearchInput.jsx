@@ -35,7 +35,7 @@ const InputArea = styled.div`
 
 const Name = styled.div`
     margin: 0 1rem;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     flex: 0 0 1;
 `
 
@@ -47,15 +47,15 @@ const Divider = styled.div`
   margin: 0.75rem 0;
 `;
 
-const SearchInput = () => {
+const SearchInput = ({name, children, hideDivider}) => {
     const box = useRef(null)
 
     return (
         <InputWrapper>
             <div className="thing" ref={box}/>
             <InputArea>
-                <Name>{/**/}test_01</Name>
-                test_02
+                <Name>{name}</Name>
+                {children}
             </InputArea>
         </InputWrapper>
     )
