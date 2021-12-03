@@ -11,7 +11,14 @@ module.exports = {
   },
 
   sendAccessToken: (res, accessToken) => {
-    return res.cookie('jwt', accessToken);
+    const now = new Date()
+    const expires = now.setHours(now.getHours() + 1)
+
+    return res.cookie('jwt', accessToken, {
+      secure: true,
+      sameSite: "none",
+      expiresIn: expires,
+    });
   },
 
 

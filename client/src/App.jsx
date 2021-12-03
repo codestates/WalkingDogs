@@ -13,10 +13,14 @@ import {BrowserRouter as Brouter, Route, Switch, Redirect} from 'react-router-do
 import {useSelector} from 'react-redux';
 import Modal from './Components/Modal';
 import Signs from './Components/Signs'; 
+import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
+import { signinAction } from './store/actions';
 import Maps from './Pages/Maps'
 
 function App() {
-
+  const [cookies, setCookie] = useCookies(['jwt']);
+  const { isLogin } = useSelector(({authReducer})=> authReducer);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
           isCreateDetailModal, 
@@ -24,13 +28,18 @@ function App() {
           isSignupModal, 
           currentGatherInfo} = useSelector(({modalReducer}) => modalReducer);
   const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal;
+  const dispatch = useDispatch();
 
-
+  useEffect(() => {
+    if(cookies.jwt){
+      dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+    }
+  }, [])
 
   return (
     <Brouter>
         {/* Hello World<br/> */}
-        <Nav/>
+        <Nav />
         <Switch>
           <Route path='/' exact component={Landingpage}/>
           <Route path='/mypage' component={Mypage}/>
@@ -44,8 +53,8 @@ function App() {
         {isModal && (
           <Modal bgColor={isCreateDetailModal && 'var(--color-darkwhite)'}>
             {isCreateGatherModal}
-            {isSignupModal && <Signs type={"회원가입"}/>}
-            {isSigninModal && <Signs type={"로그인"}/>}
+            {isSignupModal && <Signs type={"회원가입"} cookies={cookies} setCookie={setCookie}/>}
+            {isSigninModal && <Signs type={"로그인"} cookies={cookies} setCookie={setCookie}/>}
           </Modal>
         )}
         <Footer/>

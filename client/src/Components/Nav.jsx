@@ -102,7 +102,7 @@ export const ModalContainer = styled.div`
   flex: 2;
 `
 
-export const userBox = styled.div`
+export const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
   flex: 2;
@@ -275,9 +275,9 @@ function Nav({ }) {
       )}
 
       {isLogin && (
-        <userBox>
+        <UserBox>
           <UserImg src='img/puppy-test.jpeg' />
-        </userBox>
+        </UserBox>
         )}
 
       {/* <CommunityContainer>

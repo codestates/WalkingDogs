@@ -1,26 +1,28 @@
 import api from './index';
 
-const loginApi = async( userInfo ) => {
-    console.log(userInfo);
-    const result = await api({method: 'POST',
+const loginApi = async(userInfo) => {
+    const result = await api({
+            method: 'POST',
             url:`/login`, 
-            data:{
-                email:userInfo.email, 
-                password:userInfo.password
+            data:{           
+                email: userInfo.email, 
+                password: userInfo.password
             }
         });
         return result;
     };
 
 const logoutApi = () => {
-    const result = api({method: 'POST',
+    const result = api({
+            method: 'POST',
             url: `/logout`,
             data: null
             })
             return result;
 }
 
-const signupApi = async ( userInfo ) => {
+const signupApi = async (userInfo) => {
+    console.log(userInfo)
     const result = await api({method: 'POST', 
                 url: `/signup`,
                 data:{
