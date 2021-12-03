@@ -12,7 +12,7 @@ module.exports = {
      * }], {});
      */
     const bcrypt = require('bcrypt')
-    const password = '1234'
+    const password = '1q2w3e4r!'
     
     const userData = new Array(30).fill(0).map((_,idx) => {
       const hashedPass = bcrypt.hashSync(password, 10)

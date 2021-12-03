@@ -30,7 +30,7 @@ export const updateInfoAction = (data) => ({
 export const createGatherRoomModalOnAction = (data) => ({
     type: CREATE_GATHER_ROOM_MODAL_ON,
 })
-export const createGatherRoomDetailModalOnAction =(gatering) => ({
+export const createGatherRoomDetailModalOnAction = (gatering) => ({
     type: CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
     payload: {...gatering}
 })
