@@ -1,6 +1,9 @@
 const { user, dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
+// 2021/12/03 수정
+// 성공(200)시 response에 request로 받은 image와 username, dogs를 그대로 보내주도록 수정했습니다.
+// 이렇게 수정해도 괜찮은 걸까요?
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
   console.log(req.cookies);
@@ -102,8 +105,9 @@ module.exports = async (req, res) => {
     // res.status(200).end();
     res.status(200).send({
       data: {
-        image: userInfo.image,
-        username: userInfo.username,
+        image: image,
+        username: username,
+        dogs: dogs
       },
       message: 'ok',
     });
