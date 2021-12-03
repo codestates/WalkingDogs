@@ -28,7 +28,7 @@ const modalReducer = (prevState = initialState, action) => {
             state = {...prevState, isSignupModal:true};
             break;
         case SIGNIN_MODAL_ON:
-            state = {...prevState, isSigninModal:false};
+            state = {...prevState, isSigninModal:true};
             break;
         case MODAL_OFF:
             state = {...initialState};
