@@ -4,6 +4,9 @@ import { createGatherRoomDetailModalOnAction, modalOffAction } from '../store/ac
 import {useDispatch, useSelector} from 'react-redux';
 import Roomcard from './Roomcard'
 import roomApi from '../api/room'
+import AllButtons from './AllButtons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretSquareLeft, faCaretSquareRight } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -74,6 +77,13 @@ const StyleRoomCard = styled(Roomcard)`
     `}
 `;
 
+const StyledBtn = styled(AllButtons)`
+  width: 5rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+`
+
 
 // styled-component Boundary
 const RoomCreate = () => {
@@ -116,6 +126,34 @@ const RoomCreate = () => {
         },
       ],
     });
+
+    const handlePrevBtn = () => {
+        setIsOnSearch(false);
+        setInputValue("");
+        setList([]);
+        setIsSelected(false);
+        setSelectedOption(selectedOption.slice(0, selectedOption.length - 1));
+        setStep(step-1);
+    }
+
+    const handleNextBtn = async () => {
+        if(step >= 5 && step < 8) {
+            setSelectedOption([...selectedOption, inputValue]);
+            setIsOnSearch(false);
+            setInputValue("");
+            setList([]);
+            setIsSelected(false);
+            setStep(step + 1);
+        } else {
+            if(selectedOption.length === step){
+                setIsOnSearch(false);
+                setInputValue("");
+                setList([]);
+                setIsSelected(false);
+                setStep(step + 1);
+            }
+        }
+    };
 
     useEffect(()=>{
         switch(step){
@@ -181,6 +219,30 @@ const RoomCreate = () => {
         });
     },[step, selectedOption]);
 
+    const handleSave = () => {
+        try {
+            const payload = {
+                title: gathering.title,
+                description: inputValue,
+                placeName:gathering.placeName,
+                latitude:gathering.latitude,
+                longitude:gathering.longitude,
+                date: gathering.date,
+                time: gathering.time,
+                timeDesctiption:gathering.timeDesctiption,
+                totalNum: gathering.totalNum,
+                areaName: gathering.areaName,
+            };
+            const res = await roomApi.roomDetailApi(payload);
+            if(res.status === 200){
+                dispatch(modalOffAction);
+                dispatch(createGatherRoomDetailModalOnAction(res.data));
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return (
         <>
@@ -191,10 +253,41 @@ const RoomCreate = () => {
                         {step === 2 && selectedOption[0] && `${selectedOption[0]} 모임`}
                         {step === 3 &&
                             selectedOption[1].length !==0 &&
-                            `${selectedOption[1].place_name} 에서`
-                        }
+                            `${selectedOption[1].place_name} 에서
+                            모임`}
+                            {(step === 4 || step === 5) && 
+                            `${selectedOption[2].split("-")[1]} 월 ${selectedOption[2].split("-")[2]}일
+                            '${selectedOption[1].place_name}에서' 모임`}
                     </div>
+                    <h2>{ask}</h2>
                 </Info>
+                <Container>
+                    <StyleRoomCard gathering={gathering} disabled={true}/>
+                </Container>
+                <MoveNextButton isOnSearch={isOnSearch}>
+                    <Btn name="prev" onClick={handlePrevBtn}>
+                        {step > 1 && (
+                            <>
+                            <FontAwesomeIcon icon={faCaretSquareLeft}/>
+                            <div> 이전 </div>
+                            </>
+                        )}
+                    </Btn>
+                    <Btn name="next" onClick={handleNextBtn}>
+                        {step < 8 ? (
+                            <>
+                            <div> 다음 </div>
+                            <FontAwesomeIcon icon={faCaretSquareRight}/>
+                            </>
+                        ) : (
+                            <>
+                             <StyledBtn color='white' bgColor='#646fcb' onClick={handleSave}> 
+                                등록하기
+                             </StyledBtn>
+                            </>
+                        )}
+                    </Btn>
+                </MoveNextButton>
             </CreateRoomContainer>
         </>
     )
