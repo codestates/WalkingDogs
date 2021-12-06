@@ -64,7 +64,7 @@ export const RoomContentBox = styled.div`
 
 //styled-component boundary
 
-const Roomcard = ({ listKey, gathering, ...rest }) => {
+const Roomcard = ({ listKey, room }) => {
 
 
 const {gatherInfoAction} = useSelector(({gathReducer})=>gathReducer);
@@ -72,15 +72,15 @@ const dispatch = useDispatch();
 
     return(
         <Link to={`/room/${listKey}`} style={{textDecoration:'none', color:'black'}}>
-        <CardContainer {...rest}>
+        <CardContainer key={listKey}>
             <ImageBox>
                 <img src='image/puppy-test.jpeg'
                     style={{objectFit:'scale-down', width:'auto', height:'auto'}}/>
             </ImageBox>
-                <Roominfo>
-                    <AddressesBox> {gathering} </AddressesBox>
-                    <RoomContentBox>cc</RoomContentBox>
-                </Roominfo>
+            <Roominfo>
+                <AddressesBox> {room.address} </AddressesBox>
+                <RoomContentBox>{room.title}</RoomContentBox>
+            </Roominfo>
         </CardContainer>
         </Link>
     );

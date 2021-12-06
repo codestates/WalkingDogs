@@ -35,20 +35,6 @@ const Mypage = () => {
                 <div className="mypage_profile_info">
                     <span className='myinfo_title'> My Information</span>
                     <li>{JSON.parse(localStorage.getItem('userData')).username}{/* 유저이름 데이터 props.username*/}</li>
-                    <div className="dogs_container">
-                        {dogs.map((el, idx) => {
-                            return (
-                            <li
-                                key={idx}
-                                style={{ display: 'flex', justifyContent: 'space-between' }}
-                            >
-                                <span>{el.name}</span>
-                                <span>{el.breed}</span>
-                                <span>{el.neutering ? '중성화 O' : '중성화 X'}</span>
-                            </li>
-                            );
-                        })}
-                    </div>
                 </div>
 
                 

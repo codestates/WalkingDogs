@@ -1,15 +1,10 @@
 import api from './index';
 
-const locationApi = async () => {
+const locationApi = async (params = { latitude: '37.61228142890456', longitude: '-126.37612861335073' }) => {
   const result = await api({
     method: 'GET',
     url: `/location`,
-    params:{
-      latitude:42.53059957720707,
-      //
-      longitude:-34.513692434871814
-      //
-    }
+    params,
   });
   return result;
 };

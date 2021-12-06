@@ -9,6 +9,7 @@ import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../stor
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import room from '../api/room';
 import map from '../api/map';
 
@@ -67,7 +68,7 @@ export const Button = styled.button`
     border-bottom: 1px solid #000000;
 `
 
-const isListLoadingBox = styled.div`
+const IsListLoadingBox = styled.div`
     width: 100%;
     height: 20rem;
 `
@@ -109,61 +110,70 @@ const Roomlist = () => {
 
 const [isListLoading, setIsListLoading] = useState(false);
 const [Post, setPost] = useState([]);
-
-const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
+const [rooms, setRooms] = useState([]);
+const conditionOptions = {
+    location: {
+        latitude: '',
+        longitude: '',
+    },
+    date: `${new Date().getFullYear}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+    time: `${new Date().getHours()}:${new Date().getMinutes}`,
+    member_limit: 0,
+    breed: '',
+};
+const [conditions, setConditions] = useState({ ...conditionOptions });
+// const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
 const dispatch = useDispatch();
 const history = useHistory();
 
-useEffect( async () => {
+useEffect(async () => {
   const result = await map.locationApi()
 
-  console.log(result)
+  setRooms([ ...result.data.rooms ]);
 }, [])
+
+useDeepCompareEffect(()=> {
+    setIsListLoading(true);
+    setTimeout(() => {
+        setIsListLoading(false);
+    }, 500)
+}, [conditions])
 
 const handleCreateRoom = () => {
     dispatch(createGatherRoomModalOnAction())
 };
 
-useEffect(()=> {
-    setIsListLoading(true);
-    setTimeout(()=>{
-        setIsListLoading(false);
-    },500)
-},[conditions, gatherings]);
-
     return(
         <>
-        <RoomlistContainer>
-            <LocationBox> 
-                <h2 className='location_title'
-                    style={{fontWeight:'inherit', margin:'2.5rem'}}>
-                        <FontAwesomeIcon icon={faSearchLocation}
-                                            style={{paddingRight:'5px'}}/>
-                        산책을 같이 할 친구를 찾아볼까요?
-                        </h2>
-                        <RoomSearchBar/>
+            <RoomlistContainer>
+                <LocationBox> 
+                    <h2 className='location_title'
+                        style={{fontWeight:'inherit', margin:'2.5rem'}}>
+                            <FontAwesomeIcon icon={faSearchLocation}
+                                                style={{paddingRight:'5px'}}/>
+                            산책을 같이 할 친구를 찾아볼까요?
+                            </h2>
+                            <RoomSearchBar/>
 
-                        <BtnContainer>
-                            <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
-                            <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
-                        </BtnContainer>
-                </LocationBox>
-                {isListLoading ? (
-                    <isListLoadingBox>
-                        yo!
-                    </isListLoadingBox>
-                ) : gatherings.length ? (
-                    <CardList>
-                        {(gatherings && gatherings.length > 0) && (
-                        gatherings.map((gath, idx)=> {
-                            <Roomcard key={idx} gathering={gath}/>
-                        })
+                            <BtnContainer>
+                                <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
+                                <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                            </BtnContainer>
+                    </LocationBox>
+                    {isListLoading ? (
+                        <IsListLoadingBox>
+                            yo!
+                        </IsListLoadingBox>
+                    ) : rooms.length ? (
+                        <CardList>
+                            {rooms.map((el) => {
+                                return <Roomcard listKey={el.id} room={{ ...el }}/>
+                            })}
+                        </CardList>
+                    ) : (
+                        <EmptyBox> 모임이 없네요😢 </EmptyBox>
                     )}
-                    </CardList>
-                ) : (
-                    <EmptyBox> 모임이 없네요😢 </EmptyBox>
-                )}
-        </RoomlistContainer>
+            </RoomlistContainer>
         </>
     );
 }
