@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
   // 수정한 코드
   //-------------------------------------------
 
-  const [lat, lon] = [parseFloat(req.query.lat), parseFloat(req.query.lon)];
+  const [lat, lon] = [parseFloat(req.query.latitude), parseFloat(req.query.longitude)];
   const result = [];
   try {
     await room.findAll().then(rooms => {
@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
         const latitude = rooms[i].dataValues.latitude;
         const longitude = rooms[i].dataValues.longitude;
         const dist = haversine(
-          { latitude, longitude },
+          { latitude: latitude, longitude: longitude },
           { latitude: lat, longitude: lon },
           { unit: 'meter' },
         );
@@ -54,9 +54,7 @@ module.exports = async (req, res) => {
         }
       }
     });
-
-    // console.log(result);
-    res.status(200).json({ data: result, message: 'ok' });
+    res.status(200).json({ rooms: result, message: 'ok' });
   } catch (err) {
     console.error;
     res.status(400).json({ message: 'bad request' });

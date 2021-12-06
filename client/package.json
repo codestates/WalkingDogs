@@ -28,6 +28,7 @@
     "redux-thunk": "^2.4.1",
     "styled-components": "^5.3.3",
     "styled-media-query": "^2.1.2",
+    "use-deep-compare-effect": "^1.8.1",
     "useref": "^1.4.3",
     "web-vitals": "^1.0.1"
   },
