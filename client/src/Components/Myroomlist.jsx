@@ -1,15 +1,18 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import './ComponentStyles/Myroomlist.css';
 
 
-const Roomlist = () => {
+const Myroomlist = ({ listKey, room }) => {
+    const history = useHistory();
+    
     return (
         <>
-            <div className="roomlist_container">
-                <li>모임 이름:{/*props.roomName*/}</li>
-                <li>위치: {/*props.place*/}</li>
+            <div key={listKey} className="roomlist_container" onClick={() => {history.push(`/room/${listKey}`)}}>
+                <li>모임 이름:{room.title}</li>
+                <li>위치: {room.address}</li>
             </div>
         </>
     )
 }
-export default Roomlist;
+export default Myroomlist;

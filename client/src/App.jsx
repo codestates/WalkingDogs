@@ -45,7 +45,7 @@ function App() {
           <Route path='/mypage' component={Mypage}/>
           <Route path='/mypagechange' component={Mypagechg}/>
           <Route path='/roomlist' component={Roomlist}/>
-          <Route path='/oneroom' component={Oneroom}/>
+          <Route path='/room/:room_id' component={Oneroom}/>
           <Route path='/community' component={Community}/>
           <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
@@ -53,8 +53,8 @@ function App() {
         {isModal && (
           <Modal bgColor={isCreateDetailModal && 'var(--color-darkwhite)'}>
             {isCreateGatherModal}
-            {isSignupModal && <Signs type={"회원가입"} cookies={cookies} setCookie={setCookie}/>}
-            {isSigninModal && <Signs type={"로그인"} cookies={cookies} setCookie={setCookie}/>}
+            {isSignupModal && <Signs type={"회원가입"} />}
+            {isSigninModal && <Signs type={"로그인"} />}
           </Modal>
         )}
         <Footer/>

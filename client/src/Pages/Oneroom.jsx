@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components'
 import Roommap from '../Components/Roommap'
 
@@ -88,6 +89,13 @@ export const OtherUserImg = styled.img`
 
 // styled-component Boundary
 const Oneroom = () => {
+
+    const params = useParams();
+
+    useEffect(() => {
+      console.log(params)
+    }, [])
+
     return(
         <>
         <OneroomContainer>

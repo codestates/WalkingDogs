@@ -6,11 +6,13 @@ const { isAuthorized } = require('../tokenFunctions');
 // 이렇게 수정해도 괜찮은 걸까요?
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
-  console.log(req.cookies);
+  console.log('userInfo : ', userInfo);
   if (!userInfo) {
     res.status(401).send('this is an invalid token');
   } else {
     const { username, dogs, image } = req.body;
+
+    console.log(dogs)
 
     if (username) {
       await user.update(
@@ -22,6 +24,7 @@ module.exports = async (req, res) => {
         },
       );
     }
+
     if (image) {
       await user.update(
         { image },
@@ -36,20 +39,20 @@ module.exports = async (req, res) => {
     if (dogs) {
       const stack = [];
       for (let i = 0; i < dogs.length; i++) {
-        stack.push(dogs[i].id);
         const selectedDog = await dog.findOne({
           where: {
-            id: dogs[i].id,
+            id: dogs[i].id ? dogs[i].id : null,
           },
         });
-
+        
         if (selectedDog) {
+          stack.push(dogs[i].id);
           await dog.update(
             {
               name: dogs[i].name,
               breed: dogs[i].breed,
               image: dogs[i].image,
-              gender: dogs[i].gender,
+              neutering: dogs[i].neutering,
             },
             {
               where: {
@@ -57,14 +60,15 @@ module.exports = async (req, res) => {
               },
             },
           );
-        } else {
+        }
+        else {
           await dog
             .create({
               user_id: userInfo.id,
               name: dogs[i].name,
               breed: dogs[i].breed,
               image: dogs[i].image,
-              gender: dogs[i].gender,
+              neutering: dogs[i].neutering,
             })
             .then(result => {
               stack.push(result.dataValues.id);
@@ -97,13 +101,25 @@ module.exports = async (req, res) => {
         },
       });
     }
+    
+    const updatedUserInfo = await user.findOne({
+      where: {
+        id: userInfo.id,
+      },
+    })
 
+    const updatedDogInfo = await dog.findAll({
+      where: {
+        user_id: userInfo.id,
+      }
+    })
+    
     // res.status(200).end();
     res.status(200).send({
       data: {
-        image: image,
-        username: username,
-        dogs: dogs
+        image: updatedUserInfo.image,
+        username: updatedUserInfo.username,
+        dogs: [ ...updatedDogInfo ]
       },
       message: 'ok',
     });
