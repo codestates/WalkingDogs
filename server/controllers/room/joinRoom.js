@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
 
   if (!userInfo) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'unauthorized' });
   }
 
   const reqInfo = await room_join_req.findOne({
@@ -29,5 +29,5 @@ module.exports = async (req, res) => {
     return res.status(200).json({ message: 'ok' });
   }
 
-  return res.status(400).json({ message: 'You Already Sended Join Request' });
+  return res.status(400).json({ message: 'you already sended join request' });
 };

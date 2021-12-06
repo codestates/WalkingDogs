@@ -6,18 +6,17 @@ require('dotenv').config();
 module.exports = async (req, res) => {
   const { email, password, username, image } = req.body;
   if (!email || !password || !username) {
-    return res.status(400).json({ message: 'Bad Request' });
+    return res.status(400).json({ message: 'bad request' });
   } else {
     const conflictUser = await user.findOne({
       where: { email: email },
     });
     if (conflictUser) {
-      return res.status(409).json({ message: 'Conflict' });
+      return res.status(409).json({ message: 'conflict' });
     } else {
-
       const hashedPass = await bcrypt.hashSync(password, 10);
 
-      console.log(hashedPass)
+      console.log(hashedPass);
 
       await user.create({
         email: email,
@@ -26,7 +25,7 @@ module.exports = async (req, res) => {
         image: image ? image : null,
       });
 
-      return res.status(201).json({ message : 'ok' });
+      return res.status(201).json({ message: 'ok' });
     }
   }
 };

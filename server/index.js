@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: [ 'http://localhost:3000', 'https://walkingdogs.link' ],
+    origin: ['http://localhost:3000', 'https://walkingdogs.link'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   }),

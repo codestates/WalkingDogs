@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   const decoded = await isAuthorized(req);
 
   if (!decoded) {
-    return res.status(401).json({ message: 'Authorization Failed' });
+    return res.status(401).json({ message: 'authorization failed' });
   } else {
     const isLogout = await logout.findOne({
       where: { token: token },
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     } else {
       return res
         .status(400)
-        .json({ message: 'Bad Request ! You Already Logouted !' });
+        .json({ message: 'bad request! you already logouted!' });
     }
   }
 };
