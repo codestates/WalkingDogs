@@ -4,78 +4,81 @@ import DatePicker from 'react-datepicker';
 import {ko} from 'date-fns/esm/locale'
 import getYear from 'date-fns/getYear'
 import getMonth from 'date-fns/getMonth'
+import PropTypes from 'prop-types'
 import media from 'styled-media-query'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faCaretLeft, faCaretRight, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
-    margin-top: 0.1rem;
-    width: auto;
-    .react-datepicker__tab-loop{
-        margin-top: 1.75rem;
-        ${media.lessThan("medium")`
-        width: 100%;
-        height: 20rem;
-        margin: 1.25rem 0 -0.75rem 0;
-        border-radius: 0.5rem
-        position: relative;
-        `};
+  margin-top: 0.5rem;
+  width: 100%;
+  .react-datepicker__tab-loop {
+    margin-top: 1.75rem;
+    ${media.lessThan("medium")`
+      width: 100%;
+      height: 20.5rem;
+      margin-top: 1.25rem;
+      margin-bottom: -0.75rem;
+      border-radius: 1rem;
+      border: 1px solid var(--color-maingreen--50);
+      position: relative;
+    `};
+  }
+  .react-datepicker__input-container {
+    > input {
+      padding: 0 1rem;
+      width: 100%;
+      ::placeholder {
+        color: var(--color-gray);
+        font-family: Interop-Light;
+      }
     }
-    .react-datepicker__input-container{
-        > input {
-            padding: 0 1rem;
-            width: 100%;
-            ::placeholder{
-                color: gray;
-                //font-family: ;
-            }
-        }
-        >button {
-            display: none;
-        }
+    > button {
+      display: none;
     }
-    .react-datepicker-popper{
-        margin-top: 1.75rem;
-        ${media.lessThan("medium")`
-            filter: none;
-            position:absolute;
-            margin: 0 !important;
-            inset: 0 !important;
-            transform: unset !important;
-        `};
-        width: 100%;
-        padding: 0;
+  }
+  .react-datepicker-popper {
+    margin-top: 1.75rem;
+    ${media.lessThan("medium")`
+      filter: none;
+      position: absolute;
+      margin: 0 !important;
+      inset: 0 !important;
+      transform: unset !important;
+    `};
+    width: 100%;
+    padding: 0;
+  }
+  .react-datepicker {
+    background-color: var(--color-white);
+    border: none;
+    border-radius: 1rem;
+    ${media.greaterThan("medium")`
+      filter: drop-shadow(0px 6px 10px var(--color-shadow));
+    `};
+    ${media.lessThan("medium")`
+      width: 100% !important;
+      inset: 0 !important;
+    `};
+  }
+  .react-datepicker__month-container {
+    > * {
+      border: 0;
     }
-    .react-datepicker{
-        background-color: #fffff1;
-        border: none;
-        border-radius: 1rem;
-        ${media.lessThan("medium")`
-            filter: drop-shadow(0px 10px);
-
-        `};
-        ${media.lessThan("medium")`
-            width: 100% !important;
-            inset: 0 !important;
-        `};
-    }
-    .react-datepicker__month-container{
-        >*{
-            border:0;
-        }
-        ${media.lessThan("medium")`
-            width: 100% !important;
-            inset: 0 !important;
-        `};
-    }
-    .react-datepicker__month{
-        margin: 0.5rem;
-    }
-    .react-datepicker__header{
-        border-radius: 1rem 1rem 0 0;
-        background-color: transparent;
-        font-family: Interop-Medium;
-    }.react-datepicker__navigation {
+    ${media.lessThan("medium")`
+      width: 100% !important;
+      inset: 0 !important;
+    `};
+  }
+  .react-datepicker__month {
+    margin: 0.5rem;
+  }
+  .react-datepicker__header {
+    border-radius: 1rem 1rem 0 0;
+    background-color: transparent;
+    font-family: Interop-Medium;
+  }
+  .react-datepicker__navigation {
     margin: 0.5rem 0;
   }
   .react-datepicker__current-month {
@@ -84,14 +87,14 @@ const Container = styled.div`
   }
   .react-datepicker__day-names {
     margin-top: -0.5rem;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--color-lightgray);
   }
   .react-datepicker__day-name {
     font-size: 1rem;
     width: 2rem;
     line-height: 2rem;
     margin: 0.25rem;
-    color: black;
+    color: var(--color-darkgray);
   }
   .react-datepicker__week {
     > * {
@@ -105,7 +108,7 @@ const Container = styled.div`
     }
     .react-datepicker__day {
       :hover {
-        background-color: grey;
+        background-color: var(--color-maingreen--10);
       }
     }
     .react-datepicker__day--disabled {
@@ -115,20 +118,20 @@ const Container = styled.div`
       }
     }
     .react-datepicker__day--selected {
-      color: white;
-      background-color: grey;
+      color: var(--color-white);
+      background-color: var(--color-maingreen--75);
       :hover {
-        color: white;
-        background-color: white;
+        color: var(--color-white);
+        background-color: var(--color-maingreen--75);
         opacity: 0.8;
       }
     }
     .react-datepicker__day--today {
-      border: 1px solid grey;
+      border: 1px solid var(--color-maingreen--75);
       line-height: calc(2rem - 2px);
     }
   }
-`
+`;
 
 const CustomHeader = styled.div`
   margin: 1rem;
@@ -241,6 +244,12 @@ const [date, setDate] = useState(new Date());
                 </ClearBtn>)}
         </Container>
     );
+}
+
+InputDatepicker.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  selectDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  setSelectDate: PropTypes.func.isRequired,
 }
 
 export default InputDatepicker;
