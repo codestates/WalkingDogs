@@ -62,10 +62,10 @@ app.get('/location', controllers.map.location);
 
 // comment
 app.post('/comment', controllers.comment.newComment);
-app.get('all-comment', controllers.comment.allComment);
-app.get('my-comment', controllers.comment.myComment);
-app.put('/comment/', controllers.comment.editComment);
-app.delete('/comment/', controllers.comment.deleteComment);
+app.get('/all-comment', controllers.comment.allComment);
+app.get('/my-comment', controllers.comment.myComment);
+app.put('/comment', controllers.comment.editComment);
+app.delete('/comment', controllers.comment.deleteComment);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
