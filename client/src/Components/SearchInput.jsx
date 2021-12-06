@@ -1,5 +1,6 @@
 import React ,{useRef}from 'react';
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import media from 'styled-media-query'
 
 
@@ -59,6 +60,16 @@ const SearchInput = ({name, children, hideDivider}) => {
             </InputArea>
         </InputWrapper>
     )
+}
+
+SearchInput.defaultProps = {
+    hideDivider: false,
+};
+
+SearchInput.propTypes = {
+    name: PropTypes.string.isRequired,
+    children: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]).isRequired,
+    hideDivider: PropTypes.bool,
 }
 
 export default SearchInput;

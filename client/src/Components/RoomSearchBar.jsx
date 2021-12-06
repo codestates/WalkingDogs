@@ -33,7 +33,7 @@ const RoomSearchBar = () => {
 
                 <SearchInput name='날짜'>
                     <InputDatepicker
-                        id='date'/>
+                        id='date' />
                 </SearchInput>
 
                 <SearchInput name='시간'>

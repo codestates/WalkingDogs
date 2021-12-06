@@ -4,28 +4,48 @@ import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
-import {createGatherRoomModalOnAction, signinAction,singoutAction} from 'react-redux'
+import media from 'styled-media-query'
+import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import useDeepCompareEffect from 'use-deep-compare-effect'
+import room from '../api/room';
+import map from '../api/map';
 
 
 export const RoomlistContainer = styled.div`
     border: 1px solid #000000;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin:10px;
-`
+
+    >*{
+        padding: 2rem;
+        ${media.lessThan("medium")`
+        `}
+    }
+    .pc {
+        ${media.lessThan("medium")`
+            display:none;
+        `}
+    }
+    .mobile{
+        display:none;
+        ${media.lessThan("medium")`
+        display:block;
+        `}
+    }
+`;
 
 export const LocationBox = styled.div`
     display: flex;
     flex-direction: column;
+    flex: 0 0 1;
     border: 1px solid #000000;
     margin-top: 5px;
-    width: 99%;
     min-height: 15rem;
     border-radius: 5px;
     justify-content: center;
@@ -34,22 +54,28 @@ export const LocationBox = styled.div`
     font-size: 25px;
 ` 
 
-export const ItemlistContainer = styled.div`
+export const CardList = styled.div`
     border: 1px solid #000000;
     width: 100%;
     display: grid;
     flex-wrap: row;
     gap: 0.8rem;
-    grid-template-rows: repeat(auto-fill, 1fr);
     grid-template-columns: repeat(auto-fill,minmax(20rem, auto));
 `
 
 export const Button = styled.button`
     
     border-bottom: 1px solid #000000;
-
 `
 
+const IsListLoadingBox = styled.div`
+    width: 100%;
+    height: 20rem;
+`
+
+const EmptyBox = styled.div`
+    height: 20rem;
+`
 export const BtnContainer = styled.div`
     border: 1px solid #000000;
     width: 100%;
@@ -65,6 +91,7 @@ export const CreateRoomBtn = styled.button`
     border-radius: 30px;
     width: auto;
     font-size: 20px;
+    cursor: pointer;
 `
 
 
@@ -81,44 +108,72 @@ export const MapBtn = styled(Link)`
 
 const Roomlist = () => {
 
-// const testState = useSelector(state=> state.testdumState);
-
-// const {testDummys} = testState;
-
 const [isListLoading, setIsListLoading] = useState(false);
-
-const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
+const [Post, setPost] = useState([]);
+const [rooms, setRooms] = useState([]);
+const conditionOptions = {
+    location: {
+        latitude: '',
+        longitude: '',
+    },
+    date: `${new Date().getFullYear}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+    time: `${new Date().getHours()}:${new Date().getMinutes}`,
+    member_limit: 0,
+    breed: '',
+};
+const [conditions, setConditions] = useState({ ...conditionOptions });
+// const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
 const dispatch = useDispatch();
 const history = useHistory();
 
+useEffect(async () => {
+  const result = await map.locationApi()
+
+  setRooms([ ...result.data.rooms ]);
+}, [])
+
+useDeepCompareEffect(()=> {
+    setIsListLoading(true);
+    setTimeout(() => {
+        setIsListLoading(false);
+    }, 500)
+}, [conditions])
+
+const handleCreateRoom = () => {
+    dispatch(createGatherRoomModalOnAction())
+};
 
     return(
         <>
-        <RoomlistContainer>
-            <LocationBox> 
-                <h2 className='location_title'
-                    style={{fontWeight:'inherit', margin:'2.5rem'}}>
-                        <FontAwesomeIcon icon={faSearchLocation}
-                                            style={{paddingRight:'5px'}}/>
-                        산책을 같이 할 친구를 찾아볼까요?
-                        </h2>
-                        <RoomSearchBar/>
+            <RoomlistContainer>
+                <LocationBox> 
+                    <h2 className='location_title'
+                        style={{fontWeight:'inherit', margin:'2.5rem'}}>
+                            <FontAwesomeIcon icon={faSearchLocation}
+                                                style={{paddingRight:'5px'}}/>
+                            산책을 같이 할 친구를 찾아볼까요?
+                            </h2>
+                            <RoomSearchBar/>
 
-                        <BtnContainer>
-                            <CreateRoomBtn> 새로운 모임 만들기</CreateRoomBtn>
-                            <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
-                        </BtnContainer>
-                </LocationBox>
-
-                <ItemlistContainer>
-                <Roomcard/>
-                <Roomcard/>
-                <Roomcard/>
-                <Roomcard/>
-                <Roomcard/>
-                <Roomcard/>
-                </ItemlistContainer>
-        </RoomlistContainer>
+                            <BtnContainer>
+                                <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
+                                <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                            </BtnContainer>
+                    </LocationBox>
+                    {isListLoading ? (
+                        <IsListLoadingBox>
+                            yo!
+                        </IsListLoadingBox>
+                    ) : rooms.length ? (
+                        <CardList>
+                            {rooms.map((el) => {
+                                return <Roomcard listKey={el.id} room={{ ...el }}/>
+                            })}
+                        </CardList>
+                    ) : (
+                        <EmptyBox> 모임이 없네요😢 </EmptyBox>
+                    )}
+            </RoomlistContainer>
         </>
     );
 }

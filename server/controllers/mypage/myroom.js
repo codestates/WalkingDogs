@@ -17,9 +17,7 @@ module.exports = async (req, res) => {
             res.status(401).send({message: 'no such user in the database' });
         } else {
             console.log(roomList.dataValues);
-            res.status(200).send({ data: {
-                rooms: roomList.dataValues.rooms, message: 'ok' }
-            });
+            res.status(200).send({ rooms: roomList.dataValues.rooms, message: 'ok' });
         }
     }
 };

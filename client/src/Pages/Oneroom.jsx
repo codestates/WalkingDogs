@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components'
 import Roommap from '../Components/Roommap'
+import Comment from '../Components/Comment';
 
 export const OneroomContainer = styled.div`
     border: 1px solid #000000;
@@ -28,9 +30,10 @@ export const RoomBox = styled.div`
 export const RoomBtnBox = styled.div`
     border: 1px solid blue;
     display: flex;
-    min-width: 100rem;
-    height: 10rem;
+    min-width: 30rem;
+    height: 20rem;
     margin: 10px;
+    justify-content: space-around;
 `
 
 export const ImageBox = styled.div`
@@ -85,9 +88,27 @@ export const OtherUserImg = styled.img`
     margin: auto 5px;
 `
 
+const JoinBtn = styled.button`
+    width: 20rem;
+    height: 4.5rem;
+    font-size: 20px;
+    cursor: pointer;
+`
 
 // styled-component Boundary
 const Oneroom = () => {
+
+const params = useParams();
+const [isOpenCom, setIsOpenCom] = useState(false);
+
+const handleOpenComment = () => {
+    setIsOpenCom(!isOpenCom)
+}
+
+useEffect(() => {
+    console.log(params)
+}, [])
+
     return(
         <>
         <OneroomContainer>
@@ -123,9 +144,10 @@ const Oneroom = () => {
                         </RoominfoBox>
                 </RoomBox>
             <RoomBtnBox>
-                
+                <JoinBtn>참여하기</JoinBtn>
             </RoomBtnBox>
         </OneroomContainer>
+        <Comment/>
     <Roommap/>
         </>
     );

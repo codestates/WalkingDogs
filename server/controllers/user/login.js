@@ -34,10 +34,12 @@ module.exports = async (req, res) => {
       delete copy.dataValues.password;
       const token = generateAccessToken(copy.dataValues);
       sendAccessToken(res, token);
-      return res.status(200).json({
-        data: { accessToken: token, user_image: './test.img' },
-        message: 'ok',
-      });
+      return res
+        .status(200)
+        .json({
+          data: { accessToken: token, user_image: './test.img', username: copy.dataValues.username },
+          message: 'ok',
+        });
     }
   }
 };
