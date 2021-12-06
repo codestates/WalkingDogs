@@ -26,7 +26,6 @@ export const updateInfoAction = (data) => ({
     },
 });
 
-
 //MODAL ACTIONS
 
 export const createGatherRoomModalOnAction = (data) => ({
@@ -61,5 +60,3 @@ export const gatherInfoAction = ({data}) => ({
     type: GATHER_INFO,
     payload: {...data}
 })
-
-console.log(gatherInfoAction);
