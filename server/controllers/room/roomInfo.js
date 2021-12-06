@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
 
   if (!userInfo) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'unauthorized' });
   }
 
   const roomUser = await room.findOne({
