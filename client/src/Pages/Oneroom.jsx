@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components'
 import Roommap from '../Components/Roommap'
 import Comment from '../Components/Comment';
@@ -97,12 +98,16 @@ const JoinBtn = styled.button`
 // styled-component Boundary
 const Oneroom = () => {
 
-
+const params = useParams();
 const [isOpenCom, setIsOpenCom] = useState(false);
 
 const handleOpenComment = () => {
     setIsOpenCom(!isOpenCom)
 }
+
+useEffect(() => {
+    console.log(params)
+}, [])
 
     return(
         <>

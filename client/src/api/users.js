@@ -22,7 +22,6 @@ const logoutApi = () => {
 }
 
 const signupApi = async (userInfo) => {
-    console.log(userInfo)
     const result = await api({method: 'POST', 
                 url: `/signup`,
                 data:{

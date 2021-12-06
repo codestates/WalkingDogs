@@ -26,8 +26,8 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
-      gender: {
-        type: Sequelize.STRING,
+      neutering: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

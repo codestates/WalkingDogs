@@ -24,6 +24,7 @@ export const HeaderStyle = styled.header`
 
 
 export const NavContainer = styled.nav`
+    width: 100%;
     display: flex;
     flex: 1;
     justify-content: space-between;
@@ -105,6 +106,7 @@ export const ModalContainer = styled.div`
 export const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   flex: 2;
 `
 
@@ -183,6 +185,13 @@ export const UserImg = styled.img`
   border-radius: 100%;
   object-fit: fill;
 
+`
+
+export const UserName = styled.span`
+  font-size: 20px;
+  color: white;
+  font-weight: 700;
+  margin-right: 10px;
 `
 
 const InputContainer = styled.div`
@@ -276,7 +285,8 @@ function Nav({ }) {
 
       {isLogin && (
         <UserBox>
-          <UserImg src='img/puppy-test.jpeg' />
+          <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
+          <UserImg src='img/puppy-test.jpeg' onClick={() => history.push('/mypage')}/>
         </UserBox>
         )}
 

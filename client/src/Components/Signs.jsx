@@ -207,14 +207,11 @@ const handleSign = async (e) => {
         delete signInputValue.passwordConfirm;
         delete signInputValue.userName;
         try {
-          console.log('signInputValue', signInputValue)
           const res = await userApi.loginApi(signInputValue);
-          console.log(res)
-          console.log(document.cookie)
           if (res.status === 200) {
             localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
             dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
-            dispatch(modalOffAction);
+            dispatch(modalOffAction());
             history.push('/roomlist');
             // dispatch(modalOffAction) 1st, history.push('/')
           }

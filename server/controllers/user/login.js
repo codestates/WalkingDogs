@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
       return res
         .status(200)
         .json({
-          data: { accessToken: token, user_image: './test.img' },
+          data: { accessToken: token, user_image: './test.img', username: copy.dataValues.username },
           message: 'ok',
         });
     }

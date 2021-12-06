@@ -9,6 +9,8 @@ import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../stor
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import room from '../api/room';
+import map from '../api/map';
 
 
 export const RoomlistContainer = styled.div`
@@ -112,6 +114,11 @@ const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
 const dispatch = useDispatch();
 const history = useHistory();
 
+useEffect( async () => {
+  const result = await map.locationApi()
+
+  console.log(result)
+}, [])
 
 const handleCreateRoom = () => {
     dispatch(createGatherRoomModalOnAction())
