@@ -6,7 +6,10 @@ import { faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
+import PropTypes from "prop-types";
+
 import media from 'styled-media-query';
+
 
 
 const ModalBackdrop = styled.div`
@@ -133,6 +136,11 @@ const Modal = ({children, bgColor}) => {
         </ModalBackdrop>
       </ModalOverlay>
     );
+}
+
+Modal.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.bool, PropTypes.element, PropTypes.node]).isRequired,
+  bgColor: PropTypes.string,
 }
 
 export default Modal;
