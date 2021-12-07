@@ -47,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
       image: {
         type: DataTypes.STRING,
       },
+      kakao_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      }
     },
     {
       sequelize,

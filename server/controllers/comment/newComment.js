@@ -11,15 +11,21 @@ module.exports = async (req, res) => {
     res.status(401).json({ message: 'unauthorized' });
   } else {
     try {
-      const contents = await comment.create({
+      await comment.create({
         room_id: room_id,
         user_id: userInfo.id,
         message: message,
       });
-      console.log(contents);
+      
+      const list = await comment.findAll({
+        where: {
+          room_id,
+        },
+      })
+
       res
         .status(201)
-        .json({ data: contents, message: 'your comment is created' });
+        .json({ data: list, message: 'your comment is created' });
     } catch {
       console.error;
       res.status(500).json({ message: 'server error' });

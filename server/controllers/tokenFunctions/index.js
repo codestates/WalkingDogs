@@ -20,7 +20,6 @@ module.exports = {
     });
   },
 
-
   isAuthorized: async req => {
     // JWT 토큰이 전달되지 않은 경우
     if (!req.cookies['jwt']) {
