@@ -62,8 +62,7 @@ app.get('/location', controllers.map.location);
 
 // comment
 app.post('/comment', controllers.comment.newComment);
-app.get('/all-comment', controllers.comment.allComment);
-app.get('/my-comment', controllers.comment.myComment);
+app.get('/comment', controllers.comment.allComment);
 app.put('/comment', controllers.comment.editComment);
 app.delete('/comment', controllers.comment.deleteComment);
 
