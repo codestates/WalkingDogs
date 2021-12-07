@@ -61,8 +61,8 @@ app.post('/password', controllers.mypage.password);
 app.get('/location', controllers.map.location);
 
 // comment
-app.post('/comment', controllers.comment.newComment);
 app.get('/comment', controllers.comment.allComment);
+app.post('/comment', controllers.comment.newComment);
 app.put('/comment', controllers.comment.editComment);
 app.delete('/comment', controllers.comment.deleteComment);
 

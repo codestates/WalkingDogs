@@ -1,5 +1,5 @@
 const { user } = require('../../models');
-const { generateAccessToken } = require('../tokenFunctions');
+const { generateAccessToken, sendAccessToken } = require('../tokenFunctions');
 // require("dotenv").config();
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -29,10 +29,12 @@ const { OAuth2Client } = require('google-auth-library');
 
 module.exports = async (req, res) => {
   const authorizationCode = req.body.authorizationCode;
+
   //   console.log('authorizationCode:', authorizationCode);
   const { tokens } = await oauth2Client.getToken(authorizationCode);
   oauth2Client.setCredentials(tokens);
   //   console.log('tokens: ', tokens);
+
 
   let email = '';
   let username = '';
@@ -57,51 +59,44 @@ module.exports = async (req, res) => {
       },
     });
     if (currentUser) {
+
       delete currentUser.dataValues.email;
       delete currentUser.dataValues.password;
+     
+
       const newAccessToken = generateAccessToken(currentUser.dataValues);
-      res
+      
+      return res
+        .cookie('jwt', newAccessToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '1d',
+        })
         .status(200)
-        .json({
-          data: {
-            accessToken: newAccessToken,
-            username: currentUser.dataValues.username,
-            image: currentUser.dataValues.image,
-          },
-          message: 'ok',
-        });
-    } else {
+        .json({ data: { accessToken: newAccessToken, username: currentUser.dataValues.username, user_image: currentUser.dataValues.image }, message: 'ok' });
+    }
+    else {
+
       const userInfo = await user.create({
         username: username,
         email: email,
         image: image,
       });
-      if (!userInfo) {
-        // console.log('database fails');
-        res.status(400).json({ message: 'unauthorized' });
-      } else {
-        // console.log('database succeeds');
-        const newUser = await user.findOne({
-          where: {
-            email: email,
-          },
-        });
 
-        delete newUser.dataValues.email;
-        delete newUser.dataValues.password;
-        // console.log('newUser: ', newUser);
-        const newAccessToken = generateAccessToken(newUser.dataValues);
-        res
-          .status(200)
-          .json({
-            data: {
-              accessToken: newAccessToken,
-              username: newUser.dataValues.username,
-              image: newUser.dataValues.image,
-            },
-            message: 'ok',
-          });
-      }
+      
+      delete userInfo.dataValues.email;
+      delete userInfo.dataValues.password;
+
+      const newAccessToken = generateAccessToken(userInfo.dataValues);
+      return res
+        .cookie('jwt', newAccessToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '1d',
+        })
+        .status(200)
+        .json({ data: { accessToken: newAccessToken, username: userInfo.dataValues.username, user_image: userInfo.dataValues.image }, message: 'ok' });
+
     }
   }
 
