@@ -43,6 +43,7 @@ app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
+app.post('/signupPermission', controllers.user.signupPermission);
 
 // room
 app.get('/room/:room_id', controllers.room.roomInfo);
