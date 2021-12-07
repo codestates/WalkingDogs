@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import {ko} from 'date-fns/esm/locale'
 import getYear from 'date-fns/getYear'
 import getMonth from 'date-fns/getMonth'

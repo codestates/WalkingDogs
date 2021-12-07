@@ -3,10 +3,13 @@ import styled from 'styled-components';
 import { createGatherRoomDetailModalOnAction, modalOffAction } from '../store/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import Roomcard from './Roomcard'
+import RoomSearch from './RoomSearch'
 import roomApi from '../api/room'
 import AllButtons from './AllButtons';
+import media from 'styled-media-query'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretSquareLeft, faCaretSquareRight } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -100,22 +103,19 @@ const RoomCreate = () => {
 
     const dispatch = useDispatch();
 
-    const [gathering, setGathering] = useState({
+    const [roomInfo, setRoomInfo] = useState({
         id: 1,
-        title: '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
+        room_title: '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
         description: '마포구 포메라니안 집사입니다. 최근에 애견카페 괜찮을 곳 찾았어요!',
         creater:{
             id:'uuid',
-            username:'test1',
             image:"",
         },
-        areaName:"마포구",
-        placeName: "월드컵경기장",
+        address:"마포구",
         latitude: "37.56820203278462",
         longitude: "126.8990406557216",
         date: "2021-12-27",
-        time: 'evening',
-        timeDesctiption: "18시",
+        meeting_time: "18시",
         totalNum: 4,
         currentNum: 1,
         done: false,
@@ -189,7 +189,7 @@ const RoomCreate = () => {
             break;
         }
         if(step === 6) setInputValue(2);
-        setGathering({
+        setRoomInfo({
             id:1,
             title: selectedOption[6]
             ? selectedOption[6]
@@ -219,21 +219,22 @@ const RoomCreate = () => {
         });
     },[step, selectedOption]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         try {
             const payload = {
-                title: gathering.title,
+                title: roomInfo.title,
                 description: inputValue,
-                placeName:gathering.placeName,
-                latitude:gathering.latitude,
-                longitude:gathering.longitude,
-                date: gathering.date,
-                time: gathering.time,
-                timeDesctiption:gathering.timeDesctiption,
-                totalNum: gathering.totalNum,
-                areaName: gathering.areaName,
+                placeName:roomInfo.placeName,
+                latitude:roomInfo.latitude,
+                longitude:roomInfo.longitude,
+                date: roomInfo.date,
+                time: roomInfo.time,
+                timeDesctiption:roomInfo.timeDesctiption,
+                totalNum: roomInfo.totalNum,
+                address: roomInfo.areaName,
             };
-            const res = await roomApi.roomDetailApi(payload);
+            const res = await roomApi.newRoomApi(payload);
+            console.log(res)
             if(res.status === 200){
                 dispatch(modalOffAction);
                 dispatch(createGatherRoomDetailModalOnAction(res.data));
@@ -242,6 +243,17 @@ const RoomCreate = () => {
             console.error(error);
         }
     };
+
+    
+    /*
+    latitude: roomInfo.latitude,
+    longitude: roomInfo.longitude,
+    address: roomInfo.address,
+    selected_dogs: [...roomInfo.selected_dogs],
+    room_title: roomInfo.room_title,
+    member_limit: roomInfo.member_limit,
+    meeting_time: roomInfo.meeting_time,
+    */
 
 
     return (
@@ -262,7 +274,18 @@ const RoomCreate = () => {
                     <h2>{ask}</h2>
                 </Info>
                 <Container>
-                    <StyleRoomCard gathering={gathering} disabled={true}/>
+                    <RoomSearch
+                    step={step}
+                    isOnSearch={isOnSearch}
+                    setIsOnSearch={setIsOnSearch}
+                    inputValue={inputValue}
+                    setInputValue={setInputValue}
+                    list={list}
+                    isSelected={isSelected}
+                    setIsSelected={setIsSelected}
+                    selectedOption={selectedOption}
+                    setSelectedOption={setSelectedOption}/>
+                    <StyleRoomCard roomInfo={roomInfo} disabled={true}/>
                 </Container>
                 <MoveNextButton isOnSearch={isOnSearch}>
                     <Btn name="prev" onClick={handlePrevBtn}>

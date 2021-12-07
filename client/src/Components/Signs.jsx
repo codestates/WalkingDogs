@@ -10,9 +10,11 @@ import {
   signupModalOnAction,
 } from '../store/actions';
 
+import AllButtons from './AllButtons'
+
 import userApi from '../api/users';
 
-export const Form = styled.form`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,17 +45,17 @@ export const Form = styled.form`
   }
 `;
 
-export const Logo = styled.img`
+const Logo = styled.img`
   height: 5rem;
   object-fit: scale-down;
   background-color: #646fcb;
 `;
 
-export const InputContainer = styled.div`
+const InputContainer = styled.div`
   height: auto;
 `;
 
-export const Input = styled.input`
+const Input = styled.input`
   height: 2rem;
   padding: 0;
   font-size: 0.875rem;
@@ -87,7 +89,7 @@ export const VerifiedMessage = styled.div`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled(AllButtons)`
   display: flex;
   align-items: center;
   justify-content: center;

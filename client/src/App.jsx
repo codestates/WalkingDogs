@@ -17,6 +17,10 @@ import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { signinAction } from './store/actions';
 import Maps from './Pages/Maps'
+import RoomCreate from './Components/RoomCreate'
+import PwChange from './Components/PwChange'
+
+
 
 function App() {
   const [cookies, setCookie] = useCookies(['jwt']);
@@ -25,9 +29,10 @@ function App() {
   const {isCreateGatherModal, 
           isCreateDetailModal, 
           isSigninModal, 
-          isSignupModal, 
+          isSignupModal,
+          isPasswordChgModal,
           currentGatherInfo} = useSelector(({modalReducer}) => modalReducer);
-  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal;
+  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,6 +40,16 @@ function App() {
       dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
     }
   }, [])
+
+
+  useEffect (() => {
+    const vh = currentHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    return () => {
+      document.documentElement.style.removeProperty("--vh", `${vh}px`);
+    }
+  }, [currentHeight]);
+
 
   return (
     <Brouter>
@@ -51,8 +66,9 @@ function App() {
           <Redirect from='*' to='/'/>
         </Switch>
         {isModal && (
-          <Modal bgColor={isCreateDetailModal && 'var(--color-darkwhite)'}>
-            {isCreateGatherModal}
+          <Modal bgColor={isCreateDetailModal && 'grey'}>
+            {isCreateGatherModal && <RoomCreate/>}
+            {isPasswordChgModal && <PwChange/>}
             {isSignupModal && <Signs type={"회원가입"} />}
             {isSigninModal && <Signs type={"로그인"} />}
           </Modal>

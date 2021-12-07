@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components'
 import Roommap from '../Components/Roommap'
 import Comment from '../Components/Comment';
+import roomApi from '../api/room'
 
 export const OneroomContainer = styled.div`
     border: 1px solid #000000;
@@ -105,9 +106,20 @@ const handleOpenComment = () => {
     setIsOpenCom(!isOpenCom)
 }
 
+const handleJoinBtnClick = () => {
+    try {
+        const res = roomApi.joinRoomApi();
+        
+    } catch (error) {
+        
+    }
+}
+
 useEffect(() => {
     console.log(params)
 }, [])
+
+
 
     return(
         <>

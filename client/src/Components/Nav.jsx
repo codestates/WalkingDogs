@@ -2,16 +2,18 @@ import React, {useEffect, useState} from "react"
 import { faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { useHistory } from 'react-router'
-import Mypage from '../Pages/Mypage'
-import styled,{css} from 'styled-components'
+import { useHistory } from 'react-router';
+import Mypage from '../Pages/Mypage';
+import styled,{css} from 'styled-components';
 import media from 'styled-media-query';
+import UserIcon from './UserIcon';
 import { signinAction,
          signinModalOnAction,
-         signupAction,
+         signoutAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
+import userApi from '../api/users'
 
 
 export const HeaderStyle = styled.header`
@@ -94,7 +96,15 @@ export const SignupBtn = styled.button`
     cursor: pointer;
     font-size:1.8rem;
     margin: 0 1.1rem;
-    
+`
+
+const LogoutBtn = styled.button`
+  border: 0.5px solid white;
+  background-color: #646fcb;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size:1.8rem;
 `
 
 export const ModalContainer = styled.div`
@@ -192,6 +202,7 @@ export const UserName = styled.span`
   color: white;
   font-weight: 700;
   margin-right: 10px;
+  cursor: pointer;
 `
 
 const InputContainer = styled.div`
@@ -210,7 +221,7 @@ const Input = styled.input`
     border: hidden;
   }
   ::placeholder {
-    color: var(--color-gray);
+    color: gray;
   }
 `;
 
@@ -218,36 +229,77 @@ const PWInput = styled.input.attrs({type: 'password'})`
   height: 2rem;
   padding: 0 0.5rem;
   font-size: 0.875rem;
-  color: var(--color-black);
+  color: black;
   ::placeholder {
-    color: var(--color-gray);
+    color: gray;
   }
 `;
 
-// const Button = styled(Btn)`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 0;
-//   min-height: 3rem;
-//   font-size: 1rem;
-//   border: 1.5px solid var(--color-maingreen--100);
-//   * {
-//     font-size: 0.5rem;
-//   }
-// `;
+const PcUserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: calc (-4.5rem - 3px);
+  right: 0;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
+  ${media.lessThan("medium")`
+    display: none;
+  `};
+`;
+
+const PcUserInfoMyPageBtn = styled(Link)`
+  background-color: var(--color-white);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  border-bottom: 1px solid var(--color-lightgray);
+  transition: background-color 100ms ease-out;
+  :hover {
+    background-color: var(--color-darkwhite);
+  }
+`;
+
+const PcUserInfoLogoutBtn = styled.button`
+  color: var(--color-red);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background-color: var(--color-white);
+  transition: background-color 100ms ease-out;
+  :hover {
+    background-color: var(--color-red--25);
+  }
+`;
+
 
 // styled-component Boundary
 
-function Nav({ }) {
+function Nav() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isUserBtnClicked, setIsUserBtnClicked] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
   const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
   
+
+  const handleUserInfoClick = () => {
+    setIsUserBtnClicked((prev) => !prev);
+  }
+
+  const closeAll = () => {
+    setIsUserBtnClicked(false);
+  }
+
+  const handleSignOut = () => {
+    closeAll();
+      const res = userApi.logoutApi();
+        dispatch(signoutAction());
+      if(res.status === 200) history.push("/")
+  };
 
 
   return (
@@ -287,52 +339,16 @@ function Nav({ }) {
         <UserBox>
           <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
           <UserImg src='img/puppy-test.jpeg' onClick={() => history.push('/mypage')}/>
+          <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>
         </UserBox>
         )}
 
-      {/* <CommunityContainer>
-        <Link to="community">
-            <CommunityBtn> 커뮤니티 </CommunityBtn>
-        </Link>
-      </CommunityContainer>
-
-      <ModalContainer>
-        
-          <LoginModalBtn > 로그인 </LoginModalBtn>
-        
-        
-          <LoginModalBackdrop >
-              <LoginModalView >
-                <CloseBtn>
-                  <FontAwesomeIcon icon={faTimes}/>
-                </CloseBtn>
-                  <ModalTitleBox>
-                    <TitleImg src='img/WalkingDogsTitleLogo.jpeg'/>
-                  </ModalTitleBox>
-                <InputContainer>
-                  <Input name='email' placeholder='이메일'></Input>
-                  <PWInput name='password' placeholder='비밀번호'></PWInput>
-                </InputContainer>
-              </LoginModalView>
-
-          </LoginModalBackdrop>
-        
-
-          <SignupBtn > 회원가입 </SignupBtn>
-          
-            <SignUpModalBackdrop>
-                <SignupModalView onClick={(e)=> e.stopPropagation()}>
-                  <CloseBtn >
-                    <FontAwesomeIcon icon={faTimes}/>
-                  </CloseBtn>
-                </SignupModalView>
-            </SignUpModalBackdrop> 
-          
-      </ModalContainer>
- 
-        <Link to="/mypage" className="mypage_icon" render={(props) => <Mypage />}>
-          <UserImg src='img/puppy-test.jpeg' />
-        </Link>       */}
+        {isUserBtnClicked && (
+          <PcUserInfo>
+            <PcUserInfoMyPageBtn to='/mypage' onClick={handleUserInfoClick}> 마이 페이지 </PcUserInfoMyPageBtn>
+            <PcUserInfoLogoutBtn onClick={handleSignOut}> 로그아웃 </PcUserInfoLogoutBtn>
+          </PcUserInfo>
+        )}
     </NavContainer>
   );
 }

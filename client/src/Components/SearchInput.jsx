@@ -1,5 +1,5 @@
 import React ,{useRef}from 'react';
-import styled from 'styled-components'
+import styled,{css} from 'styled-components'
 import PropTypes from 'prop-types'
 import media from 'styled-media-query'
 
@@ -21,9 +21,27 @@ const InputWrapper = styled.label`
                 return '10rem';
         }};
     `}
+    border-radius: 1rem;
     display: flex;
+    :hover {
+        ${media.greaterThan("medium")`
+        background-color: white;
+        `};
+    }
     position: relative;
-`
+    .bg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 4rem;
+        border: 1px solid gray;
+        border-radius: 1rem;
+        ${media.greaterThan("medium")`
+        display: none;
+        `};
+    }
+    `;
 
 const InputArea = styled.div`
     flex: 1 1 0;
@@ -32,11 +50,15 @@ const InputArea = styled.div`
     flex-direction: column;
     justify-content: space-between;
     margin: 0.75rem 0;
+    ${media.lessThan("medium")`
+    height: fit-content;
+  `};
 `
 
 const Name = styled.div`
     margin: 0 1rem;
     font-size: 0.9rem;
+    color: gray;
     flex: 0 0 1;
 `
 
@@ -58,6 +80,7 @@ const SearchInput = ({name, children, hideDivider}) => {
                 <Name>{name}</Name>
                 {children}
             </InputArea>
+            {!hideDivider && <Divider className="divider"/>}
         </InputWrapper>
     )
 }

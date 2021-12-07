@@ -3,6 +3,7 @@ import {SIGN_IN,
         UPDATE_INFO,
         SIGNUP_MODAL_ON,
         SIGNIN_MODAL_ON,
+        PASSWORDCHG_MODAL_ON,
         CREATE_GATHER_ROOM_MODAL_ON,
         CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
         SEARCH_GATHER,
@@ -15,7 +16,7 @@ export const signinAction = (data) => ({
     payload: { ...data },
 }) 
 
-export const singoutAction = (data) => ({
+export const signoutAction = (data) => ({
     type: SIGN_OUT,
 })
 
@@ -43,6 +44,10 @@ export const signupModalOnAction = (data) => ({
 
 export const signinModalOnAction = (data) => ({
     type: SIGNIN_MODAL_ON,
+})
+
+export const passwordChgModalOnAction = (data) => ({
+    type: PASSWORDCHG_MODAL_ON,
 })
 
 export const modalOffAction = (data)=> ({

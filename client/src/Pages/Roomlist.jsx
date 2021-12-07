@@ -5,6 +5,7 @@ import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import media from 'styled-media-query'
+import AllButtons from '../Components/AllButtons'
 import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -122,6 +123,7 @@ const conditionOptions = {
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
+console.log(conditions)
 // const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
 const dispatch = useDispatch();
 const history = useHistory();

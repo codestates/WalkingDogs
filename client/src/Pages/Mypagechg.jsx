@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import mypage from '../api/mypage';
 import './PageStyle/Mypagechg.css';
+import { passwordChgModalOnAction, modalOffAction, updateInfoAction} from '../store/actions';
+import AllButtons from '../Components/AllButtons'
+//
+import styled, {css} from 'styled-components'
+import media from 'styled-media-query'
+import {useSelector, useDispatch} from 'react-redux'
+import {useHistory} from 'react-router-dom'
+import Modal from '../Components/Modal';
+import PwChange from '../Components/PwChange';
+
+//
 
 // 순상 : 강아지 list 쪽 CSS 스타일 임시로 넣어놓았습니다.
 // 순상 : CSS 수정 부탁드립니다. ( contents 정렬 )
@@ -9,14 +20,69 @@ import './PageStyle/Mypagechg.css';
 // image 추가 버튼, image 추가 로직
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
 // 전체 스타일링 (중요도 낮음)
+
+const PasswordChgBtn = styled.button`
+  border: 0.5px solid white;
+  background-color: #646fcb;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size:1.8rem;
+`
+
+const ModalContainer = styled.div`
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 auto;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 1rem;
+  color: darkgray;
+  background-color: #646fcb;
+  ${(props) => {
+    props.bgColor &&
+      css`
+        background-color: ${props.bgColor};
+      `;
+  }};
+  ${media.lessThan("medium")`
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transform: translateY(0)
+    min-height: 100%;
+    min-width: 100%;
+    border-radius: 0;
+  `};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+
+
+//styled-component Boundary
 const Mypagechg = () => {
   const [infos, setInfos] = useState({ userName: '', dogs: [], image: '' });
+
+  const [isPwModalOpen, setIsPwModalOpen] = useState(false);
+  const [pwChgMode, setPwChgMode] = useState(false);
+  const [isMypage, setIsMyPage] = useState(false);
+
+  const {password} = useSelector(({authReducer})=> authReducer);
+
+  const {isPasswordChgModal} = useSelector(({modalReducer})=> modalReducer);
 
   const [choice, setChoice] = useState({
     name: '',
     breed: '',
     neutering: false,
   });
+
+  const dispatch = useDispatch();
 
   const choiceOpt = [
     '--견종을 선택하세요--',
@@ -82,6 +148,8 @@ const Mypagechg = () => {
 
   const handleChangePasswordBtnClick = () => {
     // 순상 : 진희님 패스워드 변경 modal 창 추가 부탁드립니다.
+    setIsPwModalOpen(!isPwModalOpen)
+    
   };
 
   const handleClickOpts = e => {
@@ -174,12 +242,14 @@ const Mypagechg = () => {
               >
                 Profile Change Button
               </button>
-              <button
-                className="profile_pw_btn"
-                onClick={handleChangePasswordBtnClick}
-              >
-                Password Change Button
-              </button>
+              
+              
+              {!isPasswordChgModal &&(
+              <PasswordChgBtn onClick={()=>passwordChgModalOnAction()}>
+                비밀번호 변경
+              </PasswordChgBtn>)}
+
+              
             </div>
           </div>
         </div>
