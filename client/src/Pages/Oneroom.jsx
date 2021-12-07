@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components'
 import Roommap from '../Components/Roommap'
-import Comment from '../Components/Comment';
+import Comments from '../Components/Comments';
 
 export const OneroomContainer = styled.div`
     border: 1px solid #000000;
@@ -147,7 +147,7 @@ useEffect(() => {
                 <JoinBtn>참여하기</JoinBtn>
             </RoomBtnBox>
         </OneroomContainer>
-        <Comment/>
+        <Comments roomId={params.room_id}/>
     <Roommap/>
         </>
     );

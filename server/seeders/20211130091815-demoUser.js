@@ -22,6 +22,7 @@ module.exports = {
         email : "test" + (idx + 1) + "@wd.link",
         password : hashedPass, 
         image: './test.img',
+        kakao_id: null,
         createdAt : new Date(),
         updatedAt : new Date(),
       }
