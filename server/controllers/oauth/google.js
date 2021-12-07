@@ -12,7 +12,7 @@ const { google } = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
   clientId,
   clientSecret,
-  redirectUri
+  redirectUri,
 );
 
 // const scopes = [
@@ -29,10 +29,12 @@ const { OAuth2Client } = require('google-auth-library');
 
 module.exports = async (req, res) => {
   const authorizationCode = req.body.authorizationCode;
-  // console.log('authorizationCode:', authorizationCode);
+
+  //   console.log('authorizationCode:', authorizationCode);
   const { tokens } = await oauth2Client.getToken(authorizationCode);
   oauth2Client.setCredentials(tokens);
-  // console.log('tokens: ', tokens);
+  //   console.log('tokens: ', tokens);
+
 
   let email = '';
   let username = '';
@@ -45,7 +47,7 @@ module.exports = async (req, res) => {
       audience: clientId,
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub'];
+    // const userid = payload['sub'];
     // console.log('payload: ', payload);
 
     email = payload.email;
@@ -57,6 +59,11 @@ module.exports = async (req, res) => {
       },
     });
     if (currentUser) {
+
+      delete currentUser.dataValues.email;
+      delete currentUser.dataValues.password;
+     
+
       const newAccessToken = generateAccessToken(currentUser.dataValues);
       
       return res
@@ -75,9 +82,10 @@ module.exports = async (req, res) => {
         email: email,
         image: image,
       });
+
       
-      delete newUser.dataValues.email;
-      delete newUser.dataValues.password;
+      delete userInfo.dataValues.email;
+      delete userInfo.dataValues.password;
 
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       return res
@@ -88,7 +96,7 @@ module.exports = async (req, res) => {
         })
         .status(200)
         .json({ data: { accessToken: newAccessToken, username: userInfo.dataValues.username, user_image: userInfo.dataValues.image }, message: 'ok' });
-    
+
     }
   }
 
