@@ -1,4 +1,4 @@
-const { user, room } = require('../../models');
+const { user, room, user_room } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
@@ -7,17 +7,24 @@ module.exports = async (req, res) => {
         res.status(401).send({ message: 'this token is not authorized' });
     } else {
         const id = userInfo.id;
-        const roomList = await user.findOne({
+        const roomList = await user_room.findAll({
             where: {
-                id: id
+                user_id: id
             },
-            include: room
+            include: {
+                model: room,
+            },
         })
+
         if (!roomList) {
             res.status(401).send({message: 'no such user in the database' });
         } else {
-            console.log(roomList.dataValues);
-            res.status(200).send({ rooms: roomList.dataValues.rooms, message: 'ok' });
+            const rooms = []
+            roomList.forEach((el) => {
+                rooms.push(el.room)
+            })
+
+            res.status(200).send({ rooms, message: 'ok' });
         }
     }
 };

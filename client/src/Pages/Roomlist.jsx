@@ -129,6 +129,7 @@ const history = useHistory();
 useEffect(async () => {
   const result = await map.locationApi()
 
+  console.log(result)
   setRooms([ ...result.data.rooms ]);
 }, [])
 

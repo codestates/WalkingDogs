@@ -17,21 +17,17 @@ const newRoomApi = async roomInfo => {
   return result;
 };
 
-const roomDetailApi = async () => {
+const roomDetailApi = async (roomId) => {
   const result = await api({
-    url: `/room/:room_id`,
+    url: `/room/${roomId}`,
   });
   return result;
 };
 
-const joinRoomApi = async roomInfo => {
+const joinRoomApi = async (roomId) => {
   const result = await api({
-    method: 'POST',
-    url: `/room/:room_id/join`,
-    data: {
-      user_id: roomInfo.user_id,
-      room_id: roomInfo.room_id,
-    },
+    method: 'PUT',
+    url: `/room/${roomId}/join`,
   });
   return result;
 };

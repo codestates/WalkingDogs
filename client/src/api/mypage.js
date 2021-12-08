@@ -14,6 +14,7 @@ const myroomApi = async () => {
   return result;
 };
 
+// ! 패드워드 모달이 완성된 뒤에 확인
 const passwordApi = async userInfo => {
   const result = await api({
     method: 'POST',

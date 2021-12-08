@@ -18,9 +18,14 @@ module.exports = async (req, res) => {
         },
         include: user,
       });
-      console.log(contents);
 
-      res.status(200).json({ data: contents, message: 'ok' });
+      const result = []
+
+      contents.forEach(el => {
+        result.push(Object.assign({}, { ...el.dataValues }, { isMine: el.dataValues.user_id === userInfo.id}))
+      })
+
+      res.status(200).json({ data: result, message: 'ok' });
     } catch {
       console.error;
       res.status(500).json({ message: 'server error' });
