@@ -23,6 +23,10 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      kakao_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

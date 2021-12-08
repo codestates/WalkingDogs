@@ -9,8 +9,8 @@ import {
   signinModalOnAction,
   signupModalOnAction,
 } from '../store/actions';
-
 import userApi from '../api/users';
+require('dotenv').config();
 
 export const Form = styled.form`
   display: flex;
@@ -55,7 +55,7 @@ export const InputContainer = styled.div`
 
 export const Input = styled.input`
   height: 2rem;
-  padding: 0;
+  padding: 0px;
   font-size: 0.875rem;
   color: black;
   ::placeholder {
@@ -100,6 +100,38 @@ export const Button = styled.button`
   * {
     font-size: 0.5rem;
   }
+`;
+
+export const OAuthContainer = styled.div`
+  margin-top: -30px;
+  padding: 0px;
+  height: 10%;
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+export const KakaoBtn = styled.button`
+  margin: 0px;
+  display: flex;
+  padding: 0px;
+  border: 0px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const GoogleBtn = styled.button`
+  margin: 0px;
+  display: flex;
+  padding: 0px;
+  border: 0px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
 `;
 
 //styled-component Boundary
@@ -210,7 +242,7 @@ const handleSign = async (e) => {
           const res = await userApi.loginApi(signInputValue);
           if (res.status === 200) {
             localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
-            dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+            dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
             dispatch(modalOffAction());
             history.push('/roomlist');
             // dispatch(modalOffAction) 1st, history.push('/')
@@ -236,6 +268,28 @@ const handleSign = async (e) => {
       }
     }
   };
+
+  const handleClickOAuth = (e) => {
+    const name = e.target.name
+    const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+    
+    if(name === 'google') {
+      const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
+      const REACT_APP_GOOGLE_REDIRECT_URL = process.env.REACT_APP_GOOGLE_REDIRECT_URL
+      const scope = googleScope.join('+')
+      const path = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REACT_APP_GOOGLE_REDIRECT_URL}&scope=${scope}&access_type=offline`
+
+      window.location.assign(path)
+    }
+    else {
+      const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY
+      const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
+
+      const path = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
+
+      window.location.assign(path)
+    }
+  }
 
   return isOnVerification ? (
     <>
@@ -273,6 +327,10 @@ const handleSign = async (e) => {
             </>
           )}
         </InputContainer>
+        <OAuthContainer>
+          <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>구글</GoogleBtn>
+          <KakaoBtn type="button" name='kakao' onClick={(e) => handleClickOAuth(e)}>카카오</KakaoBtn>
+        </OAuthContainer>
         <Button
           type="button"
           style={{ backgroundColor: '' }}

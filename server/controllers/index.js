@@ -3,7 +3,7 @@ module.exports = {
     login: require('./user/login'),
     logout: require('./user/logout'),
     signup: require('./user/signup'),
-    signupPermission: require('./user/signupPermission'),
+    // signupPermission: require('./user/signupPermission'),
   },
   oauth: {
     kakao: require('./oauth/kakao'),
@@ -27,15 +27,7 @@ module.exports = {
   },
   comment: {
     newComment: require('./comment/newComment'),
-    allComment: require('./comment/allComment.js'),
-    myComment: require('./comment/myComment.js'),
-    editComment: require('./comment/editComment'),
-    deleteComment: require('./comment/deleteComment'),
-  },
-  comment: {
-    newComment: require('./comment/newComment'),
     allComment: require('./comment/allComment'),
-    myComment: require('./comment/myComment'),
     editComment: require('./comment/editComment'),
     deleteComment: require('./comment/deleteComment'),
   },

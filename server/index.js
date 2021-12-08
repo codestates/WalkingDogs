@@ -43,7 +43,7 @@ app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
-app.post('/signupPermission', controllers.user.signupPermission);
+// app.post('/signupPermission', controllers.user.signupPermission);
 
 // room
 app.get('/room/:room_id', controllers.room.roomInfo);
@@ -62,9 +62,8 @@ app.post('/password', controllers.mypage.password);
 app.get('/location', controllers.map.location);
 
 // comment
+app.get('/comment', controllers.comment.allComment);
 app.post('/comment', controllers.comment.newComment);
-app.get('/all-comment', controllers.comment.allComment);
-app.get('/my-comment', controllers.comment.myComment);
 app.put('/comment', controllers.comment.editComment);
 app.delete('/comment', controllers.comment.deleteComment);
 

@@ -1,5 +1,5 @@
 const { user } = require('../../models');
-const { generateAccessToken } = require('../tokenFunctions');
+const { generateAccessToken, sendAccessToken } = require('../tokenFunctions');
 // require("dotenv").config();
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -12,7 +12,7 @@ const { google } = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
   clientId,
   clientSecret,
-  redirectUri
+  redirectUri,
 );
 
 // const scopes = [
@@ -29,10 +29,12 @@ const { OAuth2Client } = require('google-auth-library');
 
 module.exports = async (req, res) => {
   const authorizationCode = req.body.authorizationCode;
-//   console.log('authorizationCode:', authorizationCode);
+
+  //   console.log('authorizationCode:', authorizationCode);
   const { tokens } = await oauth2Client.getToken(authorizationCode);
   oauth2Client.setCredentials(tokens);
-//   console.log('tokens: ', tokens);
+  //   console.log('tokens: ', tokens);
+
 
   let email = '';
   let username = '';
@@ -45,7 +47,7 @@ module.exports = async (req, res) => {
       audience: clientId,
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub'];
+    // const userid = payload['sub'];
     // console.log('payload: ', payload);
 
     email = payload.email;
@@ -57,34 +59,44 @@ module.exports = async (req, res) => {
       },
     });
     if (currentUser) {
-      res
-        .status(400)
-        .json({ message: 'this user already exists in the database' });
-    } else {
+
+      delete currentUser.dataValues.email;
+      delete currentUser.dataValues.password;
+     
+
+      const newAccessToken = generateAccessToken(currentUser.dataValues);
+      
+      return res
+        .cookie('jwt', newAccessToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '1d',
+        })
+        .status(200)
+        .json({ data: { accessToken: newAccessToken, username: currentUser.dataValues.username, user_image: currentUser.dataValues.image }, message: 'ok' });
+    }
+    else {
+
       const userInfo = await user.create({
         username: username,
         email: email,
         image: image,
       });
-      if (!userInfo) {
-        // console.log('database fails');
-        res.status(400).json({ message: 'unauthorized' });
-      } else {
-        // console.log('database succeeds');
-        const newUser = await user.findOne({
-            where: {
-                email: email
-            }
+
+      
+      delete userInfo.dataValues.email;
+      delete userInfo.dataValues.password;
+
+      const newAccessToken = generateAccessToken(userInfo.dataValues);
+      return res
+        .cookie('jwt', newAccessToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '1d',
         })
-        
-        delete newUser.dataValues.email;
-        delete newUser.dataValues.password;
-        // console.log('newUser: ', newUser);
-        const newAccessToken = generateAccessToken(newUser.dataValues);
-        res
-          .status(200)
-          .json({ accessToken: newAccessToken, message: 'ok' });
-      }
+        .status(200)
+        .json({ data: { accessToken: newAccessToken, username: userInfo.dataValues.username, user_image: userInfo.dataValues.image }, message: 'ok' });
+
     }
   }
 

@@ -17,6 +17,7 @@ import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { signinAction } from './store/actions';
 import Maps from './Pages/Maps'
+import auth from './api/auth';
 
 function App() {
   const [cookies, setCookie] = useCookies(['jwt']);
@@ -30,7 +31,27 @@ function App() {
   const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal;
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const getAccessToken = async (url) => {
+    const where = url.searchParams.get('where')
+    const authorizationCode = url.searchParams.get('code')
+    let result
+    if(where === 'google')
+      result = await auth.googleApi(authorizationCode)
+    else
+      result = await auth.kakaoApi(authorizationCode)
+
+    localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
+    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+  }
+
+  useEffect(async () => {
+    const url = new URL(window.location.href)
+    const authorizationCode = url.searchParams.get('code')
+    if(authorizationCode) {
+      await getAccessToken(url)
+    }
+    else {
+    }
     if(cookies.jwt){
       dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
     }
