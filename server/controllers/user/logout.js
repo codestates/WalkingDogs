@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
   const token = req.cookies['jwt'];
   const decoded = await isAuthorized(req);
 
+  console.log(decoded);
   if (!decoded) {
     return res.status(401).json({ message: 'authorization failed' });
   } else {
