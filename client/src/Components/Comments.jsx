@@ -1,4 +1,5 @@
 import { faCommentSlash } from '@fortawesome/free-solid-svg-icons';
+import { set } from 'lodash';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import comment from '../api/comment';
@@ -21,17 +22,23 @@ const Title = styled.h2`
 `
 
 const CommentContainer = styled.div`
-    border: 1px solid black;
-    width: 100rem;
+    border: 1px solid darkgray;
+    border-radius: 10px;
+    width: 50%;
     height: 10rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 `
 
 const Comment = styled.div`
     display: flex;
     align-items: center;
-    border: 1px solid red;
-    width: 100%;
-    height: 2rem;
+    width: 95%;
+    height: auto;
+    padding: 10px;
 `
 
 const InputContainer = styled.div`
@@ -41,7 +48,17 @@ const InputContainer = styled.div`
 `
 
 const CommentInput = styled.input`
-    width: 100%;
+    width: 55%;
+    min-height: 2rem;
+    max-height: 2rem;
+    border: 1px solid blue;
+    border-radius: 5px;
+    padding: 0px 10px;
+    margin: 0px;
+`
+
+const ModifyInput = styled.input`
+    width: 55%;
     min-height: 2rem;
     max-height: 2rem;
     border: 1px solid blue;
@@ -65,7 +82,8 @@ const CommentText = styled.span`
 `
 
 const CommentOption = styled.div`
-    flex: 1 1 0;
+    display: ${props => props.isMine ? 'block' : 'none'};
+    flex: 2 1 0;
 `
 
 const ModifyButton = styled.button`
@@ -76,14 +94,29 @@ const DeleteButton = styled.button`
     flex: 1 1 0;
 `
 
+const CommentUserImage = styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+`
+
 const Comments = ({ roomId }) => {
 
 const [comments, setComments] = useState([]);
 const [commentContent, setCommentContent] = useState("");
+
 const [errMsg, setErrMsg] = useState("");
 
-const textareaChange = (e) => {
+const [isModify, setIsModify] = useState(false);
+const [modifyContent, setModifyContent] = useState({});
+
+const textAreaChange = (e) => {
     setCommentContent(e.target.value);
+}
+
+const modifyAreaChange = (e) => {
+    setModifyContent(Object.assign({ ...modifyContent }, { message: e.target.value }));
+    console.log(modifyContent)
 }
 
 const commentSubmit = async (e) => {
@@ -95,24 +128,54 @@ const commentSubmit = async (e) => {
     }
     else {
         setErrMsg("")
-        const result = await comment.newCommentApi(roomId, commentContent)
+        await comment.newCommentApi(roomId, commentContent)
 
-        console.log(result)
+        const result = await comment.getCommentApi(roomId)
+
+        setComments([ ...result.data.data ])
+        setCommentContent("")
     }
 }
 
-const handleButtonClickModify = () => {
+const modifySubmit = async (e) => {
+    e.preventDefault();
+    const convertedComment = modifyContent.message.split(' ').join()
 
+    if (convertedComment === "") {
+        setErrMsg("내용을 입력해 주세요.")
+    }
+    else {
+        setErrMsg("")
+        await comment.modifyCommentApi(modifyContent.id, modifyContent.message)
+
+        const newComments = comments.map((el) => {
+            return el.id === modifyContent.id ? {...modifyContent} : el
+        })
+
+        setComments(newComments)
+        setIsModify(false)
+        setModifyContent({})
+
+    }
 }
 
-const handleButtonClickDelete = () => {
-    
+const handleButtonClickModify = (idx) => {
+  setModifyContent({ ...comments[idx] })
+  setIsModify(true)
+}
+
+// 삭제 확인 모달이 있다면 좋기는 할 것 같음.
+const handleButtonClickDelete = async (idx) => {
+  const targetId = comments[idx].id
+
+  await comment.deleteCommentApi(targetId)
+  
+  setComments( [ ...comments.filter((_, elIdx) => elIdx !== idx) ])
 }
 
 useEffect(async () => {
   const getComments = await comment.getCommentApi(roomId)
   
-  console.log(getComments)
   setComments([ ...getComments.data.data ])
 }, [])
 
@@ -120,19 +183,29 @@ useEffect(async () => {
         <Container>
             <Title> 이 모임에서 자유롭게 얘기를 나눠봐요</Title>
             <CommentContainer>
-                {comments.map((el) => 
+                {comments.map((el, idx) => 
                     <Comment key={el.id}>
+                        <CommentUserImage src={el.user.image}/>
                         <CommentText>{el.message}</CommentText>
-                        <CommentOption>
-                            <ModifyButton onClick={handleButtonClickModify}>...</ModifyButton> 
-                            <DeleteButton onClick={handleButtonClickDelete}>X</DeleteButton>
+                        <CommentOption isMine={el.isMine}>
+                            <ModifyButton onClick={() => handleButtonClickModify(idx)}>...</ModifyButton> 
+                            <DeleteButton onClick={() => handleButtonClickDelete(idx)}>X</DeleteButton>
                         </CommentOption>
                     </Comment>
                 )}
             </CommentContainer>
             <InputContainer>
-                <CommentInput type='text' placeholder='댓글을 입력하세요.' onChange={(e) => textareaChange(e)}/>
-                <button type='button' className='commentSubmitBtn' onClick={(e) => commentSubmit(e)}>게시</button>
+                {isModify ? 
+                    <>
+                        <ModifyInput type='text' placeholder='댓글을 입력하세요.' onChange={(e) => modifyAreaChange(e)} value={modifyContent.message}/>
+                        <button type='button' className='modifySubmitBtn' onClick={(e) => modifySubmit(e)}>게시</button>
+                    </>
+                :
+                    <>
+                        <CommentInput type='text' placeholder='댓글을 입력하세요.' onChange={(e) => textAreaChange(e)} value={commentContent} />
+                        <button type='button' className='commentSubmitBtn' onClick={(e) => commentSubmit(e)}>게시</button>
+                    </>
+                }
             </InputContainer>
             <ErrMessage>{errMsg}</ErrMessage>
         </Container>

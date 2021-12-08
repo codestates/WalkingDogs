@@ -13,7 +13,6 @@ import { signinAction,
 
 import { useDispatch, useSelector } from "react-redux";
 
-
 export const HeaderStyle = styled.header`
   background-color: #646fcb;
   display: flex;
@@ -252,18 +251,16 @@ function Nav({ }) {
 
   return (
     <NavContainer>
-      <NavbarTitle>
-          <NavLink to='/'>
-            <NavTitleImg 
-              src='img/WalkingDogsTitleLogo.jpeg'
-              alt='WalkingDogsTitleLogo'
-              isLogin={isLogin}/>
-            <NavShortImg 
-            src='img/WalkingDogsShort.jpeg'
-            alt='WalkingDogsShort'
-            isLogin={isLogin}
-            />
-          </NavLink>
+      <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
+        <NavTitleImg 
+          src='img/WalkingDogsTitleLogo.jpeg'
+          alt='WalkingDogsTitleLogo'
+          isLogin={isLogin}/>
+        <NavShortImg 
+        src='img/WalkingDogsShort.jpeg'
+        alt='WalkingDogsShort'
+        isLogin={isLogin}
+        />
       </NavbarTitle>
 
       <CommunityContainer>

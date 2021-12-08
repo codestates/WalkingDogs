@@ -48,11 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       // },
       latitude: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT(9,6),
         allowNull: false,
       },
       longitude: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT(9,6),
         allowNull: false
       },
       address: {
