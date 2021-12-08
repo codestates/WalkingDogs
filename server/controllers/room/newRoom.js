@@ -31,6 +31,10 @@ module.exports = async (req, res) => {
 
   // let address= '';
   const userInfo = await isAuthorized(req);
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
 
   //-------------------------------------
   // 카카오 api 요청 보내는 수정 전 코드
