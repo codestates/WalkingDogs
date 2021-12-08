@@ -3,6 +3,10 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   const { comment_id } = req.body;
   if (!comment_id) {
     res.status(400).json({ message: 'you should enter comment_id' });

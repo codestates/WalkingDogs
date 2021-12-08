@@ -1,9 +1,13 @@
 require('dotenv').config();
-// const fs = require('fs');
+const fs = require('fs');
 const https = require('https');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const multer  = require('multer');
+const path = require('path');
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
 const options = require('./config').options;
 const app = express();
 const port = 80;
@@ -35,12 +39,44 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+//-------------------------------------------
+// 이미지 업로드 관련 코드
+//-------------------------------------------
+
+// try {
+//   fs.readdirSync('uploads');
+// } catch(error) {
+//   console.log("uploads 폴더가 없어서 uploads 폴더를 생성합니다.");
+//   fs.mkdirSync('uploads');
+// }
+
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: process.env.S3_REGION,
+  
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'walkingdogs',
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}${path.basename(file.originalname)}`);
+    },
+  }),
+  limits: { filesize: 5 * 1024 * 1024 },
+});
+
+//-----------------------------------------------
 // routers
+//-----------------------------------------------
 
 // user
 app.post('/login', controllers.user.login);
 app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
+app.post('/image', upload.single('image'), controllers.user.image);
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
 

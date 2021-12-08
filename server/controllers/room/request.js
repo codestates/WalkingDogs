@@ -12,6 +12,10 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   const leaderInfo = await isAuthorized(req);
+  if(leaderInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   console.log(leaderInfo);
 
   if (!leaderInfo) {
@@ -23,6 +27,7 @@ module.exports = async (req, res) => {
     const roomInfo = await room.findAll({
       where: { leader_id: leaderInfo.id },
     });
+    console.log("roomInfo: ", roomInfo);
     if (roomInfo) {
       for (let i = 0; i < roomInfo.length; i++) {
         let roomId = roomInfo[i].dataValues.id;

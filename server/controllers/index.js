@@ -3,6 +3,7 @@ module.exports = {
     login: require('./user/login'),
     logout: require('./user/logout'),
     signup: require('./user/signup'),
+    image: require('./user/image')
   },
   oauth: {
     kakao: require('./oauth/kakao'),

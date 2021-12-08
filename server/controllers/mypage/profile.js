@@ -6,6 +6,10 @@ const { isAuthorized } = require('../tokenFunctions');
 // 이렇게 수정해도 괜찮은 걸까요?
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   console.log('userInfo : ', userInfo);
   if (!userInfo) {
     res.status(401).send('this is an invalid token');
