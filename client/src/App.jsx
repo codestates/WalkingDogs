@@ -57,7 +57,7 @@ function App() {
     }
     else {
     }
-    if(cookies.jwt){
+    if(cookies.accessToken){
       dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
     }
   }, [])
