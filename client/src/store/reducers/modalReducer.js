@@ -2,7 +2,8 @@ import {
     CREATE_GATHER_ROOM_MODAL_ON,
     CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
     SIGNUP_MODAL_ON, 
-    SIGNIN_MODAL_ON, 
+    SIGNIN_MODAL_ON,
+    PASSWORDCHG_MODAL_ON, 
     MODAL_OFF} from '../actions/actionTypes'
 
 
@@ -11,6 +12,7 @@ const initialState = {
     isCreateDetailModal:false,
     isSigninModal: false,
     isSignupModal: false,
+    isPasswordChgModal: false,
     currentGatherInfo:{},
 }
 
@@ -30,6 +32,8 @@ const modalReducer = (prevState = initialState, action) => {
         case SIGNIN_MODAL_ON:
             state = {...prevState, isSigninModal:true};
             break;
+        case PASSWORDCHG_MODAL_ON:
+            state = {...prevState, isPasswordChgModal:true};
         case MODAL_OFF:
             state = {...initialState};
             break;

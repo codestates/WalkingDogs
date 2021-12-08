@@ -1,5 +1,6 @@
 import React , {useRef, useEffect, useState}from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types'
 import room from '../api/room';
 const { kakao } = window;
 
@@ -78,7 +79,18 @@ const Roommap = ( { address, latitude, longitude }) => {
 
         </Container>
     )
+};
 
+Roommap.defaultProps = {
+    place: '광화문',
+    latitude:126.8990406557216,
+    longitude:37.56820203278462,
+};
+
+Roommap.propTypes = {
+    place: PropTypes.string.isRequired,
+    latitude: PropTypes.string.isRequired,
+    longitude: PropTypes.string.isRequired,
 }
 
 export default Roommap;

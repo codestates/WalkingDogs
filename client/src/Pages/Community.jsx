@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components'
+import AfterPost from '../Components/Post'
 
 
-export const Container = styled.div`
+const Container = styled.div`
     align-items: center;
     border: 1px dotted red;
     display: flex;
@@ -12,7 +13,22 @@ export const Container = styled.div`
     width: auto;
 `
 
-export const H1 = styled.h1`
+const TitleBox = styled.div`
+    border: 1px solid var(--color-black);
+    width: 30rem;
+    height:auto;
+    margin:10px;
+    text-align: center;
+`
+
+const Post1Container = styled.div`
+    border: 1px solid var(--color-black);
+    width: 80%;
+    height: 50rem;
+    margin:10px;
+`
+
+const H1 = styled.h1`
 `
 
 // styled-component Boundary
@@ -21,20 +37,13 @@ const Community = () => {
     return(
         <>
         <Container>
-            <div className="container1"
-                    style={{border: '1px solid #000000',
-                            width: 'auto',
-                            height: 'auto',
-                            margin:'10px',}}>
-                                <H1>커뮤니티에서 후일담을 남겨봐요</H1>
-            </div>
+            <TitleBox>
+                <H1>커뮤니티에서 후일담을 남겨봐요</H1>
+            </TitleBox>
 
-            <div className="container2"
-                    style={{border: '1px solid #000000',
-                            width: '80%',
-                            height: '50rem',
-                            margin:'10px'}}>
-            </div>
+            <Post1Container>
+                
+            </Post1Container>
             <div className="container3"
                     style={{border: '1px solid #000000',
                             width: '80%',
