@@ -1,69 +1,84 @@
 const { user } = require('../../models');
 const { generateAccessToken } = require('../tokenFunctions');
-const bcrypt = require('bcrypt');
 const axios = require('axios');
 require('dotenv').config();
 
 module.exports = async (req, res) => {
   const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
   const KAKAO_REDIRECT_URI = process.env.KAKAO_REDIRECT_URI;
-
+  
+  const makeFormData = params => {
+    const searchParams = new URLSearchParams()
+    Object.keys(params).forEach(key => {
+      searchParams.append(key, params[key])
+    })
+    
+    return searchParams
+  }
+  
   const authCode = req.body.authorizationCode;
-  if (authCode) {
-    axios
-      .post('https://kauth.kakao.com/oauth/token', {
+
+  if (authCode) {  
+    const tokenResponse = await axios
+      .post('https://kauth.kakao.com/oauth/token', makeFormData({
         grant_type: 'authorization_code',
         client_id: KAKAO_CLIENT_ID,
         redirect_uri: KAKAO_REDIRECT_URI,
         code: authCode,
+      }),
+      {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
         },
-      })
-      .then(response => {
-        const token = response.data.access_token;
-        axios.get(
-          'https://kapi.kakao.com/v2/user/me',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-          { withCredentials: true },
-        );
-      })
-      .then(async data => {
-        const nickname = data.data.properties.nickname;
-        const email = data.data.kakao_account.email;
-        const password = '1q2w3e4r!';
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        const kakaoEmail = await user.findOne({ where: { email } });
-        const kakaoNickname = await user.findOne({ where: { nickname } });
+        withCredentials: true,
+    });
 
-        if (kakaoEmail !== null) {
-          return res.status(409).json({ message: 'e-mail already exists!' });
-        } else if (kakaoNickname !== null) {
-          return res.status(409).json({ message: 'nickname already exists!' });
-        } else {
-          const createUser = await user.create({
-            email: email,
-            password: hashedPassword,
-            nickname: nickname,
-          });
+    const token = tokenResponse.data.access_token
+    const meResponse = await axios.get(
+      'https://kapi.kakao.com/v2/user/me',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+      
+    const id = meResponse.data.id
+    const { email, profile } = meResponse.data.kakao_account
+    const username = profile.nickname
+    const image = profile.profile_image_url
+    
+    console.log('id : ', id, '\nemail : ', email, '\nusername : ', username, '\nimg : ', image)
 
-          const accessToken = generateAccessToken(createUser.dataValues);
-          return res
-            .cookie('accessToken', accessToken, {
-              secure: true,
-              sameSite: 'none',
-              expiresIn: '1d',
-            })
-            .status(200)
-            .json({
-              data: createUser.dataValues,
-              message: 'successfully logined',
-            });
-        }
+    const userInfo = await user.findOne({ where: { kakao_id : id } })
+    
+    let accessToken
+
+    if(!userInfo) {
+      // user create
+      const createUser = await user.create({
+        username: username,
+        email: email !== undefined ? email :null,
+        kakao_id: id,
+        image: image,
+      });
+
+      accessToken = generateAccessToken(createUser.dataValues);
+    }
+    else
+      accessToken = generateAccessToken(userInfo.dataValues);
+  
+    return res
+      .cookie('jwt', accessToken, {
+        secure: true,
+        sameSite: 'none',
+        expiresIn: '1d',
+      })
+      .status(200)
+      .json({
+        data: { accessToken, user_image: image, username },
+        message: 'successfully logined',
       });
   }
 };

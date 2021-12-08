@@ -1,16 +1,27 @@
-import api from './index'
+import api from '.';
 
+require('dotenv').config();
 
-const passwordApi = async(userInfo) => {
+const googleApi = async (authorizationCode) => {
     const result = await api({
-            method: 'POST',
-            url:`/password`, 
-            data:{           
-                password: userInfo.password
-            }
-        });
-        return result;
-    };
+    method: 'POST',
+    url: `/google`,
+    data: {
+        authorizationCode,
+      },
+  });
+  return result;
+};
 
+const kakaoApi = async (authorizationCode) => {
+  const result = await api({
+    method: 'POST',
+    url: `/kakao`,
+    data: {
+      authorizationCode,
+    },
+  });
+  return result;
+};
 
-export default {passwordApi}
+export default { googleApi, kakaoApi };

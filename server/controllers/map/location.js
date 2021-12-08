@@ -1,4 +1,4 @@
-const { room } = require('../../models');
+const { room, user } = require('../../models');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {
@@ -40,7 +40,9 @@ module.exports = async (req, res) => {
   const [lat, lon] = [parseFloat(req.query.latitude), parseFloat(req.query.longitude)];
   const result = [];
   try {
-    await room.findAll().then(rooms => {
+    await room.findAll({
+      include: user
+    }).then(rooms => {
       for (let i = 0; i < rooms.length; i++) {
         const latitude = rooms[i].dataValues.latitude;
         const longitude = rooms[i].dataValues.longitude;

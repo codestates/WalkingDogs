@@ -1,8 +1,13 @@
 const { user } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
+const bcrypt = require('bcrypt')
 
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   console.log('userInfo: ', userInfo);
   const passwords = req.body;
   console.log('password', passwords);
@@ -15,12 +20,14 @@ module.exports = async (req, res) => {
     res.status(401).send({ message: 'no such user in the database' });
   } else {
     console.log('userData: ', userData);
-    if (userData.dataValues.password !== passwords.old_password) {
+
+    if (!bcrypt.compareSync(passwords.old_password, userData.dataValues.password)) {
       res.status(400).send({ message: 'old password does not match' });
     } else {
       if (passwords.new_password === passwords.new_password_check) {
+        const hashedPass = await bcrypt.hashSync(passwords.new_password, 10);
         const updatedUser = await user.update(
-          { password: passwords.new_password },
+          { password: hashedPass },
           {
             where: {
               id: userInfo.id,

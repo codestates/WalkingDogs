@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
 
-      models.user_room.belongsTo(models.user, {
+      models.user_room.belongsTo(models.room, {
         foreignKey: { name: 'room_id', allowNull: false },
         targetKey: 'id',
         onDelete: 'CASCADE',

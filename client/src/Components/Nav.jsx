@@ -14,7 +14,6 @@ import { signinAction,
 import { useDispatch, useSelector } from "react-redux";
 import userApi from '../api/users'
 
-
 export const HeaderStyle = styled.header`
   background-color: var(--color-mainviolet--100);
   height: auto;

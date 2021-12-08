@@ -36,4 +36,4 @@ const signupApi = async (userInfo) => {
 
 
 
-export default {loginApi,logoutApi,signupApi};
+export default { loginApi, logoutApi, signupApi };
