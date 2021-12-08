@@ -25,7 +25,7 @@ const InputWrapper = styled.label`
     display: flex;
     :hover {
         ${media.greaterThan("medium")`
-        background-color: white;
+        background-color: var(--color-darkwhite);
         `};
     }
     position: relative;
@@ -35,7 +35,7 @@ const InputWrapper = styled.label`
         right: 0;
         top: 0;
         height: 4rem;
-        border: 1px solid gray;
+        border: 1px solid var(--color-lightgray);
         border-radius: 1rem;
         ${media.greaterThan("medium")`
         display: none;
@@ -58,7 +58,7 @@ const InputArea = styled.div`
 const Name = styled.div`
     margin: 0 1rem;
     font-size: 0.9rem;
-    color: gray;
+    color: var(--color-darkgray);
     flex: 0 0 1;
 `
 
@@ -74,7 +74,19 @@ const SearchInput = ({name, children, hideDivider}) => {
     const box = useRef(null)
 
     return (
-        <InputWrapper>
+        <InputWrapper
+            onFocus={()=> {
+                box.current.style.cssText = css`
+                    border: 1px solid var(--color-mainviolet--50);
+                `;
+            }}
+            onBlur={()=> {
+                box.current.style.cssText = css`
+                    border: 1px solid var(--color-lightgray);
+                `;
+            }}
+            sort={name}
+            >
             <div className="thing" ref={box}/>
             <InputArea>
                 <Name>{name}</Name>

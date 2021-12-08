@@ -1,41 +1,59 @@
 import React from "react";
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 
 
-export const Landing1Container = styled.div`
-  border: 1px solid #000000;
+const boxLeftFade = keyframes`
+  from {
+    opacity: 0;
+    margin-left: 0rem;
+  }
+  to {
+    margin-left: 10rem;
+  }
+`
+
+const imageFade = keyframes`
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+`
+
+const Landing1Container = styled.div`
   display: flex;
   width: auto;
-  height: 350px;
+  height: 55rem;
   background-position: center;
   background-size: cover;
+  background-image: url("img/landingbackground1.jpeg");
   justify-content: space-between;
   align-items: center;
+  object-fit: fit-content;
 `
 
-export const Landing1Script = styled.span`
-  border: 1px solid #000000;
+const Landing1Script = styled.span`
   font-size: 45px;
-  margin-left: 10px;
+  margin-left: 10rem;
+  animation: ${boxLeftFade} 3s ease-in-out;
+  
 `
 
-export const Landing1Image = styled.div`
-    border: 2px solid #000000;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-right: 10px;
+const Landing1Image = styled.img`
+    width: 50rem;
+    height: 39rem;
+    border-radius: 100%;
+    animation: ${imageFade} 3s ease-in-out;
 `
 
-export const Ment1 = styled.p`
+const Image = styled.img`
+width: fit-content;
+height: fit-content;
+object-fit: scale-down;
 
 `
-export const Ment2 = styled.p`
 
-`
-export const Ment3 = styled.p`
-
-`
 
 // styled component boundary
 
@@ -44,12 +62,14 @@ const Landing1 = () => {
     <>
       <Landing1Container>
         <Landing1Script className="landing1_script">
-          <Ment1 >혼자 산책할때마다<br/></Ment1>
-          <Ment2>외로울 텐데...<br/><br/></Ment2>
-          <Ment3>근처 친구들이 있다면 더 좋겠죠?</Ment3>
+          <p>혼자 산책할때마다<br/></p>
+          <p>외로울 텐데...<br/><br/></p>
+          <p>근처 친구들이 있다면 더 좋겠죠?</p>
         </Landing1Script>
 
-        <Landing1Image className="landing1_image"></Landing1Image>
+        <Landing1Image className="landing1_image" src='img/Joy__Original.gif'>
+        </Landing1Image>
+          
       </Landing1Container>
     </>
   );

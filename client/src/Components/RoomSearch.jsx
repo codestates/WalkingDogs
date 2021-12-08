@@ -79,7 +79,7 @@ const StyledDate = styled.div`
       margin-top: 1.25rem;
       margin-bottom: -0.75rem;
       border-radius: 1rem;
-      border: 1px solid var(--color-maingreen--50);
+      border: 1px solid var(--color-mainviolet--50);
       position: relative;
     `};
   }
@@ -191,7 +191,7 @@ const StyleDatePicker = styled(DatePicker)`
     padding: 0.65rem;
     border-radius: 0.25rem;
     margin-right: 0.5rem;
-    color: gray;
+    color: var(--color-gray);
     border: 1px solid gray;
     font-size: 1rem;
     width:80%;
@@ -201,9 +201,9 @@ const StyleDatePicker = styled(DatePicker)`
 const Count = styled.div`
   width: 18.5rem;
   height: 5rem;
-  border: 1px solid gray;
+  border: 1px solid var(--color-lightgray);
   border-radius: 1rem;
-  background-color: white;
+  background-color: var(--color-darkwhite);
   padding: 1.2rem;
   display: flex;
   justify-content: space-between;
@@ -235,13 +235,13 @@ const RoomSearch = ({
 
     const [thing, setThing] = useState([]);
 
-    useEffect(() => {
-        const getRoom = () => {
-            const {data: rooms} = roomApi.newRoomApi();
-            setThing(thing);
-        };
-        getRoom();
-    },[]);
+    // useEffect(() => {
+    //     const getRoom = () => {
+    //         const {data: rooms} = roomApi.newRoomApi();
+    //         setThing(thing);
+    //     };
+    //     getRoom();
+    // },[]);
 
     const time = [{
       id: 1, 
@@ -311,14 +311,14 @@ const RoomSearch = ({
   };
 
   const handleInputClick = () => {
-    if (selectedOptions.length === 0 || selectedOptions.length === step) {
-      setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
-      setOnSearch(true);
-    }
-    if (step === 3 || step === 4) {
-      setOnSearch(true);
-    }
-    setInputValue("");
+    // if (selectedOptions.length === 0 || selectedOptions.length === step) {
+    //   setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
+    //   setOnSearch(true);
+    // }
+    // if (step === 3 || step === 4) {
+    //   setOnSearch(true);
+    // }
+    // setInputValue("");
   };
 
   const handleCount = (e) => {

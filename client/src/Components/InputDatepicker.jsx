@@ -189,22 +189,24 @@ const ClearBtn = styled.button`
 `;
 
 // styled component boundary
-const InputDatepicker = ({placeholder, selectDate, setSelectDate}) => {
+const InputDatepicker = ({placeholder, selectedDate, setSelectedDate}) => {
 
 const [date, setDate] = useState(new Date());
 
     const handleClearClick = () => {
-        setSelectDate("");
+      setSelectedDate("");
     }
 
     return(
         <Container>
             <DatePicker 
             showPopperArrow={false}
-            selected={selectDate}
+            selected={selectedDate}
             minDate={new Date()} 
             dateFormat="yyyy-MM-dd"
-            onChange={(date)=> setSelectDate(date)}
+              onChange={(date) => {
+                setSelectedDate(date)
+              }}
             locale={ko}
             placeholderText={placeholder}
             disabledKeyboardNavigation
@@ -239,7 +241,7 @@ const [date, setDate] = useState(new Date());
                 </CustomHeader>
             )}
             ></DatePicker>
-            {selectDate && (
+            {selectedDate && (
                 <ClearBtn>
                     <FontAwesomeIcon icon={faTimesCircle}/>
                 </ClearBtn>)}
@@ -249,8 +251,8 @@ const [date, setDate] = useState(new Date());
 
 InputDatepicker.propTypes = {
   placeholder: PropTypes.string.isRequired,
-  selectDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
-  setSelectDate: PropTypes.func.isRequired,
+  selectedDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  setSelectedDate: PropTypes.func.isRequired,
 }
 
 export default InputDatepicker;

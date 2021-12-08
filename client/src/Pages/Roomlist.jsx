@@ -16,7 +16,6 @@ import map from '../api/map';
 
 
 export const RoomlistContainer = styled.div`
-    border: 1px solid #000000;
     width: 100%;
     height: 100%;
     display: flex;
@@ -25,6 +24,8 @@ export const RoomlistContainer = styled.div`
 
     >*{
         padding: 2rem;
+        width: 100%;
+        text-align: center;
         ${media.lessThan("medium")`
         `}
     }
@@ -41,19 +42,30 @@ export const RoomlistContainer = styled.div`
     }
 `;
 
-export const LocationBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 1;
-    border: 1px solid #000000;
-    margin-top: 5px;
-    min-height: 15rem;
-    border-radius: 5px;
-    justify-content: center;
-    align-items: center;
-    padding-top: 10px;
-    font-size: 25px;
-` 
+const LocationBox = styled.div`
+  background-color: var(--color-mainviolet--75);
+  min-height: 20rem;
+  flex: 0 0 1;
+  ${media.lessThan("medium")`
+    padding : 4rem 2rem;
+  `}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .create-gathering {
+    width: 16rem;
+    ${media.lessThan("medium")`
+      margin-bottom: 1.25rem;
+    `}
+    ${media.lessThan("small")`
+      width: 100%;
+      min-width: 20rem;
+      height: 3.2rem;
+    `}
+    background-color: var(--color-darkwhite);
+    color: var(--color-white);
+  }
+`;
 
 export const CardList = styled.div`
     border: 1px solid #000000;
@@ -75,7 +87,8 @@ const IsListLoadingBox = styled.div`
 `
 
 const EmptyBox = styled.div`
-    height: 20rem;
+    height: 10rem;
+    font-family: 'Jua';
 `
 export const BtnContainer = styled.div`
     border: 1px solid #000000;
@@ -130,7 +143,6 @@ const history = useHistory();
 
 useEffect(async () => {
   const result = await map.locationApi()
-
   setRooms([ ...result.data.rooms ]);
 }, [])
 
@@ -156,7 +168,6 @@ const handleCreateRoom = () => {
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
                             <RoomSearchBar/>
-
                             <BtnContainer>
                                 <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
@@ -164,7 +175,7 @@ const handleCreateRoom = () => {
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-                            yo!
+                            test
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>

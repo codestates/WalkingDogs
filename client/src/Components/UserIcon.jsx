@@ -5,9 +5,6 @@ import {useHistory} from 'react-router';
 import {modalOffAction} from '../store/actions'
 import PropTypes from 'prop-types';
 
-
-
-
 const IconContainer = styled.div`
     width: fit-content;
     display: flex;
@@ -64,7 +61,7 @@ const IconContainer = styled.div`
     border-radius: 50%;
     font-size: 0.35em;
     color: var(--color-white);
-    background-color: var(--color-maingreen--100);
+    background-color: var(--color-mainviolet--100);
     display: flex;
     justify-content: center;
     align-items: center;
