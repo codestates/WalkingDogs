@@ -4,6 +4,10 @@ const { isAuthorized } = require('../tokenFunctions');
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
   const { room_id } = req.query;
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   if (!room_id) {
     res.status(400).json({ message: 'you should enter room_id' });
   }
@@ -18,9 +22,14 @@ module.exports = async (req, res) => {
         },
         include: user,
       });
-      console.log(contents);
 
-      res.status(200).json({ data: contents, message: 'ok' });
+      const result = []
+
+      contents.forEach(el => {
+        result.push(Object.assign({}, { ...el.dataValues }, { isMine: el.dataValues.user_id === userInfo.id}))
+      })
+
+      res.status(200).json({ data: result, message: 'ok' });
     } catch {
       console.error;
       res.status(500).json({ message: 'server error' });

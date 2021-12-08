@@ -2,14 +2,13 @@ import React , {useEffect} from 'react';
 import styled, {css} from 'styled-components'
 import {useDispatch} from 'react-redux'
 import { modalOffAction } from '../store/actions'
-import { faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
 
 import media from 'styled-media-query';
-
 
 
 const ModalBackdrop = styled.div`
@@ -86,7 +85,7 @@ border-radius: 0.5rem;
   cursor: pointer;
   :hover {
     color: gray;
-    background-color: var(--color-lightgray);
+    background-color: gray;
     opacity: 0.8;
   }
 `
@@ -120,7 +119,7 @@ const Modal = ({children, bgColor}) => {
         left: unset;
         right: unset;
       `
-      window.scrollTo(0, parseInt(scrollY || "0") * 1);
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
   },[]);
 

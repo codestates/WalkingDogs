@@ -3,6 +3,10 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
+  if(userInfo.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
   const { room_id, message } = req.body;
   if (!room_id || !message) {
     res.status(400).json({ message: 'you should enter room_id and message' });
@@ -16,16 +20,10 @@ module.exports = async (req, res) => {
         user_id: userInfo.id,
         message: message,
       });
-      
-      const list = await comment.findAll({
-        where: {
-          room_id,
-        },
-      })
 
       res
         .status(201)
-        .json({ data: list, message: 'your comment is created' });
+        .json({ message: 'your comment is created' });
     } catch {
       console.error;
       res.status(500).json({ message: 'server error' });

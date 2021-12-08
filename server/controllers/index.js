@@ -4,6 +4,7 @@ module.exports = {
     logout: require('./user/logout'),
     signup: require('./user/signup'),
     // signupPermission: require('./user/signupPermission'),
+    image: require('./user/image'),
   },
   oauth: {
     kakao: require('./oauth/kakao'),

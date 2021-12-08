@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { user } = require('../../models');
-const { generateAccessToken, sendAccessToken } = require('../tokenFunctions');
+const { generateAccessToken, sendAccessToken, generateRefreshToken, sendRefreshToken } = require('../tokenFunctions');
 require('dotenv').config();
 
 // 2021.12.1 진행 중
@@ -32,12 +32,14 @@ module.exports = async (req, res) => {
       const copy = Object.assign({}, userInfo);
       delete copy.dataValues.email;
       delete copy.dataValues.password;
-      const token = generateAccessToken(copy.dataValues);
-      sendAccessToken(res, token);
+      const accessToken = generateAccessToken(copy.dataValues);
+      const refreshToken = generateRefreshToken(copy.dataValues);
+      sendAccessToken(res, accessToken);
+      sendRefreshToken(res, refreshToken)
       return res
         .status(200)
         .json({
-          data: { accessToken: token, user_image: './test.img', username: copy.dataValues.username },
+          data: { user_image: './test.img', username: copy.dataValues.username },
           message: 'ok',
         });
     }

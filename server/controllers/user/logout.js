@@ -4,9 +4,14 @@ require('dotenv').config();
 
 // 2021.12.1 완료
 module.exports = async (req, res) => {
-  const token = req.cookies['jwt'];
+  const token = req.cookies['accessToken'];
   const decoded = await isAuthorized(req);
+  if(decoded.accessToken) {
+    res.status(400).json({ message: 'you should renew your access token' });
+  }
+  
 
+  console.log(decoded);
   if (!decoded) {
     return res.status(401).json({ message: 'authorization failed' });
   } else {
