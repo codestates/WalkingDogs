@@ -23,6 +23,7 @@ const Search = styled.input`
     ${media.lessThan("medium")`
         width: 20rem;
     `}
+    
 `;
 
 const SearchResult = styled.ul`
@@ -333,7 +334,6 @@ const RoomSearch = ({
     setInputValue(e.target.value);
   };
 
-
     return(
       <Container>
         {((step >= 1 && step <= 5) || step === 7 || step === 8) && (
@@ -354,7 +354,7 @@ const RoomSearch = ({
 
         {isOnSearch && (
           <>
-           {step === 1 && (
+           {step === 1 && (  // 지도를 출력해야함.
               <>
             <SearchResult>
               {thing.filter((el) => el.place_name.includes(inputValue))

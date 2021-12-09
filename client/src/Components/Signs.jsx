@@ -251,7 +251,11 @@ const handleSign = async (e) => {
         try {
           const res = await userApi.loginApi(signInputValue);
           if (res.status === 200) {
-            localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+            const token = document.cookie.split(';')
+            .find(row => row.startsWith('accessToken'))
+            .split('=')[1]
+
+            localStorage.setItem(token, JSON.stringify({ ...res.data.data }))
             dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
             dispatch(modalOffAction());
             history.push('/roomlist');

@@ -386,7 +386,7 @@ function Nav() {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
+  const {id, username, user_image, isLogin} = useSelector(({authReducer})=> authReducer);
   
 
   const handleUserInfoClick = () => {
@@ -401,35 +401,36 @@ function Nav() {
 
   const handleSignOut = async() => {
     closeAll();
-    console.log("aaaa")
-      const res = await userApi.logoutApi();
-        
-      if(res.status === 200) {
-        dispatch(signoutAction());
-        localStorage.removeItem('userData');
-        history.push("/")
-      }
+    const storageKey = document.cookie.split(';')
+            .find(row => row.startsWith('accessToken'))
+            .split('=')[1]
+    const res = await userApi.logoutApi();
+    if(res.status === 200) {
+      localStorage.removeItem(storageKey)
+      dispatch(signoutAction());
+      history.push("/")
+    }
   };
 
 
   return (
       <HeaderStyle>
-           <LogoLink to='/'>
-           <NavTitleImg 
-              src='img/WalkingDogsTitleLogo.jpeg'
-              alt='WalkingDogsTitleLogo'
-              isLogin={isLogin}/>
-            <NavShortImg 
-            src='img/WalkingDogsShort.jpeg'
-            alt='WalkingDogsShort'
-            isLogin={isLogin}
-            />
-          </LogoLink>
+            <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
+              <NavTitleImg 
+                src='img/WalkingDogsTitleLogo.jpeg'
+                alt='WalkingDogsTitleLogo'
+                isLogin={isLogin}/>
+              <NavShortImg 
+              src='img/WalkingDogsShort.jpeg'
+              alt='WalkingDogsShort'
+              isLogin={isLogin}
+              />
+            </NavbarTitle>
 
         {isLogin && (
               <Navs isNav={isHambugBtnClicked}>
                 <MobileUserContainer>
-                  <UserIcon size={1.2} user={{id, username, image}} isDisabled/>
+                  <UserIcon size={1.2} user={{id, username, user_image}} isDisabled/>
                 </MobileUserContainer>  
                 <MobileStyledH4> Page</MobileStyledH4>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
@@ -463,8 +464,9 @@ function Nav() {
 
         {isLogin && (
           <UserBox>
+            {console.log(user_image)}
             <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
-              <UserImg src='img/puppy-test.jpeg' onClick={() => history.push('/mypage')}/>
+              <UserImg src={user_image} onClick={() => history.push('/mypage')}/>
             <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>
           </UserBox>
         )}

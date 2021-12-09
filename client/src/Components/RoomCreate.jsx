@@ -137,7 +137,7 @@ const RoomCreate = () => {
         setStep(step-1);
     }
 
-    const handleNextBtn = async () => {
+    const handleNextBtn = () => {
         if(step >= 5 && step < 8) {
             setSelectedOption([...selectedOption, inputValue]);
             setIsOnSearch(false);

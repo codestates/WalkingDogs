@@ -4,6 +4,7 @@ module.exports = {
     logout: require('./user/logout'),
     signup: require('./user/signup'),
     image: require('./user/image'),
+    check: require('./user/check'),
     withdrawal: require('./user/withdrawal')
   },
   oauth: {

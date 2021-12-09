@@ -88,8 +88,6 @@ module.exports = async (req, res) => {
         });
         return res.status(200).json({
           data: {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
             username: currentUser.dataValues.username,
             user_image: currentUser.dataValues.image,
           },
@@ -110,6 +108,7 @@ module.exports = async (req, res) => {
 
         const newAccessToken = generateAccessToken(userInfo.dataValues);
         const newRefreshToken = generateRefreshToken(userInfo.dataValues);
+        
         res.cookie('accessToken', newAccessToken, {
           secure: true,
           sameSite: 'none',
@@ -124,8 +123,6 @@ module.exports = async (req, res) => {
           .status(200)
           .json({
             data: {
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
               username: userInfo.dataValues.username,
               user_image: userInfo.dataValues.image,
             },

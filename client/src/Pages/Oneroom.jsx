@@ -98,8 +98,8 @@ const JoinBtn = styled.button`
   cursor: pointer;
   margin: 2px;
   :hover{
-    background-color: var(--color-mainviolet--25);
-    color: var(--color-darkwhite);
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
   }
   &.active{
     background-color: var(--color-mainviolet--25);

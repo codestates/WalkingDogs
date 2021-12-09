@@ -92,28 +92,27 @@ const RoomContentBox = styled.div`
 
 //styled-component boundary
 
-const Roomcard = ({ gathering, ...rest }) => {
+const Roomcard = ({ listKey, room }) => {
 
 
 const {isCreateGatherModal} = useSelector(({modalReducer})=>modalReducer);
 const dispatch = useDispatch();
 const handleGathDetailRoomModalOn = () =>{
-    if(!isCreateGatherModal) dispatch(createGatherRoomDetailModalOnAction(gathering));
+    // if(!isCreateGatherModal) dispatch(createGatherRoomDetailModalOnAction(gathering));
 };
 
     return(
-        <Link to='/room/:room_id'>
-            <CardContainer {...rest}>
-                <ContentContainer>
-                    <ImageBox>{/**/}</ImageBox>
-                    <Roominfo>
-                        <TitleBox> {/**/}</TitleBox>
-                        <RoomContentBox>
-                            <AddressesBox>{/**/}</AddressesBox>
-                        </RoomContentBox>
-                    </Roominfo>
-                </ContentContainer>
-            </CardContainer>
+        <Link to={`/room/${listKey}`} style={{textDecoration:'none', color:'black'}}>
+        <CardContainer key={listKey}>
+            <ImageBox>
+                <img src='image/puppy-test.jpeg'
+                    style={{objectFit:'scale-down', width:'auto', height:'auto'}}/>
+            </ImageBox>
+            <Roominfo>
+            <AddressesBox> {room.address} </AddressesBox>
+              <RoomContentBox>{room.title}</RoomContentBox>
+            </Roominfo>
+        </CardContainer>
         </Link>
     );
 };

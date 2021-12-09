@@ -10,7 +10,6 @@ module.exports = async (req, res) => {
   //   return res.status(401).json({ message: 'you should renew your access token' });
   // }
   
-
   console.log(decoded);
   if (!decoded) {
     return res.status(401).json({ message: 'authorization failed' });

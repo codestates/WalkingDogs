@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
   };
 
   const authCode = req.body.authorizationCode;
-  console.log(authCode);
   if (authCode) {
     const tokenResponse = await axios.post(
       'https://kauth.kakao.com/oauth/token',
@@ -45,23 +44,11 @@ module.exports = async (req, res) => {
       },
       withCredentials: true,
     });
-  
-    console.log(meResponse);
-    const id = meResponse.data.id;
-    const { email, profile } = meResponse.data.kakao_account;
-    const username = profile.nickname;
-    const image = profile.profile_image_url;
-
-    console.log(
-      'id : ',
-      id,
-      '\nemail : ',
-      email,
-      '\nusername : ',
-      username,
-      '\nimg : ',
-      image,
-    );
+    
+    const id = meResponse.data.id
+    const { email, profile } = meResponse.data.kakao_account
+    const username = profile.nickname
+    const image = profile.profile_image_url
 
     const userInfo = await user.findOne({ where: { kakao_id: id } });
 
@@ -72,7 +59,7 @@ module.exports = async (req, res) => {
       // user create
       const createUser = await user.create({
         username: username,
-        email: email !== undefined ? email : null,
+        email: email !== undefined ? email : 'null',
         kakao_id: id,
         image: image,
         is_member: true
@@ -96,7 +83,7 @@ module.exports = async (req, res) => {
       expiresIn: '7d',
     });
     return res.status(200).json({
-      data: { accessToken, refreshToken, user_image: image, username },
+      data: { user_image: image, username },
       message: 'successfully logined',
     });
   }

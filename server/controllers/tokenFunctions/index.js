@@ -27,7 +27,7 @@ module.exports = {
     return res.cookie('accessToken', accessToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '1h',
     });
   },
 
@@ -37,7 +37,7 @@ module.exports = {
     return res.cookie('refreshToken', refreshToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '7d',
     });
   },
 

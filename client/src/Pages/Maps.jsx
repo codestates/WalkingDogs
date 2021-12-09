@@ -70,12 +70,12 @@ const RoomList = styled.div`
     `};
 `
 
-const StyleRoomCard = styled(Roomcard)`
-    border: 3px solid var(--color-white);
-    &.hovered{
-        box-shadow: 2px 2px var(--color-mainviolet--50);
-    }
-`
+// const StyleRoomCard = styled(Roomcard)`
+//     border: 3px solid var(--color-white);
+//     &.hovered{
+//         box-shadow: 2px 2px var(--color-mainviolet--50);
+//     }
+// `
 
 const KakaoMap = styled.div`
     width: 100vw;
@@ -154,7 +154,7 @@ const Maps = () => {
                 </KakaoMap>
             </MapContainer>
                     <RoomList>
-                        <StyleRoomCard/>
+                        {/* <StyleRoomCard/> */}
                     </RoomList>
         </>
     );

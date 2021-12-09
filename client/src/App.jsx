@@ -23,9 +23,10 @@ import RoomCrew from './Components/RoomCrew';
 
 
 import auth from './api/auth';
+import users from './api/users';
 
 function App() {
-  const [cookies, setCookie] = useCookies(['jwt']);
+  const [cookies, setCookie] = useCookies([]);
   const { isLogin } = useSelector(({authReducer})=> authReducer);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
@@ -47,8 +48,12 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
-    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+    const token = document.cookie.split(';')
+    .find(row => row.startsWith('accessToken'))
+    .split('=')[1]
+
+    localStorage.setItem(token, JSON.stringify({ ...result.data.data }))
+    dispatch(signinAction(JSON.parse(localStorage.getItem(token))))
   }
 
   useEffect(async () => {
@@ -60,14 +65,28 @@ function App() {
     else {
     }
     if(cookies.accessToken){
-      dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+      await users.checkApi()
+      .then(res => {
+        if(res.data.data) {
+          // 로그인 작업을 실시
+          localStorage.setItem(cookies.accessToken, JSON.stringify({ ...res.data.data }))
+          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))));
+        }
+        else {
+          // 원래 쓰던거 사용
+          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
+        }
+      })
+      .catch(_ => {
+        window.location.assign('http://localhost:3000')
+      })
     }
   }, [])
 
 
   useEffect (() => {
     const vh = currentHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     return () => {
       document.documentElement.style.removeProperty("--vh", `${vh}px`);
     }
@@ -90,8 +109,8 @@ function App() {
         </Switch>
         {isModal && (
           <Modal bgColor={isCreateDetailModal && 'grey'}>
-            {isCreateGatherModal && <RoomCreate/>}
-            {isPasswordChgModal && <PwChange/>}
+            {isCreateGatherModal && <RoomCreate />}
+            {isPasswordChgModal && <PwChange />}
             {isSignupModal && <Signs type={"회원가입"} />}
             {isSigninModal && <Signs type={"로그인"} />}
             {isGatherCrewModal && <RoomCrew/>}
