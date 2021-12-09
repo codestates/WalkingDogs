@@ -10,6 +10,9 @@ import {
   signupModalOnAction,
 } from '../store/actions';
 
+import {SiKakaotalk} from 'react-icons/si';
+import {FcGoogle} from 'react-icons/fc';
+
 import AllButtons from './AllButtons'
 
 import userApi from '../api/users';
@@ -23,7 +26,7 @@ const Form = styled.form`
   width: 25rem;
   height: auto;
   margin: 3rem 2rem;
-  background-color: #646fcb;
+  background-color: var(--color-mainviolet--100);
   border-radius: 4%;
   * {
     width: 23rem;
@@ -34,6 +37,7 @@ const Form = styled.form`
     height: 2.4rem;
     border: 1px solid #000000;
     border-radius: 0.4rem;
+    background-color: var(--color-darkwhite);
     :first-of-type {
       margin-top: 1rem;
     }
@@ -42,7 +46,7 @@ const Form = styled.form`
     }
   }
   button {
-    color: var(--color-gray);
+    color: var(--color-black);
   }
 `;
 
@@ -98,7 +102,8 @@ export const Button = styled(AllButtons)`
   min-height: 3rem;
   font-size: 1rem;
   border: 1.5px solid var(--color-violet--100);
-  border-radius: 30px;
+  background-color: var(--color-darkwhite);
+  border-radius: 1rem;
   cursor: pointer;
   * {
     font-size: 0.5rem;
@@ -117,24 +122,26 @@ export const KakaoBtn = styled.button`
   margin: 0px;
   display: flex;
   padding: 0px;
-  border: 0px;
-  border-radius: 50%;
-  width: 50px;
+  border-radius: 1rem;
+  width: 11rem;
   height: 50px;
   justify-content: center;
   align-items: center;
+  background-color: yellow;
+  font-size: 20px;
 `;
 
 export const GoogleBtn = styled.button`
   margin: 0px;
   display: flex;
   padding: 0px;
-  border: 0px;
-  border-radius: 50%;
-  width: 50px;
+  border-radius: 1rem;
+  width: 11rem;
   height: 50px;
   justify-content: center;
   align-items: center;
+  background-color: white;
+  font-size: 20px;
 `;
 
 //styled-component Boundary
@@ -331,8 +338,13 @@ const handleSign = async (e) => {
           )}
         </InputContainer>
         <OAuthContainer>
-          <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>구글</GoogleBtn>
-          <KakaoBtn type="button" name='kakao' onClick={(e) => handleClickOAuth(e)}>카카오</KakaoBtn>
+          <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>
+            <FcGoogle style={{width:"2rem", height:"2rem", marginRight:"1rem"}}/>
+            구글
+            </GoogleBtn>
+          <KakaoBtn type="button" name='kakao' onClick={(e) => handleClickOAuth(e)}>
+            <SiKakaotalk style={{width:"2rem", height:"2rem", marginRight:"1rem"}}/>
+            카카오</KakaoBtn>
         </OAuthContainer>
         <Button
           type="button"

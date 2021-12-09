@@ -19,6 +19,7 @@ import { signinAction } from './store/actions';
 import Maps from './Pages/Maps'
 import RoomCreate from './Components/RoomCreate'
 import PwChange from './Components/PwChange'
+import RoomCrew from './Components/RoomCrew';
 
 
 import auth from './api/auth';
@@ -31,9 +32,10 @@ function App() {
           isCreateDetailModal, 
           isSigninModal, 
           isSignupModal,
+          isGatherCrewModal,
           isPasswordChgModal,
           currentGatherInfo} = useSelector(({modalReducer}) => modalReducer);
-  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
+  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal || isGatherCrewModal;
   const dispatch = useDispatch();
 
   const getAccessToken = async (url) => {
@@ -92,6 +94,7 @@ function App() {
             {isPasswordChgModal && <PwChange/>}
             {isSignupModal && <Signs type={"회원가입"} />}
             {isSigninModal && <Signs type={"로그인"} />}
+            {isGatherCrewModal && <RoomCrew/>}
           </Modal>
         )}
         <Footer/>

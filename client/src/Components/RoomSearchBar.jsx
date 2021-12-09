@@ -3,10 +3,13 @@ import styled from 'styled-components'
 import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
 import InputDatepicker from "./InputDatepicker";
-// import InputDataList from "./InputDataList";
+import InputDataLi from "./InputDataLi";
 import {useDispatch} from 'react-redux'
 import { searchGatherAction } from "../store/actions";
 import roomApi from '../api/room';
+import AllButtons from './AllButtons'
+
+import {FcSearch} from 'react-icons/fc'
 
 const InputContainer = styled.form`
   margin-bottom: 2rem;
@@ -69,6 +72,19 @@ const Inputlist = styled.div`
     align-items: center;
 `
 
+const SearchBtnContainer = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  position: relative;
+`;
+
+const SearchIcon = styled(FcSearch)`
+
+`
+
 // styled-component Boundary
 
 const RoomSearchBar = () => {
@@ -100,6 +116,11 @@ const RoomSearchBar = () => {
 
                 </SearchInput>
             </Inputlist>
+            <SearchBtnContainer>
+              <AllButtons>
+                검색
+              </AllButtons>
+            </SearchBtnContainer>
         </InputContainer>
     );
 }
