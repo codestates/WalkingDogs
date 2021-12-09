@@ -399,12 +399,17 @@ function Nav() {
     setIsHambugBtnClicked(false);
   }
 
+  // 로그아웃을 눌렀을 때, 액세스 토큰이 만료되었다는 응답을 받았다면?
+  // 이미 이 유저는 유효한 상태가 아님. 그러니 그냥 로그아웃 해주면 된다.
+
+  // 이미 로그인이 되어있는 상태인데 다시 로그인을 하도록 한다??
   const handleSignOut = async() => {
     closeAll();
     console.log("aaaa")
       const res = await userApi.logoutApi();
-        dispatch(signoutAction());
       if(res.status === 200) {
+        dispatch(signoutAction());
+        localStorage.removeItem('userData')
         history.push("/")
       }
   };
@@ -480,4 +485,4 @@ function Nav() {
   );
 }
 
-export default Nav;
+export default
