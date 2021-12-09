@@ -9,18 +9,19 @@ import UserIcon from './UserIcon';
 
 
 const CardContainer = styled.div`
+    border: 0.5rem solid var(--color-mainviolet--50);
     border-radius: 1rem;
     background-color: white;
     filter: drop-shadow(2px 2px 6px lightgray);
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     /* max-width: 25rem; */
-    min-width: 20rem;
+    min-width: 23rem;
     > * {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.15rem;
     }
     .divider {
         margin: 0 0.4em 0.1em;
@@ -50,8 +51,8 @@ const ImageBox = styled.div`
     display: fixed;
 `
 const Roominfo = styled.div`
-    border: 1px solid #000000;
-    width: 18rem;
+    
+    width: 14rem;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -60,9 +61,17 @@ const Roominfo = styled.div`
     margin: 5px;
 `;
 
+const TitleBox = styled.div`
+    border: 1px solid green;
+    width: 13rem;
+    height: 2rem;
+    margin: 3px;
+    border-radius: 10px;
+`
+
 const AddressesBox = styled.div`
     border: 1px solid green;
-    width: 80%;
+    width: 12rem;
     height: 30px;
     margin: 5px;
     text-align: center;
@@ -71,11 +80,14 @@ const AddressesBox = styled.div`
 
 const RoomContentBox = styled.div`
     border: 1px solid green;
-    width: 80%;
+    width: 13rem;
     height: 8rem;
-    margin: 5px;
+    margin: 3px;
     text-align: center;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 `
 
 //styled-component boundary
@@ -90,15 +102,19 @@ const handleGathDetailRoomModalOn = () =>{
 };
 
     return(
-        <CardContainer>
-            <ContentContainer>
-                <ImageBox></ImageBox>
-                <Roominfo>
-                    
-
-                </Roominfo>
-            </ContentContainer>
-        </CardContainer>
+        <Link to='/room/:room_id'>
+            <CardContainer>
+                <ContentContainer>
+                    <ImageBox></ImageBox>
+                    <Roominfo>
+                        <TitleBox> {/* 모임 제목 작성 */}</TitleBox>
+                        <RoomContentBox>
+                            <AddressesBox>{/* 모임 장소*/}</AddressesBox>
+                        </RoomContentBox>
+                    </Roominfo>
+                </ContentContainer>
+            </CardContainer>
+        </Link>
     );
 };
 
