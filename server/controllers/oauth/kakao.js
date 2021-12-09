@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
         withCredentials: true,
       }
     );
-      
+    
     const id = meResponse.data.id
     const { email, profile } = meResponse.data.kakao_account
     const username = profile.nickname
