@@ -1,5 +1,9 @@
 const { user } = require('../../models');
-const { generateAccessToken, sendAccessToken } = require('../tokenFunctions');
+const {
+  generateAccessToken,
+  sendAccessToken,
+  generateRefreshToken,
+} = require('../tokenFunctions');
 // require("dotenv").config();
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -32,73 +36,104 @@ module.exports = async (req, res) => {
 
   //   console.log('authorizationCode:', authorizationCode);
   const { tokens } = await oauth2Client.getToken(authorizationCode);
+  if (!tokens) {
+    return res.status(401).json({ message: 'unauthorized' });
+  }
+
   oauth2Client.setCredentials(tokens);
   //   console.log('tokens: ', tokens);
 
+  try {
+    let email = '';
+    let username = '';
+    let image = '';
 
-  let email = '';
-  let username = '';
-  let image = '';
-
-  const client = new OAuth2Client(clientId);
-  async function verify() {
-    const ticket = await client.verifyIdToken({
-      idToken: tokens.id_token,
-      audience: clientId,
-    });
-    const payload = ticket.getPayload();
-    // const userid = payload['sub'];
-    // console.log('payload: ', payload);
-
-    email = payload.email;
-    username = payload.name;
-    image = payload.picture;
-    const currentUser = await user.findOne({
-      where: {
-        email: email,
-      },
-    });
-    if (currentUser) {
-
-      delete currentUser.dataValues.email;
-      delete currentUser.dataValues.password;
-     
-
-      const newAccessToken = generateAccessToken(currentUser.dataValues);
-      
-      return res
-        .cookie('jwt', newAccessToken, {
-          secure: true,
-          sameSite: 'none',
-          expiresIn: '1d',
-        })
-        .status(200)
-        .json({ data: { accessToken: newAccessToken, username: currentUser.dataValues.username, user_image: currentUser.dataValues.image }, message: 'ok' });
-    }
-    else {
-
-      const userInfo = await user.create({
-        username: username,
-        email: email,
-        image: image,
+    const client = new OAuth2Client(clientId);
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+        idToken: tokens.id_token,
+        audience: clientId,
       });
+      if (!ticket) {
+        return res.status(400).json({ message: 'bad request' });
+      }
+      const payload = ticket.getPayload();
+      // const userid = payload['sub'];
+      // console.log('payload: ', payload);
 
-      
-      delete userInfo.dataValues.email;
-      delete userInfo.dataValues.password;
+      email = payload.email;
+      username = payload.name;
+      image = payload.picture;
+      const currentUser = await user.findOne({
+        where: {
+          email: email,
+        },
+      });
+      if (currentUser) {
+        delete currentUser.dataValues.email;
+        delete currentUser.dataValues.password;
 
-      const newAccessToken = generateAccessToken(userInfo.dataValues);
-      return res
-        .cookie('jwt', newAccessToken, {
+        const newAccessToken = generateAccessToken(currentUser.dataValues);
+        const newRefreshToken = generateRefreshToken(currentUser.dataValues);
+
+        res.cookie('accessToken', newAccessToken, {
           secure: true,
           sameSite: 'none',
-          expiresIn: '1d',
-        })
-        .status(200)
-        .json({ data: { accessToken: newAccessToken, username: userInfo.dataValues.username, user_image: userInfo.dataValues.image }, message: 'ok' });
+          expiresIn: '1h',
+        });
+        res.cookie('refreshToken', newRefreshToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '7d',
+        });
+        return res.status(200).json({
+          data: {
+            username: currentUser.dataValues.username,
+            user_image: currentUser.dataValues.image,
+          },
+          message: 'ok',
+        });
+      } else {
+        const userInfo = await user.create({
+          username: username,
+          email: email,
+          image: image,
+          is_member: true
+        });
+        if(!userInfo) {
+          return res.status(400).json({ message: 'bad request' })
+        }
+        delete userInfo.dataValues.email;
+        delete userInfo.dataValues.password;
 
+        const newAccessToken = generateAccessToken(userInfo.dataValues);
+        const newRefreshToken = generateRefreshToken(userInfo.dataValues);
+        
+        res.cookie('accessToken', newAccessToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '1h',
+        });
+        res.cookie('refreshToken', newRefreshToken, {
+          secure: true,
+          sameSite: 'none',
+          expiresIn: '7d',
+        });
+        return res
+          .status(200)
+          .json({
+            data: {
+              username: userInfo.dataValues.username,
+              user_image: userInfo.dataValues.image,
+            },
+            message: 'ok',
+          });
+      }
     }
-  }
 
-  verify().catch(console.error);
+    verify().catch(console.error);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'server error' });
+  }
 };

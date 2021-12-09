@@ -18,7 +18,7 @@ import RoomCreate from '../Components/RoomCreate';
 
 export const RoomlistContainer = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,11 +88,10 @@ const IsListLoadingBox = styled.div`
 `
 
 const EmptyBox = styled.div`
-    height: 10rem;
+    height: 20rem;
     font-family: 'Jua';
 `
 export const BtnContainer = styled.div`
-    border: 1px solid #000000;
     width: 100%;
     display: flex;
     flex-direction:row;
@@ -101,23 +100,28 @@ export const BtnContainer = styled.div`
 `
 
 
-export const CreateRoomBtn = styled.button`
+const CreateRoomBtn = styled.button`
     border: 1px solid #000000;
     border-radius: 30px;
-    width: auto;
+    width: 11rem;
+    height: 3rem;
     font-size: 20px;
     cursor: pointer;
+    text-align: center;
 `
 
 
-export const MapBtn = styled(Link)`
+const MapBtn = styled(Link)`
     border: 1px solid #000000;
     border-radius: 30px;
-    width: auto;
+    width: 8rem;
     font-size: 20px;
-    margin-right: 10px;
+    align-items: center;
+    text-decoration: none;
 `
-
+const SuggestMent = styled.div`
+    font-size: 20px;
+`
 // styled component boundary
 
 
@@ -149,9 +153,12 @@ useEffect(() => {
     const success = async (position) => {
         const latitude = position.coords.latitude.toFixed(6)
         const longitude = position.coords.longitude.toFixed(6)
+
+        console.log(latitude, longitude)
+
+        const result = await map.locationApi()
         
-        const result = await map.locationApi({ latitude, longitude })
-        
+        console.log(result)
         setRooms([ ...result.data.rooms ]);
         setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
         setIsListLoading(false )
@@ -202,7 +209,10 @@ useEffect(() => {
                             })}
                         </CardList>
                     ) : (
-                        <EmptyBox> 모임이 없네요😢 </EmptyBox>
+                        <EmptyBox> 모임이 없네요😢
+                        <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
+                        </EmptyBox>
+                        
                     )}
             </RoomlistContainer>
         </>

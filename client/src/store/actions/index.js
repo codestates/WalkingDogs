@@ -6,6 +6,7 @@ import {SIGN_IN,
         PASSWORDCHG_MODAL_ON,
         CREATE_GATHER_ROOM_MODAL_ON,
         CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
+        GATHER_CREW_MODAL_ON,
         SEARCH_GATHER,
         GATHER_INFO,
         MODAL_OFF } from './actionTypes'
@@ -48,6 +49,10 @@ export const signinModalOnAction = (data) => ({
 
 export const passwordChgModalOnAction = (data) => ({
     type: PASSWORDCHG_MODAL_ON,
+})
+
+export const gatherCrewModalOnAction = (data) => ({
+    type: GATHER_CREW_MODAL_ON,
 })
 
 export const modalOffAction = (data)=> ({
