@@ -23,6 +23,7 @@ module.exports = {
         password : hashedPass, 
         image: './test.img',
         kakao_id: null,
+        is_member: true,
         createdAt : new Date(),
         updatedAt : new Date(),
       }

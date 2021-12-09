@@ -27,7 +27,7 @@ module.exports = {
     return res.cookie('accessToken', accessToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '1h',
     });
   },
 
@@ -37,7 +37,7 @@ module.exports = {
     return res.cookie('refreshToken', refreshToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '7d',
     });
   },
 
@@ -72,7 +72,7 @@ module.exports = {
             if (error) {
               return error;
             } else {
-              console.log(decoded);
+              // console.log(decoded);
               delete decoded.iat;
               delete decoded.exp;
               const newAccessToken= generateAccessToken(decoded)

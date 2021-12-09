@@ -4,11 +4,14 @@ import styled from 'styled-components';
 import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
 import room from '../api/room';
+import {useDispatch, useSelector} from 'react-redux'
+import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
+
 
 export const OneroomContainer = styled.div`
   border: 1px solid #000000;
   width: auto;
-  height: 500px;
+  height: 50rem;
   margin: 10px 10px;
   border-radius: 10px;
   display: flex;
@@ -24,14 +27,13 @@ export const RoomBox = styled.div`
   height: 25rem;
   justify-content: space-around;
   align-items: center;
-  margin: 10px;
+  margin: 15px;
 `;
 
-export const RoomBtnBox = styled.div`
-  border: 1px solid blue;
+const RoomBtnBox = styled.div`
   display: flex;
-  min-width: 30rem;
-  height: 20rem;
+  min-width: auto;
+  height: auto;
   margin: 10px;
   justify-content: space-around;
 `;
@@ -88,17 +90,47 @@ export const OtherUserImg = styled.img`
 `;
 
 const JoinBtn = styled.button`
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
   width: 20rem;
-  height: 4.5rem;
+  height: 2rem;
   font-size: 20px;
   cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
+
 `;
+
+const GathCrewBox = styled.div`
+  border: 1px solid #000000;
+  width: 50%;
+  height: 55px;
+  justify-content: flex-end;
+  margin: 5px 10px;
+  cursor: pointer;
+`
 
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
   const [isOpenCom, setIsOpenCom] = useState(false);
   const [roomDetail, setRoomDetail] = useState({});
+  const [isGatherJoin, setIsGatherJoin] = useState(false);
+
+  const dispatch = useDispatch();
+  const {isGatherCrewModal} = useSelector(({modalReducer}) => modalReducer);
+
+
+  const handleCrewModalOpen = () => {
+    dispatch(isGatherCrewModal())
+  }
 
   const handleButtonClickJoin = async () => {
     const result = await room.joinRoomApi(params.room_id)
@@ -157,21 +189,12 @@ const Oneroom = () => {
               >
                 같이 가는 친구들은 누굴까요?
               </span>
-              <div
-                className="test2"
-                style={{
-                  border: '1px solid #000000',
-                  width: '50%',
-                  height: '55px',
-                  justifyContent: 'flex-end',
-                  margin: '5px 10px',
-                }}
-              >
+              <GathCrewBox onClick={handleCrewModalOpen}>
                 <OtherUserImg />
                 <OtherUserImg />
                 <OtherUserImg />
                 <OtherUserImg />
-              </div>
+              </GathCrewBox>
             </AllianceBox>
           </RoominfoBox>
         </RoomBox>

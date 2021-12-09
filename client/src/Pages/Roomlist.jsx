@@ -1,9 +1,9 @@
-import React ,{useEffect, useState}from 'react';
+import React ,{useEffect, useRef, useState}from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
 import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
@@ -13,11 +13,13 @@ import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import room from '../api/room';
 import map from '../api/map';
+import Modal from '../Components/Modal';
+import RoomCreate from '../Components/RoomCreate';
 
 
 export const RoomlistContainer = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -87,11 +89,10 @@ const IsListLoadingBox = styled.div`
 `
 
 const EmptyBox = styled.div`
-    height: 10rem;
+    height: 20rem;
     font-family: 'Jua';
 `
 export const BtnContainer = styled.div`
-    border: 1px solid #000000;
     width: 100%;
     display: flex;
     flex-direction:row;
@@ -100,64 +101,103 @@ export const BtnContainer = styled.div`
 `
 
 
-export const CreateRoomBtn = styled.button`
+const CreateRoomBtn = styled.button`
     border: 1px solid #000000;
     border-radius: 30px;
-    width: auto;
+    width: 11rem;
+    height: 3rem;
     font-size: 20px;
     cursor: pointer;
+    text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
-export const MapBtn = styled(Link)`
+const MapLinkBox = styled(Link)`
+    border-radius: 30px;
+    width: 8rem;
+    font-size: 20px;
+    align-items: center;
+    text-decoration: none;
+`
+const MapBtn = styled.button`
     border: 1px solid #000000;
     border-radius: 30px;
-    width: auto;
+    width: 8rem;
+    height: 3rem;
     font-size: 20px;
-    margin-right: 10px;
+    cursor: pointer;
+    text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
-
+const SuggestMent = styled.div`
+    margin-top: 5rem;
+    font-size: 35px;
+`
 // styled component boundary
 
 
 const Roomlist = () => {
 
-const [isListLoading, setIsListLoading] = useState(false);
+const [isListLoading, setIsListLoading] = useState(true);
 const [Post, setPost] = useState([]);
 const [rooms, setRooms] = useState([]);
 const conditionOptions = {
     location: {
-        latitude: '',
-        longitude: '',
+        latitude: 0,
+        longitude: 0,
     },
-    date: `${new Date().getFullYear}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
-    time: `${new Date().getHours()}:${new Date().getMinutes}`,
+    date: '',
+    time: '',
     member_limit: 0,
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
-console.log(conditions)
 // const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
+const isMounted = useRef(false);
 const dispatch = useDispatch();
 const history = useHistory();
 
-useEffect(async () => {
-  const result = await map.locationApi()
+useEffect(() => {
+    if(!navigator.geolocation) {
+        console.log('브라우저 GeoLocation 미지원')
+    }
+    const success = async (position) => {
+        const latitude = position.coords.latitude.toFixed(6)
+        const longitude = position.coords.longitude.toFixed(6)
 
-  console.log(result)
-  setRooms([ ...result.data.rooms ]);
+        console.log(latitude, longitude)
+
+        const result = await map.locationApi()
+        
+        console.log(result)
+        setRooms([ ...result.data.rooms ]);
+        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
+        setIsListLoading(false )
+        isMounted.current = true;
+    }
+
+    const failed = () => {
+        console.log('위치를 찾을 수 없습니다')
+    }
+
+    navigator.geolocation.getCurrentPosition(success, failed)
 }, [])
 
-useDeepCompareEffect(()=> {
-    setIsListLoading(true);
-    setTimeout(() => {
-        setIsListLoading(false);
-    }, 500)
-}, [conditions])
-
-const handleCreateRoom = () => {
-    dispatch(createGatherRoomModalOnAction())
-};
+// useDeepCompareEffect(()=> {
+//     if(isMounted.current) {
+//         setIsListLoading(true);
+//         setTimeout(() => {
+//           setIsListLoading(false);
+//         }, 500)
+//     }
+// }, [conditions])
 
     return(
         <>
@@ -169,15 +209,18 @@ const handleCreateRoom = () => {
                                                 style={{paddingRight:'5px'}}/>
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
-                            <RoomSearchBar/>
+
+                            <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
-                                <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
+                                <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-                            test
+
+                            Loading
+                      
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>
@@ -186,7 +229,10 @@ const handleCreateRoom = () => {
                             })}
                         </CardList>
                     ) : (
-                        <EmptyBox> 모임이 없네요😢 </EmptyBox>
+                        <EmptyBox> 모임이 없네요😢
+                        <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
+                        </EmptyBox>
+                        
                     )}
             </RoomlistContainer>
         </>

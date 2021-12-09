@@ -13,7 +13,8 @@ module.exports = async (req, res) => {
   }
 
   const userInfo = await user.findOne({
-    where: { email },
+    where: { email: email,
+    is_member: true },
   });
 
   if (!userInfo) {
@@ -39,7 +40,7 @@ module.exports = async (req, res) => {
       return res
         .status(200)
         .json({
-          data: { user_image: './test.img', username: copy.dataValues.username },
+          data: { user_image: copy.dataValues.image, username: copy.dataValues.username },
           message: 'ok',
         });
     }
