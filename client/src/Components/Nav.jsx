@@ -403,8 +403,10 @@ function Nav() {
     closeAll();
     console.log("aaaa")
       const res = await userApi.logoutApi();
-        dispatch(signoutAction());
+        
       if(res.status === 200) {
+        dispatch(signoutAction());
+        localStorage.removeItem('userData');
         history.push("/")
       }
   };

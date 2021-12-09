@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
   const { room_id } = req.query;
   if(userInfo.accessToken) {
-    res.status(400).json({ message: 'you should renew your access token' });
+    res.status(401).json({ message: 'you should renew your access token' });
   }
   
   if (!room_id) {

@@ -13,7 +13,8 @@ module.exports = async (req, res) => {
   }
 
   const userInfo = await user.findOne({
-    where: { email },
+    where: { email: email,
+    is_member: true },
   });
 
   if (!userInfo) {

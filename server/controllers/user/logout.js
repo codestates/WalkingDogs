@@ -6,28 +6,39 @@ require('dotenv').config();
 module.exports = async (req, res) => {
   const token = req.cookies['accessToken'];
   const decoded = await isAuthorized(req);
-  if(decoded.accessToken) {
-    res.status(400).json({ message: 'you should renew your access token' });
-  }
+  // if(decoded.accessToken) {
+  //   return res.status(401).json({ message: 'you should renew your access token' });
+  // }
   
 
   console.log(decoded);
   if (!decoded) {
     return res.status(401).json({ message: 'authorization failed' });
   } else {
-    const isLogout = await logout.findOne({
-      where: { token: token },
+    res.clearCookie('accessToken', {
+      secure: true,
+      sameSite: 'none'
     });
+    res.clearCookie('refreshToken',{
+      secure: true,
+      sameSite: 'none'
+    });
+    res.status(200).json({ message: 'ok' })
+    
+    // const isLogout = await logout.findOne({
+    //   where: { token: token },
+    // });
+    // if (!isLogout) {
+    //   //로그아웃에 없을 때, 저장
+    //   await logout.create({ token: token });
 
-    if (!isLogout) {
-      //로그아웃에 없을 때, 저장
-      await logout.create({ token: token });
+    //   return res.status(200).json({ message: 'ok' });
+    // } else {
+    //   return res
+    //     .status(400)
+    //     .json({ message: 'bad request! you already logouted!' });
+    //   // return res.status(200).json({ message: 'ok' });
 
-      return res.status(200).json({ message: 'ok' });
-    } else {
-      return res
-        .status(400)
-        .json({ message: 'bad request! you already logouted!' });
-    }
+    // }
   }
 };
