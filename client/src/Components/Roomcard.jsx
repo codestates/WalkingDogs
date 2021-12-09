@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux';
 import {createGatherRoomDetailModalOnAction} from  '../store/actions';
-import roomApi from '../api/room';
+import room from '../api/room';
 import PropTypes from 'prop-types';
 import UserIcon from './UserIcon';
 
@@ -103,13 +103,13 @@ const handleGathDetailRoomModalOn = () =>{
 
     return(
         <Link to='/room/:room_id'>
-            <CardContainer>
+            <CardContainer {...rest}>
                 <ContentContainer>
-                    <ImageBox></ImageBox>
+                    <ImageBox>{/**/}</ImageBox>
                     <Roominfo>
-                        <TitleBox> {/* 모임 제목 작성 */}</TitleBox>
+                        <TitleBox> {/**/}</TitleBox>
                         <RoomContentBox>
-                            <AddressesBox>{/* 모임 장소*/}</AddressesBox>
+                            <AddressesBox>{/**/}</AddressesBox>
                         </RoomContentBox>
                     </Roominfo>
                 </ContentContainer>
@@ -121,7 +121,7 @@ const handleGathDetailRoomModalOn = () =>{
 Roomcard.propTypes = {
     gathering: PropTypes.exact({
         id: PropTypes.number,
-        placeName: PropTypes.string,
+        address: PropTypes.string,
         latitude: PropTypes.string,
         longitude: PropTypes.string,
         date: PropTypes.string,

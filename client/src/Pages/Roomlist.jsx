@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
 import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
@@ -13,6 +13,7 @@ import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import room from '../api/room';
 import map from '../api/map';
+
 
 
 export const RoomlistContainer = styled.div`
@@ -107,19 +108,36 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
-const MapBtn = styled(Link)`
-    border: 1px solid #000000;
+const MapLinkBox = styled(Link)`
     border-radius: 30px;
     width: 8rem;
     font-size: 20px;
     align-items: center;
     text-decoration: none;
 `
-const SuggestMent = styled.div`
+const MapBtn = styled.button`
+    border: 1px solid #000000;
+    border-radius: 30px;
+    width: 8rem;
+    height: 3rem;
     font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
+`
+const SuggestMent = styled.div`
+    margin-top: 5rem;
+    font-size: 35px;
 `
 // styled component boundary
 
@@ -156,7 +174,7 @@ useDeepCompareEffect(()=> {
     setIsListLoading(true);
     setTimeout(() => {
         setIsListLoading(false);
-    }, 500)
+    }, 300)
 }, [conditions])
 
 const handleCreateRoom = () => {
@@ -173,16 +191,17 @@ const handleCreateRoom = () => {
                                                 style={{paddingRight:'5px'}}/>
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
-                            <RoomSearchBar/><button className='search_btn'>🔍</button>
+                            <RoomSearchBar/>
                             <BtnContainer>
-                                
                                 <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
-                                <MapBtn to='/maps'> 지도로 찾기 </MapBtn>
+                                <MapLinkBox to='/maps' style={{textAlign: 'center'}}> 
+                                <MapBtn>지도로 찾기</MapBtn>
+                                </MapLinkBox>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-                            test
+                            aaa
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>
