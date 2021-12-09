@@ -9,7 +9,6 @@ module.exports = async (req, res) => {
   if(decoded.accessToken) {
     res.status(400).json({ message: 'you should renew your access token' });
   }
-  
 
   console.log(decoded);
   if (!decoded) {

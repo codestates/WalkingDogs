@@ -73,6 +73,7 @@ const upload = multer({
 //-----------------------------------------------
 
 // user
+app.get('/check', controllers.user.check);
 app.post('/login', controllers.user.login);
 app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);

@@ -23,6 +23,7 @@ const Search = styled.input`
     ${media.lessThan("medium")`
         width: 20rem;
     `}
+    
 `;
 
 const SearchResult = styled.ul`
@@ -222,7 +223,7 @@ const Count = styled.div`
 const RoomSearch = ({
     step,
     isOnSearch,
-    setOnSearch,
+    setIsOnSearch,
     inputValue,
     setInputValue,
     list,
@@ -268,7 +269,7 @@ const RoomSearch = ({
   }, []);
 
   const handleSelect = (el) => {
-    setOnSearch(false);
+    setIsOnSearch(false);
     setIsSelected(true);
     if (selectedOptions.length === 0) {
       setInputValue(el.place_name + " " );
@@ -311,12 +312,12 @@ const RoomSearch = ({
   };
 
   const handleInputClick = () => {
+    setIsOnSearch(true);
     // if (selectedOptions.length === 0 || selectedOptions.length === step) {
     //   setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
-    //   setOnSearch(true);
     // }
     // if (step === 3 || step === 4) {
-    //   setOnSearch(true);
+    //   setIsOnSearch(true);
     // }
     // setInputValue("");
   };
@@ -332,7 +333,6 @@ const RoomSearch = ({
   const handleCountChange = (e) => {
     setInputValue(e.target.value);
   };
-
 
     return(
       <Container>
@@ -354,7 +354,7 @@ const RoomSearch = ({
 
         {isOnSearch && (
           <>
-           {step === 1 && (
+           {step === 1 && (  // 지도를 출력해야함.
               <>
             <SearchResult>
               {thing.filter((el) => el.place_name.includes(inputValue))
@@ -418,7 +418,7 @@ const RoomSearch = ({
 RoomSearch.propTypes = {
     step: PropTypes.number.isRequired,
     isOnSearch: PropTypes.bool.isRequired,
-    setOnSearch: PropTypes.func.isRequired,
+    setIsOnSearch: PropTypes.func.isRequired,
     inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     setInputValue: PropTypes.func.isRequired,
     list: PropTypes.array.isRequired,

@@ -1,4 +1,4 @@
-import React ,{useEffect, useState}from 'react';
+import React ,{useEffect, useRef, useState}from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
@@ -13,7 +13,8 @@ import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import room from '../api/room';
 import map from '../api/map';
-
+import Modal from '../Components/Modal';
+import RoomCreate from '../Components/RoomCreate';
 
 export const RoomlistContainer = styled.div`
     width: 100%;
@@ -122,42 +123,57 @@ export const MapBtn = styled(Link)`
 
 const Roomlist = () => {
 
-const [isListLoading, setIsListLoading] = useState(false);
+const [isListLoading, setIsListLoading] = useState(true);
 const [Post, setPost] = useState([]);
 const [rooms, setRooms] = useState([]);
 const conditionOptions = {
     location: {
-        latitude: '',
-        longitude: '',
+        latitude: 0,
+        longitude: 0,
     },
-    date: `${new Date().getFullYear}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
-    time: `${new Date().getHours()}:${new Date().getMinutes}`,
+    date: '',
+    time: '',
     member_limit: 0,
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
-console.log(conditions)
 // const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
+const isMounted = useRef(false);
 const dispatch = useDispatch();
 const history = useHistory();
 
-useEffect(async () => {
-  const result = await map.locationApi()
+useEffect(() => {
+    if(!navigator.geolocation) {
+        console.log('브라우저 GeoLocation 미지원')
+    }
+    const success = async (position) => {
+        const latitude = position.coords.latitude.toFixed(6)
+        const longitude = position.coords.longitude.toFixed(6)
+        
+        const result = await map.locationApi({ latitude, longitude })
+        
+        setRooms([ ...result.data.rooms ]);
+        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
+        setIsListLoading(false )
+        isMounted.current = true;
+    }
 
-  console.log(result)
-  setRooms([ ...result.data.rooms ]);
+    const failed = () => {
+        console.log('위치를 찾을 수 없습니다')
+    }
+
+    navigator.geolocation.getCurrentPosition(success, failed)
 }, [])
 
-useDeepCompareEffect(()=> {
-    setIsListLoading(true);
-    setTimeout(() => {
-        setIsListLoading(false);
-    }, 500)
-}, [conditions])
+// useDeepCompareEffect(()=> {
+//     if(isMounted.current) {
+//         setIsListLoading(true);
+//         setTimeout(() => {
+//           setIsListLoading(false);
+//         }, 500)
+//     }
+// }, [conditions])
 
-const handleCreateRoom = () => {
-    dispatch(createGatherRoomModalOnAction())
-};
 
     return(
         <>
@@ -169,15 +185,15 @@ const handleCreateRoom = () => {
                                                 style={{paddingRight:'5px'}}/>
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
-                            <RoomSearchBar/>
+                            <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
-                                <CreateRoomBtn onClick={handleCreateRoom}> 새로운 모임 만들기</CreateRoomBtn>
+                                <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-                            test
+                            Loading
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>

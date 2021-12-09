@@ -43,13 +43,11 @@ module.exports = async (req, res) => {
         withCredentials: true,
       }
     );
-      
+    
     const id = meResponse.data.id
     const { email, profile } = meResponse.data.kakao_account
     const username = profile.nickname
     const image = profile.profile_image_url
-    
-    console.log('id : ', id, '\nemail : ', email, '\nusername : ', username, '\nimg : ', image)
 
     const userInfo = await user.findOne({ where: { kakao_id : id } })
     

@@ -403,7 +403,7 @@ function Nav() {
     closeAll();
     console.log("aaaa")
       const res = await userApi.logoutApi();
-        dispatch(signoutAction());
+      dispatch(signoutAction());
       if(res.status === 200) {
         history.push("/")
       }
@@ -412,17 +412,17 @@ function Nav() {
 
   return (
       <HeaderStyle>
-           <LogoLink to='/'>
-           <NavTitleImg 
-              src='img/WalkingDogsTitleLogo.jpeg'
-              alt='WalkingDogsTitleLogo'
-              isLogin={isLogin}/>
-            <NavShortImg 
-            src='img/WalkingDogsShort.jpeg'
-            alt='WalkingDogsShort'
-            isLogin={isLogin}
-            />
-          </LogoLink>
+            <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
+              <NavTitleImg 
+                src='img/WalkingDogsTitleLogo.jpeg'
+                alt='WalkingDogsTitleLogo'
+                isLogin={isLogin}/>
+              <NavShortImg 
+              src='img/WalkingDogsShort.jpeg'
+              alt='WalkingDogsShort'
+              isLogin={isLogin}
+              />
+            </NavbarTitle>
 
         {isLogin && (
               <Navs isNav={isHambugBtnClicked}>
