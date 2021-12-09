@@ -485,4 +485,4 @@ function Nav() {
   );
 }
 
-export default
+export default Nav
