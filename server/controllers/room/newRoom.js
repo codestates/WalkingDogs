@@ -1,5 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
+const user_room = require('../../models/user_room');
 const { isAuthorized } = require('../tokenFunctions');
 
 // 남은 것
@@ -32,7 +33,7 @@ module.exports = async (req, res) => {
   // let address= '';
   const userInfo = await isAuthorized(req);
   if(userInfo.accessToken) {
-    res.status(400).json({ message: 'you should renew your access token' });
+    res.status(401).json({ message: 'you should renew your access token' });
   }
   
 

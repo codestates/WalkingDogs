@@ -72,7 +72,7 @@ module.exports = {
             if (error) {
               return error;
             } else {
-              console.log(decoded);
+              // console.log(decoded);
               delete decoded.iat;
               delete decoded.exp;
               const newAccessToken= generateAccessToken(decoded)

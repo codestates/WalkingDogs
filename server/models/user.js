@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
       kakao_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
+      },
+      is_member: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       }
     },
     {
