@@ -401,12 +401,15 @@ function Nav() {
 
   const handleSignOut = async() => {
     closeAll();
-    console.log("aaaa")
-      const res = await userApi.logoutApi();
+    const storageKey = document.cookie.split(';')
+            .find(row => row.startsWith('accessToken'))
+            .split('=')[1]
+    const res = await userApi.logoutApi();
+    if(res.status === 200) {
+      localStorage.removeItem(storageKey)
       dispatch(signoutAction());
-      if(res.status === 200) {
-        history.push("/")
-      }
+      history.push("/")
+    }
   };
 
 

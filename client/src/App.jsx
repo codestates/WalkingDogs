@@ -59,24 +59,21 @@ function App() {
     else {
     }
     if(cookies.accessToken){
-      users.checkApi()
+      await users.checkApi()
       .then(res => {
         if(res.data.data) {
           // 로그인 작업을 실시
-          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))));
           localStorage.setItem(cookies.accessToken, JSON.stringify({ ...res.data.data }))
+          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))));
         }
         else {
           // 원래 쓰던거 사용
-          
+          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
         }
-        
-        console.log(res)
       })
       .catch(_ => {
         window.location.assign('http://localhost:3000')
       })
-      // dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
     }
   }, [])
 
