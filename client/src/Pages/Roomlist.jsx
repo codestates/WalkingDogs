@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
 import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
@@ -15,6 +15,7 @@ import room from '../api/room';
 import map from '../api/map';
 import Modal from '../Components/Modal';
 import RoomCreate from '../Components/RoomCreate';
+
 
 export const RoomlistContainer = styled.div`
     width: 100%;
@@ -108,19 +109,36 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
-const MapBtn = styled(Link)`
-    border: 1px solid #000000;
+const MapLinkBox = styled(Link)`
     border-radius: 30px;
     width: 8rem;
     font-size: 20px;
     align-items: center;
     text-decoration: none;
 `
-const SuggestMent = styled.div`
+const MapBtn = styled.button`
+    border: 1px solid #000000;
+    border-radius: 30px;
+    width: 8rem;
+    height: 3rem;
     font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
+`
+const SuggestMent = styled.div`
+    margin-top: 5rem;
+    font-size: 35px;
 `
 // styled component boundary
 
@@ -181,7 +199,6 @@ useEffect(() => {
 //     }
 // }, [conditions])
 
-
     return(
         <>
             <RoomlistContainer>
@@ -192,6 +209,7 @@ useEffect(() => {
                                                 style={{paddingRight:'5px'}}/>
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
+
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
                                 <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
@@ -200,7 +218,9 @@ useEffect(() => {
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
+
                             Loading
+                      
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>

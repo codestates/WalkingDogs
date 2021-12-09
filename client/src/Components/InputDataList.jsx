@@ -75,7 +75,7 @@ const ClearBtn = styled.button`
 //styled-component Boundary
 
 
-const InputDataLi = ({values,placeholder,item,setItem}) => {
+const InputDataList = ({values,placeholder,item,setItem}) => {
 
     const onSelect = useCallback((selectedItem) => {
         setItem(selectedItem.label);
@@ -103,7 +103,7 @@ const InputDataLi = ({values,placeholder,item,setItem}) => {
                 match={match}
                 suppressReselect={false}
             />
-            {item && (
+            {item && ( //리스트에서 아이템을 선택하면 해당 아이템으로 설정되어 x버튼으로 없앨 수 있다. 
                 <ClearBtn onClick={handleClearClick}>
                     <FontAwesomeIcon icon={faTimes}/>
                 </ClearBtn>
@@ -112,9 +112,11 @@ const InputDataLi = ({values,placeholder,item,setItem}) => {
     );
 }
 
-InputDataLi.propTypes = {
+InputDataList.propTypes = {
     values: PropTypes.arrayOf(PropTypes.any).isRequired,
     placeholder: PropTypes.string.isRequired,
-    item: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired, //아이템을 선택하는 경ㅇ
     setItem : PropTypes.func.isRequired,
 }
+
+export default InputDataList;

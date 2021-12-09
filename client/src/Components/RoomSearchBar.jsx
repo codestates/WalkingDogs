@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
 import InputDatepicker from "./InputDatepicker";
-import InputDataLi from "./InputDataLi";
+import InputDataList from "./InputDataList";
+import InputTotalNum from './InputTotalNum'
 import {useDispatch} from 'react-redux'
 import { searchGatherAction } from "../store/actions";
 import roomApi from '../api/room';
@@ -89,6 +90,24 @@ const SearchIcon = styled(FcSearch)`
 
 const RoomSearchBar = () => {
 
+  const [addressInput, setAddressInput] = useState("");
+  const [timeInput, setTimeInput] = useState("")
+  const [dateInput, setDateInput] = useState("")
+  const [totalNumInput, setTotalNumInput] = useState(null);
+  const [searchable, setSearchable] = useState(false); //검색할 수 있는  state
+  const [breed, setBreed] = useState([]);
+  const [list, setList] = useState({
+    address: [],
+    time: [],
+    breed: [
+      { id: 1, breed: "포메라니안"},
+      { id: 2, breed: "비숑"},
+      { id: 3, breed: "푸들"},
+      { id: 4, breed: "진도"},
+      { id: 5, breed: "일본-시바"},
+      { id: 6, breed: "시베리안허스키"},
+    ],
+  })
 
     const dispatch = useDispatch();
 
@@ -96,23 +115,41 @@ const RoomSearchBar = () => {
         <InputContainer>
             <Inputlist>
                 <SearchInput name='지역'>
-                    {/* <InputDataLi/> */}
+                <InputDataList
+                  id='address'
+                  placeholder="지역이 어디인가요?"
+                  item={addressInput}
+                  setItem={setAddressInput}/>
+
                 </SearchInput>
 
                 <SearchInput name='날짜'>
                     <InputDatepicker
-                        id='date' />
+                        id='date' 
+                        placeholder='언제모일까요?'
+                        selectedDate={dateInput}
+                        setSelectedDate={setDateInput}/>
                 </SearchInput>
 
                 <SearchInput name='시간'>
-                
+                  <InputDataList
+                  id='time'
+                  placeholder='시간은?'/>
                 </SearchInput>
                 
                 <SearchInput name='인원'>
-
+                  <InputTotalNum
+                    inputId='totalNum'
+                    placeholder='인원 입력'
+                    total={totalNumInput}
+                    setTotal={setTotalNumInput}/>
                 </SearchInput>
 
-                <SearchInput name='견종'>
+                <SearchInput name='견종'
+                  id='breed'
+                  placeholder='견종 선택'
+                  breed={breed}
+                  setBreed={setBreed}>
 
                 </SearchInput>
             </Inputlist>

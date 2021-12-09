@@ -205,7 +205,7 @@ const [date, setDate] = useState(new Date());
             minDate={new Date()} 
             dateFormat="yyyy-MM-dd"
               onChange={(date) => {
-                setSelectedDate(date)
+                setSelectedDate(date);
               }}
             locale={ko}
             placeholderText={placeholder}
