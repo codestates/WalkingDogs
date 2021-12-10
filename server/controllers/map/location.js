@@ -1,4 +1,4 @@
-const { room, user } = require('../../models');
+const { room, user, user_room } = require('../../models');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {
@@ -37,58 +37,80 @@ module.exports = async (req, res) => {
   // 수정한 코드
   //-------------------------------------------
 
-  const [lat, lon] = [parseFloat(req.query.latitude), parseFloat(req.query.longitude)];
-  const result = [];
+  // room하고 user가 leader_id를 통해서 연결되어 있다.
+  // room과 user를 join하면 해당 room에 leader에 대한 정보만 들어온다. (나머지 유저에 대한 정보도 들어와야 함)
+
+  // const users = await User.findAll({ include: { model: Tool, as: 'Instruments',
+  // include: { model: Teacher,
+  // include: [ /* etc */ ] } } });
   try {
-    await room.findAll({
-      include: user
-    }).then(rooms => {
-      for (let i = 0; i < rooms.length; i++) {
-        const latitude = rooms[i].dataValues.latitude;
-        const longitude = rooms[i].dataValues.longitude;
-        const dist = haversine(
-          { latitude: latitude, longitude: longitude },
-          { latitude: lat, longitude: lon },
-          { unit: 'meter' },
-        );
-        if (dist <= 5000) {
-          result.push(rooms[i]);
+    const [lat, lon] = [
+      parseFloat(req.query.latitude),
+      parseFloat(req.query.longitude),
+    ];
+    const result = [];
+
+    // roomInfo 변수를 안써도 되지 않을까..?
+    await room
+      .findAll({
+        include: { model: user_room, include: user },
+      })
+      .then(rooms => {
+        for (let i = 0; i < rooms.length; i++) {
+          const latitude = rooms[i].dataValues.latitude;
+          const longitude = rooms[i].dataValues.longitude;
+          const dist = haversine(
+            { latitude: latitude, longitude: longitude },
+            { latitude: lat, longitude: lon },
+            { unit: 'meter' },
+          );
+          if (dist <= 5000) {
+            result.push(rooms[i]);
+          }
         }
-      }
-    });
-    res.status(200).json({ rooms: result, message: 'ok' });
+        return res.status(200).json({ rooms: result, message: 'ok' });
+      })
+      .catch(err => {
+        console.log(err);
+        return res.status(400).json({ message: 'bad request' });
+      });
+    // if (!roomInfo) {
+    //   return res.status(400).json({ message: 'bad request' });
+    // } else {
+    //   return res.status(200).json({ rooms: result, message: 'ok' });
+    // }
   } catch (err) {
     console.error;
-    res.status(400).json({ message: 'bad request' });
+    return res.status(500).json({ message: 'server error' });
   }
-
-  //---------------------------------
-  // 수정 전 코드
-  //---------------------------------
-
-  // await room.findAll({
-  //   attributes: {
-  //     include: [
-  //       [
-  //         haversine(
-  //           {
-  //             // start
-  //             latitude: Sequelize.col('latitude'),
-  //             longitude: Sequelize.col('longitude'),
-  //           },
-  //           {
-  //             // end
-  //             latitude: lat,
-  //             longitude: lon,
-  //           },
-  //           { unit: 'meter' },
-  //         ),
-  //         'distance',
-  //       ],
-  //     ],
-  //   },
-  // });
-
-  //   console.log(roomInfo.coordinates);
-  // console.log(roomInfo);
 };
+
+//---------------------------------
+// 수정 전 코드
+//---------------------------------
+
+// await room.findAll({
+//   attributes: {
+//     include: [
+//       [
+//         haversine(
+//           {
+//             // start
+//             latitude: Sequelize.col('latitude'),
+//             longitude: Sequelize.col('longitude'),
+//           },
+//           {
+//             // end
+//             latitude: lat,
+//             longitude: lon,
+//           },
+//           { unit: 'meter' },
+//         ),
+//         'distance',
+//       ],
+//     ],
+//   },
+// });
+
+//   console.log(roomInfo.coordinates);
+// console.log(roomInfo);

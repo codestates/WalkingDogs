@@ -73,10 +73,14 @@ const upload = multer({
 //-----------------------------------------------
 
 // user
+app.get('/check', controllers.user.check);
 app.post('/login', controllers.user.login);
 app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
 app.post('/image', upload.single('image'), controllers.user.image);
+app.delete('/withdrawal', controllers.user.withdrawal);
+
+// oauth
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
 // app.post('/signupPermission', controllers.user.signupPermission);

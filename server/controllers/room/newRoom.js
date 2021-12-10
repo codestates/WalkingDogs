@@ -1,5 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
+const user_room = require('../../models/user_room');
 const { isAuthorized } = require('../tokenFunctions');
 
 // 남은 것
@@ -19,59 +20,59 @@ const { isAuthorized } = require('../tokenFunctions');
 // 2 - 1. address 저장할 때, 도, 시, 동 등 행정구역별로 나누어서 저장할 지 결정하기 -> 통째로 저장하기
 
 module.exports = async (req, res) => {
-  const {
-    latitude,
-    longitude,
-    address,
-    selected_dogs,
-    room_title,
-    member_limit,
-    meeting_time,
-  } = req.body;
-
-  // let address= '';
-  const userInfo = await isAuthorized(req);
-  if(userInfo.accessToken) {
-    res.status(400).json({ message: 'you should renew your access token' });
-  }
-  
-
-  //-------------------------------------
-  // 카카오 api 요청 보내는 수정 전 코드
-  //--------------------------------------
-  // const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}&input_coord=WGS84`;
-
-  // if (!userInfo) {
-  //   return res.status(401).json({ message: "Unauthorized" });
-  // }
-  // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `${process.env.KAKAO_REST_API_KEY}` }})
-  // // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `8be48eec2d2c5c58e770b9b8039956` }})
-  // .then((result) => {
-  //   if (result.data.documents) {
-  //     console.log(result.data.documents[0]);
-  //     address = result.data.documents[0];
-  //   } else {
-  //     res.status(400).json({ message: 'not an appropriate coordinate'})
-  //   }
-
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  //   res.status(500).json({ message: 'server error' });
-  // })
-
-  if (!userInfo) {
-    res.status(401).json({ message: 'unauthorized' });
-  }
-
   try {
+    const {
+      latitude,
+      longitude,
+      address,
+      selected_dogs,
+      room_title,
+      member_limit,
+      meeting_time,
+    } = req.body;
+
+    // let address= '';
+    const userInfo = await isAuthorized(req);
+    if (userInfo.accessToken) {
+      res.status(401).json({ message: 'you should renew your access token' });
+    }
+
+    //-------------------------------------
+    // 카카오 api 요청 보내는 수정 전 코드
+    //--------------------------------------
+    // const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}&input_coord=WGS84`;
+
+    // if (!userInfo) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
+    // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `${process.env.KAKAO_REST_API_KEY}` }})
+    // // await axios.get(url, { headers: { Authorization: 'KakaoAK ' + `8be48eec2d2c5c58e770b9b8039956` }})
+    // .then((result) => {
+    //   if (result.data.documents) {
+    //     console.log(result.data.documents[0]);
+    //     address = result.data.documents[0];
+    //   } else {
+    //     res.status(400).json({ message: 'not an appropriate coordinate'})
+    //   }
+
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    //   res.status(500).json({ message: 'server error' });
+    // })
+
+    if (!userInfo) {
+      res.status(401).json({ message: 'unauthorized' });
+    }
+
     const roomInfo = await room.findAll({
       where: {
         title: room_title,
       },
     });
-    console.log(roomInfo)
-    //! room_title이 데이터베이스에 이미 존재할 경우 조건문을 통해서 분기시켰습니다.
+    console.log(roomInfo);
+    // room_title이 데이터베이스에 이미 존재할 경우 조건문을 통해서 분기시켰습니다.
+    // createRoom을 할 때, user_room에 leader_id에 해당하는 유저를 추가해야 하는지 test하기
     if (roomInfo.length !== 0) {
       res.status(409).json({ message: 'conflict' });
     } else {
@@ -84,16 +85,22 @@ module.exports = async (req, res) => {
         meeting_time: meeting_time,
         address: address,
       });
+      if (!createRoom) {
+        res.status(400).json({ message: 'bad request' });
+      }
       for (let i = 0; i < selected_dogs.length; i++) {
-        await room_dog.create({
+        const dogInfo = await room_dog.create({
           dog_id: selected_dogs[i].id,
           room_id: createdRoom.dataValues.id,
         });
+        if (!dogInfo) {
+          res.status(400).json({ message: 'bad request' });
+        }
       }
       return res.status(200).json({ message: 'ok' });
     }
   } catch (err) {
     console.error;
-    res.status(400).json({ message: 'bad request' });
+    res.status(500).json({ message: 'server error' });
   }
 };

@@ -34,6 +34,13 @@ const signupApi = async (userInfo) => {
             return result;        
         };
 
+const checkApi = async () => {
+    const result = await api({
+        method: 'GET',
+        url: '/check',
+    })
 
+    return result
+}
 
-export default { loginApi, logoutApi, signupApi };
+export default { loginApi, logoutApi, signupApi, checkApi };

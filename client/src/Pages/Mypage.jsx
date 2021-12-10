@@ -11,11 +11,18 @@ const Mypage = () => {
 
     const [dogs, setDogs] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [profileImg, setProfileImg] = useState('');
+    const [username, setUserName] = useState('');
 
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
+        const storageKey = document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1];
+        const parsedData = JSON.parse(localStorage.getItem(storageKey));
+        const [ img, username ] = [ parsedData.user_image, parsedData.username ];
 
+        setProfileImg(img);
+        setUserName(username);
         setDogs([ ...resDogList.data.dogs ]);
         setRooms([ ...resRoomList.data.rooms ]);
     }
@@ -29,12 +36,15 @@ const Mypage = () => {
         <div className="mypage_container">
             <div className="mypage_info">
                 <div className="mypage_profile_img">
-                    <img className="profile_img"/>
+                    <img className="profile_img" src={profileImg} style={{ border: 'none' }} />
                 </div>
 
                 <div className="mypage_profile_info">
                     <span className='myinfo_title'> My Information</span>
-                    <li>{JSON.parse(localStorage.getItem('userData')).username}{/* 유저이름 데이터 props.username*/}</li>
+                    <li>
+                        {username}
+                        {/* 유저이름 데이터 props.username*/}
+                    </li>
                 </div>
 
                 
