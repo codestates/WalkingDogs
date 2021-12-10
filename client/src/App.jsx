@@ -26,7 +26,7 @@ import auth from './api/auth';
 import users from './api/users';
 
 function App() {
-  const [cookies, setCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
   const { isLogin } = useSelector(({authReducer})=> authReducer);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
@@ -48,7 +48,7 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    const token = document.cookie.split(';')
+    const token = document.cookie.split('; ')
     .find(row => row.startsWith('accessToken'))
     .split('=')[1]
 
@@ -78,6 +78,8 @@ function App() {
         }
       })
       .catch(_ => {
+        removeCookie('accessToken')
+        removeCookie('refreshToken')
         window.location.assign('http://localhost:3000')
       })
     }
