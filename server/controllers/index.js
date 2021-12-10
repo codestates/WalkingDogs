@@ -5,7 +5,7 @@ module.exports = {
     signup: require('./user/signup'),
     image: require('./user/image'),
     check: require('./user/check'),
-    withdrawal: require('./user/withdrawal')
+    withdrawal: require('./user/withdrawal'),
   },
   oauth: {
     kakao: require('./oauth/kakao'),
@@ -32,5 +32,5 @@ module.exports = {
     allComment: require('./comment/allComment'),
     editComment: require('./comment/editComment'),
     deleteComment: require('./comment/deleteComment'),
-  }
+  },
 };

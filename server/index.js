@@ -83,6 +83,7 @@ app.delete('/withdrawal', controllers.user.withdrawal);
 // oauth
 app.post('/kakao', controllers.oauth.kakao);
 app.post('/google', controllers.oauth.google);
+// app.post('/signupPermission', controllers.user.signupPermission);
 
 // room
 app.get('/room/:room_id', controllers.room.roomInfo);

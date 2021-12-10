@@ -11,24 +11,26 @@ const { isAuthorized } = require('../tokenFunctions');
 // ---------------------------------------------------------
 
 module.exports = async (req, res) => {
-  const leaderInfo = await isAuthorized(req);
-  if(leaderInfo.accessToken) {
-    res.status(401).json({ message: 'you should renew your access token' });
-  }
-  
-  console.log(leaderInfo);
-
-  if (!leaderInfo) {
-    res.status(401).json({ message: 'unauthorized' });
-  }
-
   try {
+    const leaderInfo = await isAuthorized(req);
+
+    if (leaderInfo.accessToken) {
+      res.status(401).json({ message: 'you should renew your access token' });
+    }
+
+    // console.log(leaderInfo);
+    if (!leaderInfo) {
+      res.status(401).json({ message: 'unauthorized' });
+    }
+
     let arr = [];
     const roomInfo = await room.findAll({
       where: { leader_id: leaderInfo.id },
     });
-    console.log("roomInfo: ", roomInfo);
-    if (roomInfo) {
+    if (!roomInfo) {
+      res.status(400).json({ message: 'bad request' });
+      // console.log('roomInfo: ', roomInfo);
+    } else {
       for (let i = 0; i < roomInfo.length; i++) {
         let roomId = roomInfo[i].dataValues.id;
         await room_join_req
@@ -37,11 +39,15 @@ module.exports = async (req, res) => {
           })
           .then(result => {
             arr.push({ roomData: result });
+            res.status(200).json({ data: arr, message: 'ok' });
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(400).json({ message: 'bad request' });
           });
       }
     }
-    console.log(arr);
-    res.status(200).json({ data: arr, message: 'ok' });
+    // console.log(arr);
   } catch (err) {
     console.error;
     res.status(500).json({ message: 'server err' });

@@ -411,7 +411,6 @@ function Nav() {
     }
   };
 
-
   return (
       <HeaderStyle>
             <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
@@ -482,4 +481,4 @@ function Nav() {
   );
 }
 
-export default Nav;
+export default Nav
