@@ -12,7 +12,7 @@ const Container = styled.div`
     height: 13rem;
 `
 
-const Search = styled.input`
+const Search = styled.input` //create-modal창의 인풋
     background-color: white;
     width: 25.5rem;
     height: 5rem;
@@ -23,7 +23,6 @@ const Search = styled.input`
     ${media.lessThan("medium")`
         width: 20rem;
     `}
-    
 `;
 
 const SearchResult = styled.ul`
@@ -334,6 +333,7 @@ const RoomSearch = ({
     setInputValue(e.target.value);
   };
 
+
     return(
       <Container>
         {((step >= 1 && step <= 5) || step === 7 || step === 8) && (
@@ -354,7 +354,7 @@ const RoomSearch = ({
 
         {isOnSearch && (
           <>
-           {step === 1 && (  // 지도를 출력해야함.
+           {step === 1 && (
               <>
             <SearchResult>
               {thing.filter((el) => el.place_name.includes(inputValue))
