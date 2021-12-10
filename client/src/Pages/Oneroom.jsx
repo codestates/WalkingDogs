@@ -210,11 +210,10 @@ const Oneroom = () => {
                 <RoomBtnBox>
                     <JoinBtn onClick={handleButtonClickJoin}>참여하기</JoinBtn>
                 </RoomBtnBox>
-
         }
       </OneroomContainer>
       <Comments roomId={params.room_id} />
-      <Roommap address={roomDetail.address} latitude={roomDetail.latitude} longitude={roomDetail.longitude} />
+      <Roommap address={roomDetail.address} latitude={roomDetail.latitude} longitude={roomDetail.longitude} draggable={false}/>
     </>
   );
 };
