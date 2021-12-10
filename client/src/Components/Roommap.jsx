@@ -40,7 +40,7 @@ export const Minimap = styled.div`
 `
 
 
-const Roommap = ( { address, latitude, longitude }) => {
+const Roommap = ( { address, latitude, longitude, draggable = true }) => {
 
     // const container = useRef(null);
 
@@ -62,7 +62,7 @@ const Roommap = ( { address, latitude, longitude }) => {
         const container = document.querySelector('#map')
         const options = {
             center: new kakao.maps.LatLng(latitude, longitude),
-            draggable: false,
+            draggable,
             level: 3,
         };
         const map = new kakao.maps.Map(container, options)

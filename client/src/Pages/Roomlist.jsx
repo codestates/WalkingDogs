@@ -192,7 +192,7 @@ useEffect(() => {
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
                                 <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
-                                <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                <MapBtn to='/maps' style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (

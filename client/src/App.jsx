@@ -64,6 +64,7 @@ function App() {
     }
     else {
     }
+
     if(cookies.accessToken){
       await users.checkApi()
       .then(res => {
@@ -77,9 +78,12 @@ function App() {
           dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
         }
       })
-      .catch(_ => {
+      .catch(err => {
+        // 서버가 터졌을 때,
+        localStorage.clear();
         removeCookie('accessToken')
         removeCookie('refreshToken')
+        // 서버가 응답을 제대로 줬지만 400일 때,
         window.location.assign('http://localhost:3000')
       })
     }
@@ -104,7 +108,7 @@ function App() {
           <Route path='/mypage' component={Mypage}/>
           <Route path='/mypagechange' component={Mypagechg}/>
           <Route path='/roomlist' component={Roomlist}/>
-          <Route path='/room/:room_id' component={<Oneroom gathering={currentGatherInfo}/>}/>
+          <Route path='/room/:room_id' component={Oneroom}/>
           <Route path='/community' component={Community}/>
           <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
