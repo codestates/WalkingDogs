@@ -159,6 +159,7 @@ const InputTotalNum =({inputId, placeholder, total, setTotal}) => {
                     <PopperInner>
                         {total && total > 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
                         <PopperInput id={inputId} value={total || 1} disabled={!total} readOnly/>
+                        {/* {total <= 6} */}
                         <PlusBtn onClick={handlePlusClick}/>
                     </PopperInner>
                 </Popper>

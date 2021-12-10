@@ -33,7 +33,7 @@ const IconContainer = styled.div`
     }};
     position: relative;
   }
-  > #nickname {
+  > #username {
     width: fit-content;
     height: ${(props) => props.size};
     padding-top: calc(${(props) => props.size} * 0.1rem);
