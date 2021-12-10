@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
           email: email,
           password: hashedPass,
           username: username,
-          image: image ? image : null,
+          image: image ? image : 'defaultProfile.jpeg',
           is_member: true,
         });
         if (!createUser) {

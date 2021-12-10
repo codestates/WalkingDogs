@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
-import styled, {keyframes} from 'styled-components'
+import styled from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
 import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
@@ -15,7 +15,6 @@ import room from '../api/room';
 import map from '../api/map';
 import Modal from '../Components/Modal';
 import RoomCreate from '../Components/RoomCreate';
-
 
 export const RoomlistContainer = styled.div`
     width: 100%;
@@ -109,10 +108,6 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
-    :hover{
-        background-color: var(--color-darkwhite);
-        border: 1px solid var(--color-mainviolet--50);
-    }
 `
 
 
@@ -123,6 +118,8 @@ const MapLinkBox = styled(Link)`
     align-items: center;
     text-decoration: none;
 `
+
+
 const MapBtn = styled.button`
     border: 1px solid #000000;
     border-radius: 30px;
@@ -136,9 +133,9 @@ const MapBtn = styled.button`
         border: 1px solid var(--color-mainviolet--50);
     }
 `
+
 const SuggestMent = styled.div`
-    margin-top: 5rem;
-    font-size: 35px;
+    font-size: 20px;
 `
 // styled component boundary
 
@@ -171,12 +168,9 @@ useEffect(() => {
     const success = async (position) => {
         const latitude = position.coords.latitude.toFixed(6)
         const longitude = position.coords.longitude.toFixed(6)
-
-        console.log(latitude, longitude)
-
-        const result = await map.locationApi()
         
-        console.log(result)
+        const result = await map.locationApi({ latitude, longitude })
+        
         setRooms([ ...result.data.rooms ]);
         setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
         setIsListLoading(false )
@@ -199,6 +193,7 @@ useEffect(() => {
 //     }
 // }, [conditions])
 
+
     return(
         <>
             <RoomlistContainer>
@@ -209,18 +204,17 @@ useEffect(() => {
                                                 style={{paddingRight:'5px'}}/>
                             산책을 같이 할 친구를 찾아볼까요?
                             </h2>
-
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
                                 <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
-                                <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                <MapLinkBox to='/maps'>
+                                    <MapBtn style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                </MapLinkBox>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-
                             Loading
-                      
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>

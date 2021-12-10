@@ -104,7 +104,7 @@ const InputDataList = ({values,placeholder,item,setItem}) => {
                 suppressReselect={false}
             />
             {item && ( //리스트에서 아이템을 선택하면 해당 아이템으로 설정되어 x버튼으로 없앨 수 있다. 
-                <ClearBtn onClick={handleClearClick}>
+                <ClearBtn type='button' onClick={handleClearClick}>
                     <FontAwesomeIcon icon={faTimes}/>
                 </ClearBtn>
             )}

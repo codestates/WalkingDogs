@@ -11,6 +11,9 @@ import Roomcard from '../Components/Roomcard'
 import AllButtons from '../Components/AllButtons';
 
 import { searchGatherAction, signinAction, signoutAction } from '../store/actions';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import { set } from 'lodash';
+import map from '../api/map';
 
 
 
@@ -79,9 +82,8 @@ const RoomList = styled.div`
 
 const KakaoMap = styled.div`
     width: 100vw;
-    height: 200vh;
+    height: 85vh;
 `
-
 
 const CardContainer = styled.div`
     width: auto;
@@ -93,10 +95,9 @@ const Maps = () => {
 
     const dispatch = useDispatch();
     const [listView, setListView] = useState(true);
-    const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
-    const [points, setPoints] = useState([]);
-    const [map, setMap] = useState();
-    const [address, setAddress] = useState(conditions.area);
+    // const {conditions, gatherings} = useSelector(({gathReducer})=> gathReducer);
+    // const [conditions, setConditions] 
+    const [address, setAddress] = useState();
 
     // const bounds = useMemo(() => {
     //     const bounds = new kakao.maps.LatLngBounds();
@@ -117,14 +118,90 @@ const Maps = () => {
         setListView(true);
     }
 
-    useEffect(() => {
-        const container = document.querySelector('#map')
-        const options = {
-            center: new kakao.maps.LatLng(37.54861162159671, 127.00215843848797),
-            level: 3,
-        };
-        const map = new kakao.maps.Map(container, options)
+    const searchRooms = async (position) => {
+        const result = await map.locationApi({ latitude: position.latitude, longitude: position.longitude })
+        console.log(result)
+    }
+
+    useEffect(async () => {
+        const getPosition = () => {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject)
+            })
+        }
+    
+        await getPosition()
+        .then((position) => {
+            const container = document.querySelector('#map')
+            const options = {
+                center: new kakao.maps.LatLng(position.coords.latitude.toFixed(6), position.coords.longitude.toFixed(6)),
+                level: 3,
+            };
+            
+            const map = new kakao.maps.Map(container, options);
+    
+            const markerPosition = new kakao.maps.LatLng(position.coords.latitude.toFixed(6), position.coords.longitude.toFixed(6));
+    
+            const marker = new kakao.maps.Marker({
+                position: markerPosition,
+            })
+    
+            marker.setMap(map);
+    
+            kakao.maps.event.addListener(map, 'center_changed', () => {
+                const level = map.getLevel();
+                const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
+    
+                marker.setPosition(latlng)
+    
+            })
+    
+            kakao.maps.event.addListener(map, 'dragend', debounce(() => {
+                
+                searchRooms({ latitude: map.getCenter().Ma.toFixed(6), longitude: map.getCenter().La.toFixed(6) })
+    
+            }, 1000))
+        })
+        .catch((err) => {
+            const container = document.querySelector('#map')
+            const options = {
+                center: new kakao.maps.LatLng(37.54861162159671, 127.00215843848797),
+                level: 3,
+            };
+            
+            const map = new kakao.maps.Map(container, options);
+
+            const markerPosition = new kakao.maps.LatLng(37.54861162159671, 127.00215843848797);
+
+            const marker = new kakao.maps.Marker({
+                position: markerPosition,
+            })
+
+            marker.setMap(map);
+
+            kakao.maps.event.addListener(map, 'center_changed', () => {
+                const level = map.getLevel();
+                const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
+
+                marker.setPosition(latlng)
+
+            })
+
+            kakao.maps.event.addListener(map, 'dragend', debounce(() => {
+                
+                searchRooms({ latitude: map.getCenter().Ma.toFixed(6), longitude: map.getCenter().La.toFixed(6) })
+
+            }, 1000))
+        })
     }, []);
+
+    // useEffect(() => {
+    //     console.log(listView)
+    // }, [listView])
+
+    // useDeepCompareEffect(() => {
+    //     console.log(center)
+    // }, [center])
 
     // const handleCenterChange = debounce(() => {
     //     const geocoder = new kakao.maps.services.Geocoder()
@@ -150,12 +227,11 @@ const Maps = () => {
     return(
         <>
             <MapContainer>
-                <KakaoMap id='map'>
-                </KakaoMap>
+              <KakaoMap id='map'></KakaoMap>
             </MapContainer>
-                    <RoomList>
-                        {/* <StyleRoomCard/> */}
-                    </RoomList>
+            <RoomList>
+                {/* <StyleRoomCard/> */}
+            </RoomList>
         </>
     );
 }

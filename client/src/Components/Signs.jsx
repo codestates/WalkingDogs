@@ -251,7 +251,7 @@ const handleSign = async (e) => {
         try {
           const res = await userApi.loginApi(signInputValue);
           if (res.status === 200) {
-            const token = document.cookie.split(';')
+            const token = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
 

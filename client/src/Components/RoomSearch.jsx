@@ -12,7 +12,7 @@ const Container = styled.div`
     height: 13rem;
 `
 
-const Search = styled.input`
+const Search = styled.input` //create-modal창의 인풋
     background-color: white;
     width: 25.5rem;
     height: 5rem;
@@ -23,7 +23,6 @@ const Search = styled.input`
     ${media.lessThan("medium")`
         width: 20rem;
     `}
-    
 `;
 
 const SearchResult = styled.ul`
@@ -234,7 +233,8 @@ const RoomSearch = ({
     setSelectedOptions,
 }) => {
 
-    const [thing, setThing] = useState([]);
+    const [address, setAddress] = useState([]);
+    const [position, setPosition] = useState([{}]);
 
     // useEffect(() => {
     //     const getRoom = () => {
@@ -244,22 +244,31 @@ const RoomSearch = ({
     //     getRoom();
     // },[]);
 
-    const time = [{
-      id: 1, 
-      krName: '🌞오전',
-      enName: 'Morning'
-    }, 
-    {
-      id:2, 
-      krName: '🌗오후',
-      enName: 'afternoon'
-    }, 
-    {
-      id:3, 
-      krName: '🌑저녁',
-      enName: 'evening'
-    },
+    const time = [
+      { id: 1, times: `8시` }, 
+      { id: 2, times: `9시` }, 
+      { id: 3, times: `10시`},
+      { id: 4, times: `11시`},
+      { id: 5, times: `12시`},
+      { id: 6, times: `13시`},
+      { id: 7, times: `14시`},
+      { id: 8, times: `15시`},
+      { id: 9, times: `16시`},
+      { id: 10, times: `17시`},
+      { id: 11, times: `18시`},
+      { id: 12, times: `19시`},
+      { id: 13, times: `20시`},
+      { id: 14, times: `21시`},
+      { id: 15, times: `22시`},
+
   ]
+
+    const breed = [
+      {id: 1, breedType: "소"},
+      {id: 2, breedType: "중"},
+      {id: 3, breedType: "대"},
+    ]
+  /* '🌞오전' , '🌗오후', '🌑저녁'*/
 
   useEffect(() => {
     if(step === 6) {
@@ -267,6 +276,23 @@ const RoomSearch = ({
       setSelectedOptions([...selectedOptions, inputValue]);
     }
   }, []);
+
+  useEffect(() => {
+    if(!navigator.geolocation) {
+        console.log('브라우저 GeoLocation 미지원')
+    }
+    const success = async (position) => {
+        const latitude = position.coords.latitude.toFixed(6)
+        const longitude = position.coords.longitude.toFixed(6)
+        setPosition({latitude, longitude});
+    }
+
+    const failed = () => {
+        console.log('위치를 찾을 수 없습니다')
+    }
+
+    navigator.geolocation.getCurrentPosition(success, failed)
+}, [])
 
   const handleSelect = (el) => {
     setIsOnSearch(false);
@@ -334,17 +360,23 @@ const RoomSearch = ({
     setInputValue(e.target.value);
   };
 
+  const hadleInputAddress = (e) =>{
+    setInputValue(e.target.value);
+  }
+
+
     return(
       <Container>
-        {((step >= 1 && step <= 5) || step === 7 || step === 8) && (
+        {(step === 1 || step >= 5) && (
           <Search
             value={inputValue}
-            placeholder={step === 1 ? '작성해주세요' : step === 5 ? "오후 2시" : "작성해주세요"}
-            onClick ={handleInputClick}
+            placeholder={step === 1 ? "작성해 주세요." : step === 3 ? "오후 0시" : "작성해 주세요"}
+            onChange={hadleInputAddress}
             isOnSearch={isOnSearch}
-            />
+            >
+          </Search>
         )}
-        {step === 6 && (
+        {step === 4 && (
           <Count>
             <button onClick={handleCount}>-</button>
             <input value={inputValue} onChange={handleCountChange}/>
@@ -352,72 +384,73 @@ const RoomSearch = ({
           </Count>
         )}
 
+        {!isSelected && step === 1 && (
+          <MapContainer>
+            <Roommap
+              latitude={position.latitude}
+              longitude={position.longitude}/>
+          </MapContainer>
+        )}
+
         {isOnSearch && (
           <>
-           {step === 1 && (  // 지도를 출력해야함.
-              <>
+          {step === 1 && list.length > 0 (
+            <>
             <SearchResult>
-              {thing.filter((el) => el.place_name.includes(inputValue))
-              .map((el)=> {
-                <SearchList key={el.id} onClick={() => handleSelect(el)}>
-                  {el.place_name}
+              {list.map((el) => {
+                <SearchList key={el.id} onClick={()=> handleSelect(el)}>
+                  {el.address}
                 </SearchList>
               })}
             </SearchResult>
-          </>
-           )}
-        {step === 2 && list.length >= 1 && (
-          <SearchResult>
-            {list.map((el)=> {
-              <SearchList>
-                {el.place_name}
-              </SearchList>
-            })}
-          </SearchResult>
-        )}
-        {step === 3 && (
-          <StyledDate>
-            <StyleDatePicker
-              minDate={new Date()}
-              dateFormat="yyyy/MM/dd"
-              onChange={handleSelect}
-              inline
+            </>
+          )}
+
+          {step === 2 && (
+            <StyledDate>
+              <StyleDatePicker
+                minDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                onChange={handleSelect}
+                inline
               />
-          </StyledDate>
-        )}
-        {step === 4 && (
-          <SearchResult>
-            {time.
-              filter((el) => el.krName.includes(inputValue))
+            </StyledDate>
+          )}
+
+          {step === 3 && (
+            <SearchResult>
+              {time.filter((el) => el.times.includes(inputValue))
               .map((el)=> {
-                <SearchList key={el.id} onClick={()=> handleSelect(el.krName)}>
-                  {el.krName}
+                <SearchList key={el.id} onClick={() => handleSelect(el.times)}>
+                  {el.times}
                 </SearchList>
               })}
-          </SearchResult>
+            </SearchResult>
+          )}
+
+          {step === 7 && (
+            <SearchResult>
+              {breed.filter((el) => el.breedType.includes(inputValue))
+              .map((el)=> {
+                <SearchList key={el.id} onClick={() => handleSelect(el.breedType)}>
+                    {el.breedType}
+                </SearchList>
+              })}
+            </SearchResult>
+          )}
+
+          {step >= 5 && (
+            <SearchResult onClick={handleSelect}>{inputValue}</SearchResult>
+          )}
+          </>
         )}
-        {(step === 5 || step === 7 || step === 8) && (
-          <SearchResult>
-            <SearchList>{inputValue}</SearchList>
-          </SearchResult>
-        )}
-        </>
-      )}
-      {isSelected && step === 2 && (
-        <MapContainer>
-          <Roommap
-          place = {selectedOptions[selectedOptions.length - 1].place_name}
-          latitude={selectedOptions[selectedOptions.length - 1].y}
-          longitude={selectedOptions[selectedOptions.length - 1].x}/>
-        </MapContainer>
-      )}
       </Container>
     );
 }
 
 RoomSearch.propTypes = {
-    step: PropTypes.number.isRequired,
-    isOnSearch: PropTypes.bool.isRequired,
+    step: PropTypes.number.isRequired, // 숫자 props
+    isOnSearch: PropTypes.bool.isRequired, // boolean type
     setIsOnSearch: PropTypes.func.isRequired,
     inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     setInputValue: PropTypes.func.isRequired,

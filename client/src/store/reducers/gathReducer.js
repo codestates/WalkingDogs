@@ -35,8 +35,8 @@ const gathReducer = (prevState = initialState, action) => {
                     formatUsername: 
                     `${action.payload.conditions?.formatUsername}` || "",
                 
-                    formatPlace: 
-                    `${action.payload.conditions?.placeName}` || "",
+                    formatAddress: 
+                    `${action.payload.conditions?.address}` || "",
                 
                     formatDate: 
                     `${action.payload.conditions?.date?.split('-')[0]}년 ${

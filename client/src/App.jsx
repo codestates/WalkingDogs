@@ -26,7 +26,7 @@ import auth from './api/auth';
 import users from './api/users';
 
 function App() {
-  const [cookies, setCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
   const { isLogin } = useSelector(({authReducer})=> authReducer);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
@@ -64,6 +64,7 @@ function App() {
     }
     else {
     }
+
     if(cookies.accessToken){
       await users.checkApi()
       .then(res => {
@@ -77,7 +78,12 @@ function App() {
           dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
         }
       })
-      .catch(_ => {
+      .catch(err => {
+        // 서버가 터졌을 때,
+        localStorage.clear();
+        removeCookie('accessToken')
+        removeCookie('refreshToken')
+        // 서버가 응답을 제대로 줬지만 400일 때,
         window.location.assign('http://localhost:3000')
       })
     }
