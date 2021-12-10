@@ -115,7 +115,6 @@ const CreateRoomBtn = styled.button`
     }
 `
 
-
 const MapLinkBox = styled(Link)`
     border-radius: 30px;
     width: 8rem;
@@ -123,6 +122,7 @@ const MapLinkBox = styled(Link)`
     align-items: center;
     text-decoration: none;
 `
+
 const MapBtn = styled.button`
     border: 1px solid #000000;
     border-radius: 30px;
@@ -136,6 +136,7 @@ const MapBtn = styled.button`
         border: 1px solid var(--color-mainviolet--50);
     }
 `
+
 const SuggestMent = styled.div`
     margin-top: 5rem;
     font-size: 35px;
@@ -213,7 +214,9 @@ useEffect(() => {
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
                                 <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
-                                <MapBtn to='/maps'style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                <MapLinkBox to='/maps'>
+                                    <MapBtn style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                </MapLinkBox>
                             </BtnContainer>
                     </LocationBox>
                     {isListLoading ? (

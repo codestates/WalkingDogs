@@ -77,7 +77,7 @@ const SearchInput = ({name, children, hideDivider}) => {
         <InputWrapper
             onFocus={()=> {
                 box.current.style.cssText = css`
-                    border: 1px solid var(--color-mainviolet--50);
+                    border: 1px solid var(--color-darkwhite);
                 `;
             }}
             onBlur={()=> {
