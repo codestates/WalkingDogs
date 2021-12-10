@@ -1,4 +1,4 @@
-const { room, user } = require('../../models');
+const { room, user, user_room } = require('../../models');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {
@@ -37,29 +37,80 @@ module.exports = async (req, res) => {
   // 수정한 코드
   //-------------------------------------------
 
-  const [lat, lon] = [parseFloat(req.query.latitude), parseFloat(req.query.longitude)];
-  const result = [];
+  // const [lat, lon] = [parseFloat(req.query.latitude), parseFloat(req.query.longitude)];
+  // const result = [];
+  // try {
+  //   await room.findAll({
+  //     include: user
+  //   }).then(rooms => {
+  //     for (let i = 0; i < rooms.length; i++) {
+  //       const latitude = rooms[i].dataValues.latitude;
+  //       const longitude = rooms[i].dataValues.longitude;
+  //       const dist = haversine(
+  //         { latitude: latitude, longitude: longitude },
+  //         { latitude: lat, longitude: lon },
+  //         { unit: 'meter' },
+  //       );
+  //       if (dist <= 5000) {
+  //         result.push(rooms[i]);
+  //       }
+  //     }
+  //   });
+  //   res.status(200).json({ rooms: result, message: 'ok' });
+  // } catch (err) {
+  //   console.error;
+  //   res.status(400).json({ message: 'bad request' });
+  // }
+
+
+  //-----------------------------------
+  // 또 수정한 코드
+  //-----------------------------------
   try {
-    await room.findAll({
-      include: user
-    }).then(rooms => {
-      for (let i = 0; i < rooms.length; i++) {
-        const latitude = rooms[i].dataValues.latitude;
-        const longitude = rooms[i].dataValues.longitude;
-        const dist = haversine(
-          { latitude: latitude, longitude: longitude },
-          { latitude: lat, longitude: lon },
-          { unit: 'meter' },
-        );
-        if (dist <= 5000) {
-          result.push(rooms[i]);
+    const [lat, lon] = [
+      parseFloat(req.query.latitude),
+      parseFloat(req.query.longitude),
+      // req.query.latitude,
+      // req.query.longitude,
+    ];
+    const result = [];
+
+    const roomInfo = await room.findAll({
+      include: {
+        model: user_room,
+        include: {
+          model: user
         }
       }
-    });
-    res.status(200).json({ rooms: result, message: 'ok' });
+    })// ({include: { model: user_room, include: user }})
+    .then(rooms => {
+        for (let i = 0; i < rooms.length; i++) {
+          const latitude = rooms[i].dataValues.latitude;
+          const longitude = rooms[i].dataValues.longitude;
+          const dist = haversine(
+            { latitude: latitude, longitude: longitude },
+            { latitude: lat, longitude: lon },
+            { unit: 'meter' },
+          );
+          console.log(dist)
+          if (dist <= 5000) {
+            result.push(rooms[i]);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log(roomInfo);
+    // console.log(result);
+    if (!roomInfo) {
+      return res.status(400).json({ message: 'bad request' });
+    } else {
+      return res.status(200).json({ rooms: result, message: 'ok' });
+    }
   } catch (err) {
     console.error;
-    res.status(400).json({ message: 'bad request' });
+    return res.status(500).json({ message: 'server error' });
   }
 
   //---------------------------------

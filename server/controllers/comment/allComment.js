@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       contents.forEach(el => {
         result.push(Object.assign({}, { ...el.dataValues }, { isMine: el.dataValues.user_id === userInfo.id}))
       })
-
+     
       res.status(200).json({ data: result, message: 'ok' });
     } catch {
       console.error;

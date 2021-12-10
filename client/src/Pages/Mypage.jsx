@@ -17,7 +17,8 @@ const Mypage = () => {
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
-        const storageKey = document.cookie.split(';').find(row => row.startsWith('accessToken')).split('=')[1];
+        console.log('document.cookie: ', document.cookie);
+        const storageKey = document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1];
         const parsedData = JSON.parse(localStorage.getItem(storageKey));
         const [ img, username ] = [ parsedData.user_image, parsedData.username ];
 

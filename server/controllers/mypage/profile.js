@@ -6,17 +6,17 @@ const { isAuthorized } = require('../tokenFunctions');
 // 이렇게 수정해도 괜찮은 걸까요?
 module.exports = async (req, res) => {
   const userInfo = await isAuthorized(req);
-  if(userInfo.accessToken) {
+  if (userInfo.accessToken) {
     res.status(401).json({ message: 'you should renew your access token' });
   }
-  
+
   console.log('userInfo : ', userInfo);
   if (!userInfo) {
     res.status(401).send('this is an invalid token');
   } else {
     const { username, dogs, image } = req.body;
 
-    console.log(dogs)
+    console.log(dogs);
 
     if (username) {
       await user.update(
@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
             id: dogs[i].id ? dogs[i].id : null,
           },
         });
-        
+
         if (selectedDog) {
           stack.push(dogs[i].id);
           await dog.update(
@@ -64,8 +64,7 @@ module.exports = async (req, res) => {
               },
             },
           );
-        }
-        else {
+        } else {
           await dog
             .create({
               user_id: userInfo.id,
@@ -105,25 +104,25 @@ module.exports = async (req, res) => {
         },
       });
     }
-    
+
     const updatedUserInfo = await user.findOne({
       where: {
         id: userInfo.id,
       },
-    })
+    });
 
     const updatedDogInfo = await dog.findAll({
       where: {
         user_id: userInfo.id,
-      }
-    })
-    
+      },
+    });
+
     // res.status(200).end();
     res.status(200).send({
       data: {
         image: updatedUserInfo.image,
         username: updatedUserInfo.username,
-        dogs: [ ...updatedDogInfo ]
+        dogs: [...updatedDogInfo],
       },
       message: 'ok',
     });

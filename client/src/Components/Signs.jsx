@@ -251,7 +251,7 @@ const handleSign = async (e) => {
         try {
           const res = await userApi.loginApi(signInputValue);
           if (res.status === 200) {
-            const token = document.cookie.split(';')
+            const token = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
 
@@ -288,6 +288,7 @@ const handleSign = async (e) => {
     const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
     
     if(name === 'google') {
+      console.log('name: ', name);
       const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
       const REACT_APP_GOOGLE_REDIRECT_URL = process.env.REACT_APP_GOOGLE_REDIRECT_URL
       const scope = googleScope.join('+')

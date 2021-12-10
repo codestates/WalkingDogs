@@ -47,11 +47,12 @@ function App() {
       result = await auth.googleApi(authorizationCode)
     else
       result = await auth.kakaoApi(authorizationCode)
-
-    const token = document.cookie.split(';')
+    console.log('cookie: ',document.cookie);
+    console.log(typeof document.cookie);
+    const token = document.cookie.split('; ')
     .find(row => row.startsWith('accessToken'))
     .split('=')[1]
-
+    console.log(token);
     localStorage.setItem(token, JSON.stringify({ ...result.data.data }))
     dispatch(signinAction(JSON.parse(localStorage.getItem(token))))
   }

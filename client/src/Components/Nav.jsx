@@ -401,7 +401,10 @@ function Nav() {
 
   const handleSignOut = async() => {
     closeAll();
-    const storageKey = document.cookie.split(';')
+    console.log(document.cookie);
+    const cookies = document.cookie;
+    console.log(cookies);
+    const storageKey = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
     const res = await userApi.logoutApi();
