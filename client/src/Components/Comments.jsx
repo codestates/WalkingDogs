@@ -99,7 +99,12 @@ const CommentUserImage = styled.img`
     height: 40px;
     border-radius: 50%;
 `
-
+const CommentUserName = styled.span`
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    flex: 14 1 0;
+`
 const Comments = ({ roomId }) => {
 
 const [comments, setComments] = useState([]);
@@ -175,8 +180,16 @@ const handleButtonClickDelete = async (idx) => {
 
 useEffect(async () => {
   const getComments = await comment.getCommentApi(roomId)
-  
-  setComments([ ...getComments.data.data ])
+  console.log(getComments);
+  const commentArray = getComments.data.data;
+  console.log(commentArray)
+  for (let i = 0; i < commentArray.length; i++) {
+    //   if (!commentArray[i].user.is_memeber){
+    //     commentArray[i].user.username = 'anonymous';
+    //   }
+    commentArray[i].user.username = commentArray[i].user.is_member ? commentArray[i].user.username : 'anonymous'
+  }
+  setComments([ ...commentArray])
 }, [])
 
     return(
@@ -186,6 +199,7 @@ useEffect(async () => {
                 {comments.map((el, idx) => 
                     <Comment key={el.id}>
                         <CommentUserImage src={el.user.image}/>
+                        <CommentUserName>{el.user.username}</CommentUserName>
                         <CommentText>{el.message}</CommentText>
                         <CommentOption isMine={el.isMine}>
                             <ModifyButton onClick={() => handleButtonClickModify(idx)}>...</ModifyButton> 
