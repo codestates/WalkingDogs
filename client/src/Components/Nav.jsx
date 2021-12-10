@@ -401,7 +401,7 @@ function Nav() {
 
   const handleSignOut = async() => {
     closeAll();
-    const storageKey = document.cookie.split(';')
+    const storageKey = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
     const res = await userApi.logoutApi();
@@ -464,7 +464,6 @@ function Nav() {
 
         {isLogin && (
           <UserBox>
-            {console.log(user_image)}
             <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
               <UserImg src={user_image} onClick={() => history.push('/mypage')}/>
             <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>

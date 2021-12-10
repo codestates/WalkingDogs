@@ -48,7 +48,7 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    const token = document.cookie.split(';')
+    const token = document.cookie.split('; ')
     .find(row => row.startsWith('accessToken'))
     .split('=')[1]
 
