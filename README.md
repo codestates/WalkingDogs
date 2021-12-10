@@ -18,7 +18,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ![image](https://cdn.discordapp.com/attachments/912245935197802554/912986676865949696/2021-11-24_5.42.06_1.png)
 
 ## [DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
-![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-11-29-16_27_32](https://user-images.githubusercontent.com/71960647/143825760-fd04c991-6238-43c7-a731-e9ff21a70a74.png)
+![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-12-06-16_36_24](https://user-images.githubusercontent.com/71960647/144806242-73a22d27-5a63-4c4f-a5d7-64796f5ef9d3.png)
 
 
 ## 기능별 시연 gif (프로젝트 후 넣을 예정)
