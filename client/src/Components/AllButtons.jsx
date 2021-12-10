@@ -9,7 +9,7 @@ const ButtonContainer = styled.button`
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color};
   :hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
   :disabled {
     opacity: 0.5;
@@ -47,8 +47,8 @@ const AllButtons = ({className, color, bgColor ,onClick, disabled, children, ...
 }
 
 AllButtons.defaultProps = {
-    color: 'grey',
-    bgColor: '#646fcb',
+    color: '#000000',
+    bgColor: "var(--color-darkwhite)",
     onClick:null,
     disabled: false,
     children:null,

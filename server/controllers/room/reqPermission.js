@@ -7,22 +7,30 @@ const { room_join_req } = require('../../models');
 
 // 요청 수락 및 거절 api
 module.exports = async (req, res) => {
-  const { candidate_id, room_id, is_accepted } = req.body;
-
   try {
+    const { candidate_id, room_id, is_accepted } = req.body;
+
     if (is_accepted) {
-      await user_room.create({
+      const userInfo = await user_room.create({
         user_id: candidate_id,
         room_id: room_id,
       });
+      if (!userInfo) {
+        res.status(400).json({ message: 'bad request' });
+      }
     }
-    await room_join_req.destroy({
-      where: { user_id: candidate_id, room_id: room_id },
-    })
-    .then((result) => {
-      console.log(result);
-    })
-    res.status(200).json({ message: 'ok' });
+    await room_join_req
+      .destroy({
+        where: { user_id: candidate_id, room_id: room_id },
+      })
+      .then(result => {
+        console.log(result);
+        res.status(200).json({ message: 'ok' });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(400).json({ message: 'bad request' });
+      });
   } catch (err) {
     console.error;
     res.status(500).json({ message: 'server err' });

@@ -6,16 +6,108 @@ import Myroomlist from '../Components/Myroomlist'
 import Myfriendlist from "../Components/Myfriendlist";
 import {Link} from 'react-router-dom'
 import mypage from "../api/mypage";
+import styled from 'styled-components'
 
+
+
+const MypageContainer = styled.div`
+    border: 1px solid red;
+    width: 100%;
+    height: auto;
+    margin: 10px 10px;
+    display: flex;
+    align-items: center;
+    *{
+        margin:0;
+    }
+    button {
+        margin: 10px 10px;
+        width: 8%;
+        height: 20%;
+        font-size: 20px;
+        cursor: pointer; 
+    }
+    span {
+        padding: 0px 10px;
+        margin-top: 10px;
+        border: 1px solid #000000;
+        height:auto;
+    }
+`;
+
+const MypageInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid red;
+    margin: 10px 10px;
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+`;
+
+const ImgBox = styled.div`
+    margin: 10px 10px;
+    width: 6rem;
+`;
+
+const Img = styled.img`
+    width: 6rem;
+    height: 80px;
+    margin-top: 10px;
+    border-radius: 50%;
+    object-fit: scale-down;
+`
+
+const Profile = styled.div`
+    border: 1px solid red;
+    margin: 10px 10px;
+    width: 100%;
+    height: auto;
+    list-style: none;
+`
+
+const Li = styled.li`
+    padding: 8px 12px;
+    font-size: 18px;
+`
+const ExRoomList = styled.div`
+    align-items: center;
+    border: 1px solid red;
+    margin: 10px 10px;
+    width: 50%;
+    height: 2rem;
+    border-radius: 10px;
+`
+
+const FriendsList = styled.div`
+    align-items: center;
+    border: 1px solid red;
+    margin: 10px 10px;
+    width: 50%;
+    height: 50%;
+    border-radius: 10px;
+`
+
+
+
+
+//styled-component Boundary
 const Mypage = () => {
 
     const [dogs, setDogs] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [profileImg, setProfileImg] = useState('');
+    const [username, setUserName] = useState('');
 
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
+        const storageKey = document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1];
+        const parsedData = JSON.parse(localStorage.getItem(storageKey));
+        const [ img, username ] = [ parsedData.user_image, parsedData.username ];
 
+        setProfileImg(img);
+        setUserName(username);
         setDogs([ ...resDogList.data.dogs ]);
         setRooms([ ...resRoomList.data.rooms ]);
     }
@@ -26,16 +118,19 @@ const Mypage = () => {
 
     return (
     
-        <div className="mypage_container">
-            <div className="mypage_info">
-                <div className="mypage_profile_img">
-                    <img className="profile_img"/>
-                </div>
+        <MypageContainer>
+            <MypageInfo>
+                <ImgBox>
+                    <Img className="profile_img" src={profileImg}/>
+                </ImgBox>
 
-                <div className="mypage_profile_info">
+                <Profile>
                     <span className='myinfo_title'> My Information</span>
-                    <li>{JSON.parse(localStorage.getItem('userData')).username}{/* 유저이름 데이터 props.username*/}</li>
-                </div>
+                    <Li>
+                        {username}
+                        {/* 유저이름 데이터 props.username*/}
+                    </Li>
+                </Profile>
 
                 
                 <button className="mypage_profile_change_btn">
@@ -43,27 +138,27 @@ const Mypage = () => {
                     <FontAwesomeIcon icon={ faCog } />
                 </Link>
                 </button>
-            </div>
+            </MypageInfo>
             
-            <div className="myinfo_roomlist">
+            <ExRoomList className="myinfo_roomlist">
                 <span className="roomlist_title">
                     참가한 모임 목록
                 </span>
                     {rooms.map((el) => 
                         <Myroomlist listKey={el.id} room={el}/>
                     )}
-            </div>
+            </ExRoomList>
 
-            <div className="myfrend_list">
+            <FriendsList className="myfrend_list">
                 <span className="myfriendlist_title">
                     함께한 친구들 목록
                 </span>
                     {dogs.map((el) => 
                         <Myfriendlist listKey={el.id} dog={el}/>
                     )}
-            </div>
+            </FriendsList>
 
-        </div>
+        </MypageContainer>
     );
 }
 

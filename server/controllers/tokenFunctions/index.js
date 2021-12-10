@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { sign, verify } = require('jsonwebtoken');
-const { user } = require('../../models');
 
 module.exports = {
   generateAccessToken: data => {
@@ -12,7 +11,7 @@ module.exports = {
   //   return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1m' });
   // },
 
-  generateRefreshToken: (data) => {
+  generateRefreshToken: data => {
     return sign(data, process.env.ACCESS_REFRESH, { expiresIn: '7d' });
   },
 
@@ -27,7 +26,7 @@ module.exports = {
     return res.cookie('accessToken', accessToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '1h',
     });
   },
 
@@ -37,21 +36,20 @@ module.exports = {
     return res.cookie('refreshToken', refreshToken, {
       secure: true,
       sameSite: 'none',
-      expiresIn: expires,
+      expiresIn: '7d',
     });
   },
 
   isAuthorized: async req => {
     // const { generateAccessToken, generateRefreshToken } = require('./tokenFunctions')
 
-    
-    const generateAccessToken = (data) => {
+    const generateAccessToken = data => {
       return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
-    }
-    
-    const generateRefreshToken = (data) => {
+    };
+
+    const generateRefreshToken = data => {
       return sign(data, process.env.ACCESS_REFRESH, { expiresIn: '7d' });
-    }
+    };
 
     // JWT 토큰이 전달되지 않은 경우
     if (!req.cookies['accessToken']) {
@@ -62,62 +60,76 @@ module.exports = {
     const accessToken = req.cookies['accessToken'];
 
     // 토큰 정보
-    let result = await verify(accessToken, process.env.ACCESS_SECRET, async (err, decoded) => {
-      if (err) {
-        if (!req.cookies['refreshToken']) {
-          return err;
-        } else {
-          const refreshToken = req.cookies['refreshToken'];
-          const refreshInfo = await verify(refreshToken, process.env.ACCESS_REFRESH, (error, decoded) => {
-            if (error) {
-              return error;
-            } else {
-              // console.log(decoded);
-              delete decoded.iat;
-              delete decoded.exp;
-              const newAccessToken= generateAccessToken(decoded)
-              const newRefreshToken= generateRefreshToken(decoded);
-              return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-            }
-          })
-          // .then((result) => {
-          //   return result;
-          // })
-          // .catch((err) => {
-          //   return err;
-          // })
-
-          if (refreshInfo instanceof Error) {
+    let result = await verify(
+      accessToken,
+      process.env.ACCESS_SECRET,
+      async (err, decoded) => {
+        if (err) {
+          if (!req.cookies['refreshToken']) {
             return err;
           } else {
-            return refreshInfo;
+            const refreshToken = req.cookies['refreshToken'];
+            const refreshInfo = await verify(
+              refreshToken,
+              process.env.ACCESS_REFRESH,
+              (error, decoded) => {
+                if (error) {
+                  return error;
+                } else {
+                  // console.log(decoded);
+                  delete decoded.iat;
+                  delete decoded.exp;
+                  const newAccessToken = generateAccessToken(decoded);
+                  const newRefreshToken = generateRefreshToken(decoded);
+                  return {
+                    accessToken: newAccessToken,
+                    refreshToken: newRefreshToken,
+                  };
+                }
+              },
+            );
+            // .then((result) => {
+            //   return result;
+            // })
+            // .catch((err) => {
+            //   return err;
+            // })
+
+            if (refreshInfo instanceof Error) {
+              return err;
+            } else {
+              return refreshInfo;
+            }
           }
-        }
-      }
-      else {
-        return decoded
-      }
-    });
-
-    if (result instanceof Error) {
-      return null;
-    }
-
-    if(result.accessToken || result.refreshToken) {
-      result = await verify(result.accessToken, process.env.ACCESS_SECRET, (err, decoded) => {
-        if(err) {
-          return err;
         } else {
-          return Object.assign({}, {...result}, {...decoded})
+          return decoded;
         }
-      });
+      },
+    );
+
+    if (result instanceof Error) {
+      return null;
+    }
+
+    if (result.accessToken || result.refreshToken) {
+      result = await verify(
+        result.accessToken,
+        process.env.ACCESS_SECRET,
+        (err, decoded) => {
+          if (err) {
+            return err;
+          } else {
+            return Object.assign({}, { ...result }, { ...decoded });
+          }
+        },
+      );
     }
 
     if (result instanceof Error) {
       return null;
     }
 
-    return { ...result }
+    return { ...result };
   },
 };
 

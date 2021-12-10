@@ -1,49 +1,58 @@
-// import { faBuilding } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./Footer.css";
+import React from 'react';
 import styled from 'styled-components'
 
 
-export const FooterContainer = styled.footer`
+const FooterContainer = styled.footer`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000000;
+  background-color: black;
   padding: 0;
   text-decoration:none;
   height: auto;
 `
 
-export const FooterLogo = styled.div`
+const FooterLogo = styled.div`
   width: auto !important;
 `
 
-export const FooterIntro = styled.div`
+const FooterIntro = styled.div`
   list-style: none;
   padding-left: 0;
   text-align: center;
   width:auto;
 `
 
-export const IntroTitle = styled.div`
+const IntroTitle = styled.div`
   color: #ffffff;
   font-size: 35px;
 `
 
-export const Li = styled.li`
+const Li = styled.li`
   padding: 6px 12px;
   text-align: center;
   font-size: 20px;
 `
 
-export const MemberBox = styled.div`
+const MemberBox = styled.div`
   list-style: none;
   text-align: center;
 `
 
-export const MemberA = styled.a`
+const Atag = styled.a`
+  color: var(--color-darkwhite);
+
+`
+
+const MemberA = styled.a`
   color: #ffffff;
   text-decoration: none;
+`
+
+const Image = styled.img`
+  width: 20rem;
+  height: 17rem;
+  
 `
 
 // styled-component Boundary
@@ -52,11 +61,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterLogo>
-        {/* <FontAwesomeIcon icon={faBuilding} className="footer_icon" /> */}
-        <img src='./mainlogo.png' 
-              style={{width: '30%', 
-                      height: '30%', 
-                      objectFit:'cover'}}/>
+        <Image src='img/mainlogo.png'/>
       </FooterLogo>
 
       <FooterIntro>

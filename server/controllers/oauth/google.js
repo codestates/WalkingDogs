@@ -1,7 +1,6 @@
 const { user } = require('../../models');
 const {
   generateAccessToken,
-  sendAccessToken,
   generateRefreshToken,
 } = require('../tokenFunctions');
 // require("dotenv").config();
@@ -32,18 +31,18 @@ const oauth2Client = new google.auth.OAuth2(
 const { OAuth2Client } = require('google-auth-library');
 
 module.exports = async (req, res) => {
-  const authorizationCode = req.body.authorizationCode;
-
-  //   console.log('authorizationCode:', authorizationCode);
-  const { tokens } = await oauth2Client.getToken(authorizationCode);
-  if (!tokens) {
-    return res.status(401).json({ message: 'unauthorized' });
-  }
-
-  oauth2Client.setCredentials(tokens);
-  //   console.log('tokens: ', tokens);
-
   try {
+    const authorizationCode = req.body.authorizationCode;
+
+    //   console.log('authorizationCode:', authorizationCode);
+    const { tokens } = await oauth2Client.getToken(authorizationCode);
+    if (!tokens) {
+      return res.status(401).json({ message: 'unauthorized' });
+    }
+
+    oauth2Client.setCredentials(tokens);
+    //   console.log('tokens: ', tokens);
+
     let email = '';
     let username = '';
     let image = '';
@@ -60,15 +59,16 @@ module.exports = async (req, res) => {
       const payload = ticket.getPayload();
       // const userid = payload['sub'];
       // console.log('payload: ', payload);
-
       email = payload.email;
       username = payload.name;
       image = payload.picture;
+
       const currentUser = await user.findOne({
         where: {
           email: email,
         },
       });
+
       if (currentUser) {
         delete currentUser.dataValues.email;
         delete currentUser.dataValues.password;
@@ -88,8 +88,6 @@ module.exports = async (req, res) => {
         });
         return res.status(200).json({
           data: {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
             username: currentUser.dataValues.username,
             user_image: currentUser.dataValues.image,
           },
@@ -100,16 +98,17 @@ module.exports = async (req, res) => {
           username: username,
           email: email,
           image: image,
-          is_member: true
+          is_member: true,
         });
-        if(!userInfo) {
-          return res.status(400).json({ message: 'bad request' })
+        if (!userInfo) {
+          return res.status(400).json({ message: 'bad request' });
         }
         delete userInfo.dataValues.email;
         delete userInfo.dataValues.password;
 
         const newAccessToken = generateAccessToken(userInfo.dataValues);
         const newRefreshToken = generateRefreshToken(userInfo.dataValues);
+
         res.cookie('accessToken', newAccessToken, {
           secure: true,
           sameSite: 'none',
@@ -120,17 +119,13 @@ module.exports = async (req, res) => {
           sameSite: 'none',
           expiresIn: '7d',
         });
-        return res
-          .status(200)
-          .json({
-            data: {
-              accessToken: newAccessToken,
-              refreshToken: newRefreshToken,
-              username: userInfo.dataValues.username,
-              user_image: userInfo.dataValues.image,
-            },
-            message: 'ok',
-          });
+        return res.status(200).json({
+          data: {
+            username: userInfo.dataValues.username,
+            user_image: userInfo.dataValues.image,
+          },
+          message: 'ok',
+        });
       }
     }
 

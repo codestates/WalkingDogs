@@ -4,7 +4,7 @@ import {SEARCH_GATHER, GATHER_INFO} from '../actions/actionTypes';
 const initialState = {
     conditions: {
         username: '',
-        place:'',
+        address:'',
         date:'',
         time:'',
         content:'',
@@ -22,7 +22,7 @@ const gathReducer = (prevState = initialState, action) => {
                 conditions: {
                     username:action.payload.username?.username || "",
                     
-                    place:action.payload.place?.placeName || "",
+                    address:action.payload.place?.address || "",
                     
                     date: action.payload.date?.date || "",
                     
@@ -35,8 +35,8 @@ const gathReducer = (prevState = initialState, action) => {
                     formatUsername: 
                     `${action.payload.conditions?.formatUsername}` || "",
                 
-                    formatPlace: 
-                    `${action.payload.conditions?.placeName}` || "",
+                    formatAddress: 
+                    `${action.payload.conditions?.address}` || "",
                 
                     formatDate: 
                     `${action.payload.conditions?.date?.split('-')[0]}년 ${
@@ -52,9 +52,6 @@ const gathReducer = (prevState = initialState, action) => {
                     image: action.payload.image,
                     address: action.payload.address,
                     room_title:action.payload.room_title,
-
-
-
                     /*
                     latitude: roomInfo.latitude,
                     longitude: roomInfo.longitude,
