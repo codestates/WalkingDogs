@@ -221,6 +221,7 @@ const [date, setDate] = useState(new Date());
             }) => (
                 <CustomHeader>
                     <button
+                    type='button'
                     onClick={decreaseMonth}
                     disabled={prevMonthButtonDisabled}
                     className='month-navigation-button left'
@@ -232,6 +233,7 @@ const [date, setDate] = useState(new Date());
                         <span>{`${getMonth(date) + 1}월`}</span>
                     </MonthYearContainer>
                     <button
+                    type='button'
                     onClick={increaseMonth}
                     disabled={nextMonthButtonDisabled}
                     className='month-navigation-button Right'
@@ -242,7 +244,7 @@ const [date, setDate] = useState(new Date());
             )}
             ></DatePicker>
             {selectedDate && (
-                <ClearBtn>
+                <ClearBtn type='button'>
                     <FontAwesomeIcon icon={faTimesCircle}/>
                 </ClearBtn>)}
         </Container>
