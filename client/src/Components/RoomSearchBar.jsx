@@ -109,10 +109,49 @@ const RoomSearchBar = () => {
     ],
   })
 
+  // 
+
     const dispatch = useDispatch();
 
+    const handleSubmit = (e) => {
+      try {
+        e.preventDefault();
+        const months = {
+          Jan:"01",
+          Feb:"02",
+          Mar:"03",
+          Apr:"04",
+          May:"05",
+          Jun:"06",
+          Jul:"07",
+          Aug:"08",
+          Sep:"09",
+          Oct:"10",
+          Nov:"11",
+          Dec:"12",
+        };
+
+        const refinedAddressInput = addressInput.match(/[A-Za-z가-힣]*/).join("");
+        const refinedDateArr = `${dateInput}`?.split(" ").slice(1, 4);
+        const refinedDateInput = refinedDateArr.length
+        ? `${refinedDateArr[2]}-${months[refinedDateArr[0]]}-${refinedDateArr[1]}`
+        : "";
+
+        const res = roomApi.roomDetailApi({
+          address: refinedAddressInput,
+          date:dateInput,
+          time: timeInput,
+          totalNum:totalNumInput,
+        });
+        dispatch(searchGatherAction(res.data));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    
     return(
-        <InputContainer>
+        <InputContainer onSubmit={handleSubmit}>
             <Inputlist>
                 <SearchInput name='지역'>
                 <InputDataList

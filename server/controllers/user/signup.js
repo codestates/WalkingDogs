@@ -23,6 +23,7 @@ module.exports = async (req, res) => {
         password: hashedPass,
         username: username,
         image: image ? image : null,
+        is_member: true,
       });
 
       return res.status(201).json({ message: 'ok' });

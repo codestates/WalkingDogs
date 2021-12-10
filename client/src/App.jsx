@@ -102,7 +102,7 @@ function App() {
           <Route path='/mypage' component={Mypage}/>
           <Route path='/mypagechange' component={Mypagechg}/>
           <Route path='/roomlist' component={Roomlist}/>
-          <Route path='/room/:room_id' component={Oneroom}/>
+          <Route path='/room/:room_id' component={<Oneroom gathering={currentGatherInfo}/>}/>
           <Route path='/community' component={Community}/>
           <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
