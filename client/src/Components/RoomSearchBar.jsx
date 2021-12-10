@@ -99,14 +99,7 @@ const RoomSearchBar = () => {
   const [list, setList] = useState({
     address: [],
     time: [],
-    breed: [
-      { id: 1, breed: "포메라니안"},
-      { id: 2, breed: "비숑"},
-      { id: 3, breed: "푸들"},
-      { id: 4, breed: "진도"},
-      { id: 5, breed: "일본-시바"},
-      { id: 6, breed: "시베리안허스키"},
-    ],
+    breed: [],
   })
 
   // 
@@ -156,6 +149,7 @@ const RoomSearchBar = () => {
                 <SearchInput name='지역'>
                 <InputDataList
                   id='address'
+                  values={list.address}
                   placeholder="지역이 어디인가요?"
                   item={addressInput}
                   setItem={setAddressInput}/>
@@ -164,16 +158,17 @@ const RoomSearchBar = () => {
 
                 <SearchInput name='날짜'>
                     <InputDatepicker
-                        id='date' 
-                        placeholder='언제모일까요?'
-                        selectedDate={dateInput}
-                        setSelectedDate={setDateInput}/>
+                      id='date' 
+                      placeholder='언제모일까요?'
+                      selectedDate={dateInput}
+                      setSelectedDate={setDateInput}/>
                 </SearchInput>
 
                 <SearchInput name='시간'>
                   <InputDataList
                   id='time'
-                  placeholder='시간은?'/>
+                  placeholder='시간은?'
+                  timeInput={timeInput}/>
                 </SearchInput>
                 
                 <SearchInput name='인원'>
@@ -189,11 +184,15 @@ const RoomSearchBar = () => {
                   placeholder='견종 선택'
                   breed={breed}
                   setBreed={setBreed}>
-
                 </SearchInput>
             </Inputlist>
             <SearchBtnContainer>
-              <AllButtons>
+              <AllButtons
+                type='submit'
+                onClick={handleSubmit}
+                className='gath-search-btn pc'
+                disabled={!searchable}
+              >
                 검색
               </AllButtons>
             </SearchBtnContainer>
