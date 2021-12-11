@@ -46,23 +46,23 @@ const gathReducer = (prevState = initialState, action) => {
                 gatherings: action.payload.gatherings,
             };
                 break;
-            case GATHER_INFO:
-                state={
-                    ...prevState,
-                    image: action.payload.image,
-                    address: action.payload.address,
-                    room_title:action.payload.room_title,
-                    /*
-                    latitude: roomInfo.latitude,
-                    longitude: roomInfo.longitude,
-                    address: roomInfo.address,
-                    selected_dogs: [...roomInfo.selected_dogs],
-                    room_title: roomInfo.room_title,
-                    member_limit: roomInfo.member_limit,
-                    meeting_time: roomInfo.meeting_time,
-                    */ 
-                }
-                break;
+        case GATHER_INFO:
+            state={
+                ...prevState,
+                image: action.payload.image,
+                address: action.payload.address,
+                room_title:action.payload.room_title,
+                /*
+                latitude: roomInfo.latitude,
+                longitude: roomInfo.longitude,
+                address: roomInfo.address,
+                selected_dogs: [...roomInfo.selected_dogs],
+                room_title: roomInfo.room_title,
+                member_limit: roomInfo.member_limit,
+                meeting_time: roomInfo.meeting_time,
+                */ 
+            }
+            break;
             default:
                 state = {...prevState};
     }
