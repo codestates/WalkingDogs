@@ -11,7 +11,6 @@ const posReducer = (prevState = initialState, action) => {
     let state;
     switch(action.type) {
         case INIT_POSITION:
-            console.log(typeof action.payload.latitude)
             state = {
                 position: {
                     latitude: action.payload.latitude,
