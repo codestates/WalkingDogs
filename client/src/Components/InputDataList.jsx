@@ -1,4 +1,4 @@
-import React, {useMemo, useCallback} from 'react';
+import React, { useMemo, useCallback } from 'react';
 import styled from 'styled-components'
 import DataListInput from 'react-plain-datalist-input';
 import PropTypes from 'prop-types';
@@ -75,7 +75,7 @@ const ClearBtn = styled.button`
 //styled-component Boundary
 
 
-const InputDataList = ({values,placeholder,item,setItem}) => {
+const InputDataList = ({ values, placeholder, item, setItem }) => {
 
     const onSelect = useCallback((selectedItem) => {
         setItem(selectedItem.label);
@@ -84,6 +84,19 @@ const InputDataList = ({values,placeholder,item,setItem}) => {
     const onInput = (newVal) => {
         setItem(newVal);
     }
+
+    // const items = useMemo(
+    //   () => 
+    //     values.map((oneItem)=> {
+    //       const valueList = {};
+    //       valueList.key = oneItem.id;
+    //       if (oneItem.timeName) {
+    //         valueList.label = oneItem.timeName;
+    //       }
+    //       return {...valueList};
+    //     }),
+    //     [values]
+    //   );
 
     const match = (currentInput, item) => {
         return item.label.toLowerCase().includes(currentInput.toLowerCase());
@@ -98,6 +111,7 @@ const InputDataList = ({values,placeholder,item,setItem}) => {
             <DataListInput
                 placeholder={placeholder}
                 value={item}
+                // items={items}
                 onSelect={onSelect}
                 onInput={onInput}
                 match={match}
@@ -117,6 +131,6 @@ InputDataList.propTypes = {
     placeholder: PropTypes.string.isRequired,
     item: PropTypes.string.isRequired, //아이템을 선택하는 경ㅇ
     setItem : PropTypes.func.isRequired,
-}
+};
 
 export default InputDataList;

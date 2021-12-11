@@ -91,7 +91,9 @@ const RoomCreate = () => {
     const [list, setList] = useState([]);
     const [isSelected, setIsSelected] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]);
+
     const [showMessage, setShowMessage] = useState(false);
+
     const user = useSelector(({authReducer}) => authReducer);
    
     const dispatch = useDispatch();
@@ -143,11 +145,13 @@ const RoomCreate = () => {
     const handleNextBtn = () => {
         // if(step >= 6 && step < 8) {
         //     setSelectedOptions([...selectedOptions, inputValue]);
+
         //     setIsOnSearch(false);
         //     setInputValue("");
         //     setList([]);
         //     setIsSelected(false);
         //     setStep(step + 1);
+
         // } else if(selectedOptions.length === step){
         //         setIsOnSearch(false);
         //         setInputValue("");
@@ -160,6 +164,7 @@ const RoomCreate = () => {
         //     setList([]);
         //     setIsSelected(false);
         //     setStep(step + 1);
+
         // }
         if (step <= 5) {
             setIsOnSearch(true);
@@ -211,14 +216,18 @@ const RoomCreate = () => {
         
         setRoomInfo({
             id: 1,
+
             title: selectedOptions[4] ? selectedOptions[4] : selectedOptions[0] && `${selectedOptions[0].slice(0, -2)} !`,
+
             description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
             creater: {
                 id:'uuid',
                 username:user.username,
                 image:user.image,
             },
+
             address: (selectedOptions[0] && selectedOptions[0].address && selectedOptions[0].address.split(" ")[1]) || "00구",
+
             latitude: "37.56820203278462",
             longitude: "126.8990406557216",
             date: selectedOptions[2] || "2021-12-27",

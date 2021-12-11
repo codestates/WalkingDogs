@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
-import {createGatherRoomModalOnAction, signinAction,singoutAction} from '../store/actions'
+import {createGatherRoomModalOnAction, initPosAction, signinAction,singoutAction} from '../store/actions'
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
@@ -108,6 +108,10 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
@@ -156,8 +160,6 @@ const conditionOptions = {
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
-// const { conditions, gatherings } = useSelector(({ gathReducer }) => gathReducer);
-const isMounted = useRef(false);
 const dispatch = useDispatch();
 const history = useHistory();
 
@@ -165,20 +167,22 @@ useEffect(() => {
     if(!navigator.geolocation) {
         console.log('브라우저 GeoLocation 미지원')
     }
-    const success = async (position) => {
-        const latitude = position.coords.latitude.toFixed(6)
-        const longitude = position.coords.longitude.toFixed(6)
+    const success = async (pos) => {
         
+        const latitude = Number(pos.coords.latitude.toFixed(6))
+        const longitude = Number(pos.coords.longitude.toFixed(6))
+        dispatch(initPosAction({ latitude, longitude }))
+
         const result = await map.locationApi({ latitude, longitude })
         
         setRooms([ ...result.data.rooms ]);
-        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
-        setIsListLoading(false )
-        isMounted.current = true;
+        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
+        setIsListLoading(false);
     }
 
     const failed = () => {
         console.log('위치를 찾을 수 없습니다')
+        setIsListLoading(false)
     }
 
     navigator.geolocation.getCurrentPosition(success, failed)
@@ -206,9 +210,9 @@ useEffect(() => {
                             </h2>
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
-                                <CreateRoomBtn onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
+                                <CreateRoomBtn disabled={isListLoading} onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapLinkBox to='/maps'>
-                                    <MapBtn style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
+                                    <MapBtn disabled={isListLoading} style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                                 </MapLinkBox>
                             </BtnContainer>
                     </LocationBox>

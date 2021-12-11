@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
+import InputAddress from './InputAddress'
 import InputDatepicker from "./InputDatepicker";
 import InputDataList from "./InputDataList";
 import InputTotalNum from './InputTotalNum'
@@ -15,8 +16,8 @@ import {FcSearch} from 'react-icons/fc'
 const InputContainer = styled.form`
   margin-bottom: 2rem;
   height: 4rem;
-  background-color: var(--color-white);
-  border-radius: 1rem;
+  background-color: var(--color-darkwhite);
+  border-radius: 0.5rem;
   display: flex;
   ${media.lessThan("medium")`
     margin-bottom: 1.25rem;
@@ -27,14 +28,15 @@ const InputContainer = styled.form`
     min-width: 20rem;
   `}
   .gath-search-btn {
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-maingreen--75);
-    color: var(--color-white);
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--color-mainviolet--100);
+    color: black;
   }
   .gath-search-btn.pc {
     padding: 0;
-    border-radius: 0.6rem;
+    border-radius: 0.1rem;
+
   }
   .gath-search-btn.mobile {
     width: 100%;
@@ -78,11 +80,12 @@ const SearchBtnContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0rem;
   position: relative;
 `;
 
 const SearchIcon = styled(FcSearch)`
+  width: ${(prop) => prop.size}rem;
 
 `
 
@@ -99,7 +102,11 @@ const RoomSearchBar = () => {
   const [list, setList] = useState({
     address: [],
     time: [],
-    breed: [],
+    breed: [
+      { id: 1, breed: "소형"},
+      { id: 2, breed: "중형"},
+      { id: 3, breed: "대형"},
+    ],
   })
 
   // 
@@ -142,33 +149,34 @@ const RoomSearchBar = () => {
       }
     }
 
+    useEffect(()=>{
+      setSearchable(addressInput);
+    },[addressInput])
+
     
     return(
         <InputContainer onSubmit={handleSubmit}>
             <Inputlist>
                 <SearchInput name='지역'>
-                <InputDataList
+                <InputAddress
                   id='address'
-                  values={list.address}
                   placeholder="지역이 어디인가요?"
                   item={addressInput}
                   setItem={setAddressInput}/>
-
                 </SearchInput>
 
                 <SearchInput name='날짜'>
                     <InputDatepicker
-                      id='date' 
-                      placeholder='언제모일까요?'
-                      selectedDate={dateInput}
-                      setSelectedDate={setDateInput}/>
+                        id='date' 
+                        placeholder='언제모일까요?'
+                        selectedDate={dateInput}
+                        setSelectedDate={setDateInput}/>
                 </SearchInput>
 
                 <SearchInput name='시간'>
                   <InputDataList
                   id='time'
-                  placeholder='시간은?'
-                  timeInput={timeInput}/>
+                  placeholder='시간은?'/>
                 </SearchInput>
                 
                 <SearchInput name='인원'>
@@ -184,6 +192,7 @@ const RoomSearchBar = () => {
                   placeholder='견종 선택'
                   breed={breed}
                   setBreed={setBreed}>
+
                 </SearchInput>
             </Inputlist>
             <SearchBtnContainer>
@@ -192,7 +201,7 @@ const RoomSearchBar = () => {
                 onClick={handleSubmit}
                 className='gath-search-btn pc'
                 disabled={!searchable}
-              >
+                >
                 검색
               </AllButtons>
             </SearchBtnContainer>

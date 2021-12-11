@@ -6,7 +6,8 @@ import media from 'styled-media-query'
 import Roommap from './Roommap';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
-import { el } from 'date-fns/locale';
+
+import { useSelector } from 'react-redux';
 
 
 const Container = styled.div`
@@ -235,8 +236,12 @@ const RoomSearch = ({
 }) => {
 
     const [address, setAddress] = useState([]);
+
     const [position, setPosition] = useState([{}]);
     const [clickedSize, setClickedSize] = useState(false);
+
+    const { position } = useSelector(({ posReducer }) => posReducer);
+
     // useEffect(() => {
     //     const getRoom = () => {
     //         const {data: rooms} = roomApi.newRoomApi();
@@ -267,6 +272,7 @@ const RoomSearch = ({
       {id: 1, sizeType: "소"},
       {id: 2, sizeType: "중"},
       {id: 3, sizeType: "대"},
+
     ]
   /* '🌞오전' , '🌗오후', '🌑저녁'*/
 
@@ -276,23 +282,6 @@ const RoomSearch = ({
       setSelectedOptions([...selectedOptions, inputValue]);
     }
   }, []);
-
-  useEffect(() => {
-    if(!navigator.geolocation) {
-        console.log('브라우저 GeoLocation 미지원')
-    }
-    const success = async (position) => {
-        const latitude = position.coords.latitude.toFixed(6)
-        const longitude = position.coords.longitude.toFixed(6)
-        setPosition({latitude, longitude});
-    }
-
-    const failed = () => {
-        console.log('위치를 찾을 수 없습니다')
-    }
-
-    navigator.geolocation.getCurrentPosition(success, failed)
-}, [])
 
   const handleSelect = (el) => {
     setIsOnSearch(false);
@@ -418,10 +407,16 @@ const RoomSearch = ({
 
     return(
       <Container>
-        {(step === 1 || step >= 5) && (
+        {(step >= 1 || step <= 5) && (
           <Search
             value={inputValue}
-            placeholder={step === 1 ? "작성해 주세요." : step === 3 ? "오후 0시" : step === 7 ? "클릭해 주세요" : "작성해 주세요"}
+
+            placeholder={
+              step === 1 ? "작성해 주세요." 
+            : step === 2 || step === 7 ? "선택해 주세요."
+            : step === 3 ? "오후 0시" : "작성해 주세요" }
+            onClick={handleInputClick}
+
             onChange={hadleInputAddress}
             onClick={handleClick}
             isOnSearch={isOnSearch}
