@@ -117,6 +117,27 @@ const GathCrewBox = styled.div`
   cursor: pointer;
 `
 
+const MapBox = styled.div`
+  width: auto;
+  height: 100%;
+  border: 2px solid #000000;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.5rem;
+`
+
+const MapBoxAddres = styled.div`
+  background-color: var(--color-mainviolet--25);
+  width: 25rem;
+  height: 3rem;
+  margin: 0.5rem;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 1.5px 1.5px var(--color-darkgray);
+`
+
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
@@ -213,7 +234,14 @@ const Oneroom = () => {
         }
       </OneroomContainer>
       <Comments roomId={params.room_id} />
-      <Roommap address={roomDetail.address} latitude={roomDetail.latitude} longitude={roomDetail.longitude} draggable={false}/>
+      <MapBox>
+        <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
+        <Roommap 
+          address={roomDetail.address} 
+          latitude={roomDetail.latitude} 
+          longitude={roomDetail.longitude} 
+          draggable={false}/>
+      </MapBox>
     </>
   );
 };

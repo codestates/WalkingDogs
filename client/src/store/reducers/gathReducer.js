@@ -32,11 +32,11 @@ const gathReducer = (prevState = initialState, action) => {
                     
                     totalNum:Number(action.payload.conditions?.totalNum || null),
                 
-                    formatUsername: 
-                    `${action.payload.conditions?.formatUsername}` || "",
+                    // formatUsername: 
+                    // `${action.payload.conditions?.formatUsername}` || "",
                 
-                    formatAddress: 
-                    `${action.payload.conditions?.address}` || "",
+                    // formatAddress: 
+                    // `${action.payload.conditions?.address}` || "",
                 
                     formatDate: 
                     `${action.payload.conditions?.date?.split('-')[0]}년 ${

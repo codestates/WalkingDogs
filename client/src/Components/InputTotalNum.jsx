@@ -5,7 +5,7 @@ import media from 'styled-media-query';
 import {FiPlus, FiMinus} from 'react-icons/fi';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {IoCloseCircle} from  "react-icons/io5";
 
 
 const Container = styled.div`
@@ -62,6 +62,16 @@ const PopperInput = styled.input`
     `};
 `;
 
+const PopperWaring = styled.input`
+  max-width: calc(100% - 4rem);
+  text-align: center;
+  ${(props) =>
+    props.disabled &&
+    css`
+      color: var(--color-gray);
+    `};
+`;
+
 const PlusBtn = styled(FiPlus)`
   flex: 0 0 auto;
   color: var(--color-gray);
@@ -102,7 +112,17 @@ const DisabledMinus = styled(MinusBtn)`
   }
 `;
 
-const ClearBtn = styled.button`
+const DisabledPlus = styled(MinusBtn)`
+  color: var(--color-lightgray);
+  border: 1px solid var(--color-lightgray);
+  :hover,
+  :active {
+    color: var(--color-lightgray);
+    border: 1px solid var(--color-lightgray);
+  }
+`;
+
+const ClearBtn = styled(PlusBtn)`
   position: absolute;
   right: 1rem;
   top: 1.375rem;
@@ -157,15 +177,14 @@ const InputTotalNum =({inputId, placeholder, total, setTotal}) => {
             <Input value={total ? `전체 ${total} 명` : ""} placeholder={placeholder} readOnly/>
                 <Popper ref={popper}>
                     <PopperInner>
-                        {total && total > 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
+                        {total && total >= 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
                         <PopperInput id={inputId} value={total || 1} disabled={!total} readOnly/>
-                        {/* {total <= 6} */}
-                        <PlusBtn onClick={handlePlusClick}/>
+                        {total <= 5 ? <PlusBtn onClick={handlePlusClick}/> : <DisabledPlus/>}
                     </PopperInner>
                 </Popper>
                 {total && (
                     <ClearBtn onClick={handleClearClick}>
-                        <FontAwesomeIcon icon={faTimesCircle}/>
+                        <IoCloseCircle/>
                     </ClearBtn>
                 )}
         </Container>

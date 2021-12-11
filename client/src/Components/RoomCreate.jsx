@@ -90,7 +90,7 @@ const RoomCreate = () => {
     const [inputValue, setInputValue] = useState("");
     const [list, setList] = useState([]);
     const [isSelected, setIsSelected] = useState(false);
-    const [selectedOption, setSelectedOption] = useState([]);
+    const [selectedOptions, setSelectedOptions] = useState([]);
     const user = useSelector(({authReducer}) => authReducer);
 
     const dispatch = useDispatch();
@@ -135,26 +135,46 @@ const RoomCreate = () => {
         setInputValue("");
         setList([]);
         setIsSelected(false);
-        setSelectedOption(selectedOption.slice(0, selectedOption.length - 1));
+        setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
         setStep(step-1);
     }
 
     const handleNextBtn = () => {
-        if(step >= 6 && step < 8) {
-            setSelectedOption([...selectedOption, inputValue]);
-            setIsOnSearch(false);
+        // if(step >= 6 && step < 7) {
+        //     setSelectedOption([...selectedOption, inputValue]);
+        //     setIsOnSearch(false);
+        //     setInputValue("");
+        //     setList([]);
+        //     setIsSelected(false);
+        //     setStep(step + 1);
+        // } else {
+        //     if(selectedOption.length === step){
+        //         setIsOnSearch(false);
+        //         setInputValue("");
+        //         setList([]);
+        //         setIsSelected(false);
+        //         setStep(step + 1);
+        //     }
+        // }
+        if (step <= 5) {
+            setIsOnSearch(true);
+            setInputValue("");
+            setList([]);
+            setIsSelected(false);
+            setStep(step + 1);
+        } else if (step === 6) {
+            setSelectedOptions([...selectedOptions, inputValue]);
+            setIsOnSearch(true);
             setInputValue("");
             setList([]);
             setIsSelected(false);
             setStep(step + 1);
         } else {
-            if(selectedOption.length === step){
-                setIsOnSearch(false);
-                setInputValue("");
-                setList([]);
-                setIsSelected(false);
-                setStep(step + 1);
-            }
+            setSelectedOptions([...selectedOptions, inputValue]);
+            setIsOnSearch(true);
+            setInputValue("");
+            setList([]);
+            setIsSelected(false);
         }
     };
 
@@ -183,27 +203,26 @@ const RoomCreate = () => {
             default:
             break;
         }
-        if(step === 6) setInputValue(2);
         
         setRoomInfo({
             id: 1,
-            title: selectedOption[4]
-            ? selectedOption[4]
-            : selectedOption[0] && `${selectedOption[0].slice(0, -2)} !`,
-            description: selectedOption[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
+            title: selectedOptions[4]
+            ? selectedOptions[4]
+            : selectedOptions[4] && `${selectedOptions[0].slice(0, -2)} !`,
+            description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
             creater: {
                 id:'uuid',
                 username:user.username,
                 image:user.image,
             },
-            address: (selectedOption[0] && selectedOption[0].address.split(" ")[1]) || "00구",
+            address: (selectedOptions[0] && selectedOptions[0].address.split(" ")[1]) || "00구",
             latitude: "37.56820203278462",
             longitude: "126.8990406557216",
-            date: selectedOption[2] || "2021-12-27",
-            time: selectedOption[3] || "오후",
-            timeDesctiption: selectedOption[3] || "18시",
-            totalNum: selectedOption[4] || 0,
-            currentNum: selectedOption[4] - 3 || 0,
+            date: selectedOptions[2] || "2021-12-27",
+            time: selectedOptions[3] || "오후",
+            timeDesctiption: selectedOptions[3] || "18시",
+            totalNum: selectedOptions[4] || 0,
+            currentNum: selectedOptions[4] - 3 || 0,
             done: false,
             users : [{
                 id:'uuid',
@@ -212,7 +231,7 @@ const RoomCreate = () => {
             },
           ],
         });
-    },[step, selectedOption]);
+    },[step, selectedOptions]);
 
     const handleSave = () => {
         try {
@@ -248,12 +267,12 @@ const RoomCreate = () => {
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
                     <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
                         {step === 3 &&
-                            selectedOption[1].length !==0 &&
-                            `${selectedOption[1].place_name} 에
+                            selectedOptions[1].length !==0 &&
+                            `${selectedOptions[1].place_name} 에
                             모임`}
                             {(step === 4 || step === 5) && 
-                            `${selectedOption[1].split("-")[1]} 월 ${selectedOption[1].split("-")[2]}일
-                            '${selectedOption[0].place_name}에서' 모임`}
+                            `${selectedOptions[1].split("-")[1]} 월 ${selectedOptions[1].split("-")[2]}일
+                            '${selectedOptions[0].place_name}에서' 모임`}
                     </div>
                     <h2 style={{color: 'black'}}>{ask}</h2>
                 </Info>
@@ -267,8 +286,8 @@ const RoomCreate = () => {
                     list={list}
                     isSelected={isSelected}
                     setIsSelected={setIsSelected}
-                    selectedOption={selectedOption}
-                    setSelectedOption={setSelectedOption}/>
+                    selectedOptions={selectedOptions}
+                    setSelectedOptions={setSelectedOptions}/>
                 </Container>
                 <MoveNextButton isOnSearch={isOnSearch}>
                     <Btn name="prev" onClick={handlePrevBtn}>

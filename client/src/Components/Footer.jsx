@@ -36,17 +36,24 @@ const Li = styled.li`
 
 const MemberBox = styled.div`
   list-style: none;
+  margin-right: 7rem;
   text-align: center;
 `
 
 const Atag = styled.a`
   color: var(--color-darkwhite);
+  text-decoration: none;
 
 `
 
 const MemberA = styled.a`
   color: #ffffff;
   text-decoration: none;
+`
+
+const MemberTitle = styled.div`
+  color: #ffffff;
+  font-size: 35px;
 `
 
 const Image = styled.img`
@@ -67,17 +74,17 @@ const Footer = () => {
       <FooterIntro>
         <IntroTitle>About us</IntroTitle>
         <Li>
-          <a href="https://github.com/codestates/WalkingDogs"
-              style={{color:'white',textDecoration:'none'}}>Repository</a>
+          <Atag href="https://github.com/codestates/WalkingDogs"
+              style={{color:'white',textDecoration:'none'}}>Repository</Atag>
         </Li>
         <Li>
-          <a href="https://github.com/codestates/WalkingDogs/wiki"
-              style={{color:'white',textDecoration:'none'}}> WIKI </a>
+          <Atag href="https://github.com/codestates/WalkingDogs/wiki"
+              style={{color:'white',textDecoration:'none'}}> WIKI </Atag>
         </Li>
       </FooterIntro>
 
       <MemberBox>
-        <div className="footer_member_title">Members</div>
+        <MemberTitle className="footer_member_title">Members</MemberTitle>
         <Li>
           <MemberA href=""
               style={{color:'white',textDecoration:'none'}}> 박종환 </MemberA>

@@ -108,6 +108,10 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
