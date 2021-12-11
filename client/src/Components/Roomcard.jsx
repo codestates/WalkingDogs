@@ -19,7 +19,7 @@ const CardContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     /* max-width: 25rem; */
-    min-width: 23rem;
+    min-width: 21rem;
     > * {
         margin-bottom: 1.15rem;
     }
@@ -103,16 +103,16 @@ const handleGathDetailRoomModalOn = () =>{
 
     return(
         <Link to={`/room/${listKey}`} style={{textDecoration:'none', color:'black'}}>
-        <CardContainer key={listKey}>
-            <ImageBox>
-                <img src='image/puppy-test.jpeg'
-                    style={{objectFit:'scale-down', width:'auto', height:'auto'}}/>
-            </ImageBox>
-            <Roominfo>
-            <AddressesBox> {room.address} </AddressesBox>
-              <RoomContentBox>{room.title}</RoomContentBox>
-            </Roominfo>
-        </CardContainer>
+            <CardContainer key={listKey}>
+                <ImageBox>
+                    <img src='image/puppy-test.jpeg'
+                        style={{objectFit:'scale-down', width:'auto', height:'auto'}}/>
+                </ImageBox>
+                <Roominfo>
+                <AddressesBox> {room.address} </AddressesBox>
+                <RoomContentBox>{room.title}</RoomContentBox>
+                </Roominfo>
+            </CardContainer>
         </Link>
     );
 };

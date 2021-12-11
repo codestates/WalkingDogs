@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
             { latitude: lat, longitude: lon },
             { unit: 'meter' },
           );
-          if (dist <= 5000) {
+          if (dist <= 1000) {
             result.push(rooms[i]);
           }
         }

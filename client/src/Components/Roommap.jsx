@@ -21,7 +21,6 @@ export const Minimap = styled.div`
 
 const Roommap = ({ address, latitude, longitude, draggable = true }) => {
   const [center, setCenter] = useState({ latitude: 0, longitude: 0 });
-  const asdf = useSelector((state) => state.gathReducer)
 
   useEffect(() => {
       
@@ -30,6 +29,7 @@ const Roommap = ({ address, latitude, longitude, draggable = true }) => {
       center: new kakao.maps.LatLng(latitude, longitude),
       level: 3,
       draggable,
+      disableDoubleClick: !draggable,
     };
     const map = new kakao.maps.Map(container, options);
 
