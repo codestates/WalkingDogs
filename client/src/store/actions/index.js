@@ -9,7 +9,8 @@ import {SIGN_IN,
         GATHER_CREW_MODAL_ON,
         SEARCH_GATHER,
         GATHER_INFO,
-        MODAL_OFF } from './actionTypes'
+        MODAL_OFF,
+        INIT_POSITION } from './actionTypes'
 
 //AUTH ACTIONS
 export const signinAction = (data) => ({
@@ -68,5 +69,12 @@ export const searchGatherAction = ({conditions, gatherings}) => ({
 
 export const gatherInfoAction = ({data}) => ({
     type: GATHER_INFO,
+    payload: {...data}
+})
+
+//POS
+
+export const initPosAction = (data) => ({
+    type: INIT_POSITION,
     payload: {...data}
 })
