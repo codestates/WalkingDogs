@@ -1,4 +1,4 @@
-import React , {useEffect}from 'react';
+import React , {useEffect, useState}from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types'
 import room from '../api/room';
@@ -25,7 +25,7 @@ export const Minimap = styled.div`
 
 const Roommap = ( { address, latitude, longitude, draggable = true }) => {
 
-    // const [center, setCenter] = useState({ latitude : 0, longitude: 0 })
+    const [center, setCenter] = useState({ latitude : 0, longitude: 0 })
 
     useEffect(async () => {
         const container = document.querySelector('#map')

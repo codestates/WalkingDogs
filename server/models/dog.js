@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: DataTypes.INTEGER,
       name: DataTypes.STRING,
-      breed: DataTypes.STRING,
+      size: DataTypes.STRING,
       image: DataTypes.STRING,
       neutering: DataTypes.STRING,
     },

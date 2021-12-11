@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
           email: email,
           password: hashedPass,
           username: username,
-          image: image ? image : 'defaultProfile.jpeg',
+          image: image ? image : 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/1639132435227defaultProfile.jpeg',
           is_member: true,
         });
         if (!createUser) {

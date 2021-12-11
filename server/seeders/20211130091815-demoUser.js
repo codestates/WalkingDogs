@@ -21,7 +21,7 @@ module.exports = {
         username : "name" + (idx + 1), 
         email : "test" + (idx + 1) + "@wd.link",
         password : hashedPass, 
-        image: './test.img',
+        image: 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/1639132435227defaultProfile.jpeg',
         kakao_id: null,
         is_member: true,
         createdAt : new Date(),
