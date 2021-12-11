@@ -91,8 +91,11 @@ const RoomCreate = () => {
     const [list, setList] = useState([]);
     const [isSelected, setIsSelected] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]);
-    const user = useSelector(({authReducer}) => authReducer);
 
+    const [showMessage, setShowMessage] = useState(false);
+
+    const user = useSelector(({authReducer}) => authReducer);
+   
     const dispatch = useDispatch();
 
     const [roomInfo, setRoomInfo] = useState({
@@ -140,21 +143,28 @@ const RoomCreate = () => {
     }
 
     const handleNextBtn = () => {
-        // if(step >= 6 && step < 7) {
-        //     setSelectedOption([...selectedOption, inputValue]);
+        // if(step >= 6 && step < 8) {
+        //     setSelectedOptions([...selectedOptions, inputValue]);
+
         //     setIsOnSearch(false);
         //     setInputValue("");
         //     setList([]);
         //     setIsSelected(false);
         //     setStep(step + 1);
-        // } else {
-        //     if(selectedOption.length === step){
+
+        // } else if(selectedOptions.length === step){
         //         setIsOnSearch(false);
         //         setInputValue("");
         //         setList([]);
         //         setIsSelected(false);
         //         setStep(step + 1);
-        //     }
+        // } else if(step < 7) {
+        //     setIsOnSearch(false);
+        //     setInputValue("");
+        //     setList([]);
+        //     setIsSelected(false);
+        //     setStep(step + 1);
+
         // }
         if (step <= 5) {
             setIsOnSearch(true);
@@ -184,7 +194,7 @@ const RoomCreate = () => {
                 setAsk("모이는 곳의 장소는 어디인가요?")
                 break;
             case 2:
-                setAsk("언제 모이나요?")
+                setAsk("몇 일날 모이나요?")
                 break;
             case 3:
                 setAsk("시간대는 몇 시 인가요?")
@@ -206,16 +216,18 @@ const RoomCreate = () => {
         
         setRoomInfo({
             id: 1,
-            title: selectedOptions[4]
-            ? selectedOptions[4]
-            : selectedOptions[4] && `${selectedOptions[0].slice(0, -2)} !`,
+
+            title: selectedOptions[4] ? selectedOptions[4] : selectedOptions[0] && `${selectedOptions[0].slice(0, -2)} !`,
+
             description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
             creater: {
                 id:'uuid',
                 username:user.username,
                 image:user.image,
             },
-            address: (selectedOptions[0] && selectedOptions[0].address.split(" ")[1]) || "00구",
+
+            address: (selectedOptions[0] && selectedOptions[0].address && selectedOptions[0].address.split(" ")[1]) || "00구",
+
             latitude: "37.56820203278462",
             longitude: "126.8990406557216",
             date: selectedOptions[2] || "2021-12-27",
@@ -245,14 +257,20 @@ const RoomCreate = () => {
                 time: roomInfo.time,
                 timeDesctiption:roomInfo.timeDesctiption,
                 totalNum: roomInfo.totalNum,
-                address: roomInfo.areaName,
+                // address: roomInfo.areaName,
             };
-            const res = roomApi.newRoomApi(payload);
-            console.log(res)
-            if(res.status === 200){
-                dispatch(modalOffAction);
-                dispatch(createGatherRoomDetailModalOnAction(res.data));
+            if(payload.title && payload.description && payload.address && payload.latitude && payload.longitude && payload.date && payload.time && payload.timeDesctiption && payload.totalNum) {
+                const res = roomApi.newRoomApi(payload);
+                console.log(res)
+                if(res.status === 200){
+                    dispatch(modalOffAction);
+                    dispatch(createGatherRoomDetailModalOnAction(res.data));
+                }
+            } else {
+                // 모든 내용을 입력해 주세요 라고 띄우기
+                setShowMessage(true);
             }
+            
         } catch (error) {
             console.error(error);
         }
@@ -266,11 +284,11 @@ const RoomCreate = () => {
                 <Info>
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
                     <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
-                        {step === 3 &&
+                        {step === 3 && selectedOptions[1] &&
                             selectedOptions[1].length !==0 &&
                             `${selectedOptions[1].place_name} 에
                             모임`}
-                            {(step === 4 || step === 5) && 
+                        {(step === 4 || step === 5) && selectedOptions[0] && selectedOptions[1] &&
                             `${selectedOptions[1].split("-")[1]} 월 ${selectedOptions[1].split("-")[2]}일
                             '${selectedOptions[0].place_name}에서' 모임`}
                     </div>
@@ -289,6 +307,7 @@ const RoomCreate = () => {
                     selectedOptions={selectedOptions}
                     setSelectedOptions={setSelectedOptions}/>
                 </Container>
+                {showMessage ? <div>"모든 정보를 입력해 주세요"</div> : null}
                 <MoveNextButton isOnSearch={isOnSearch}>
                     <Btn name="prev" onClick={handlePrevBtn}>
                         {step > 1 && (

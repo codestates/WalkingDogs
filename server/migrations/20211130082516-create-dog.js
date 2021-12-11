@@ -20,7 +20,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      breed: {
+      size: {
         type: Sequelize.STRING,
       },
       image: {

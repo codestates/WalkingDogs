@@ -6,6 +6,7 @@ import media from 'styled-media-query'
 import Roommap from './Roommap';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
+
 import { useSelector } from 'react-redux';
 
 
@@ -235,6 +236,10 @@ const RoomSearch = ({
 }) => {
 
     const [address, setAddress] = useState([]);
+
+    const [position, setPosition] = useState([{}]);
+    const [clickedSize, setClickedSize] = useState(false);
+
     const { position } = useSelector(({ posReducer }) => posReducer);
 
     // useEffect(() => {
@@ -261,12 +266,13 @@ const RoomSearch = ({
       { id: 13, times: `20시`},
       { id: 14, times: `21시`},
       { id: 15, times: `22시`},
-  ]
+    ]
 
-    const breed = [
-      {id: 1, breedType: "소"},
-      {id: 2, breedType: "중"},
-      {id: 3, breedType: "대"},
+    const size = [
+      {id: 1, sizeType: "소"},
+      {id: 2, sizeType: "중"},
+      {id: 3, sizeType: "대"},
+
     ]
   /* '🌞오전' , '🌗오후', '🌑저녁'*/
 
@@ -280,15 +286,14 @@ const RoomSearch = ({
   const handleSelect = (el) => {
     setIsOnSearch(false);
     setIsSelected(true);
-    if (selectedOptions.length === 0) {
+    // setClickedSize(true);
+    if (step === 1) {
       setInputValue(el.place_name + " " );
       setSelectedOptions([...selectedOptions, el.place_name]);
-    }
-    if (selectedOptions.length === 1) {
-      setInputValue(el.place_name);
-      setSelectedOptions([...selectedOptions, el]);
-    }
-    if (selectedOptions.length === 2) {
+    // } else if (step === 1) {
+    //   setInputValue(el.place_name);
+    //   setSelectedOptions([...selectedOptions, el]);
+    } else if (step === 2) {
       const formatedDate =
         el.getFullYear() +
         "년 " +
@@ -304,21 +309,67 @@ const RoomSearch = ({
         "-" +
         (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate());
       setSelectedOptions([...selectedOptions, selectedDate]);
-    }
-    if (selectedOptions.length === 3) {
+    } else if (step === 3) {
       setInputValue(el);
       const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
       setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
-    }
-    if (
-      selectedOptions.length === 4 ||
-      selectedOptions.length === 6 ||
-      selectedOptions.length === 7
-    ) {
+    } else if (step === 5) {
+      setInputValue(el.target.innerText);
+      setSelectedOptions([...selectedOptions, el.target.innerText]);
+    } else if (step === 6) {
+      setInputValue(el.target.innerText);
+      setSelectedOptions([...selectedOptions, el.target.innerText]);
+    } else if (step === 7) {
+      setInputValue(el.target.innerText);
+      setSelectedOptions([...selectedOptions, el.target.innerText]);
+    } else {
       setInputValue(el.target.innerText);
       setSelectedOptions([...selectedOptions, el.target.innerText]);
     }
   };
+
+  // const handleSelect = (el) => {
+  //   setIsOnSearch(false);
+  //   setIsSelected(true);
+  //   if (selectedOptions && selectedOptions.length === 0) {
+  //     setInputValue(el.place_name + " " );
+  //     setSelectedOptions([...selectedOptions, el.place_name]);
+  //   }
+  //   if (selectedOptions && selectedOptions.length === 1) {
+  //     setInputValue(el.place_name);
+  //     setSelectedOptions([...selectedOptions, el]);
+  //   }
+  //   if (selectedOptions && selectedOptions.length === 2) {
+  //     const formatedDate =
+  //       el.getFullYear() +
+  //       "년 " +
+  //       (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
+  //       "월 " +
+  //       (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate()) +
+  //       "일";
+  //     setInputValue(formatedDate);
+  //     const selectedDate =
+  //       el.getFullYear() +
+  //       "-" +
+  //       (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
+  //       "-" +
+  //       (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate());
+  //     setSelectedOptions([...selectedOptions, selectedDate]);
+  //   }
+  //   if (selectedOptions && selectedOptions.length === 3) {
+  //     setInputValue(el);
+  //     const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
+  //     setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
+  //   }
+  //   if (selectedOptions && (
+  //     selectedOptions.length === 4 ||
+  //     selectedOptions.length === 6 ||
+  //     selectedOptions.length === 7)
+  //   ) {
+  //     setInputValue(el.target.innerText);
+  //     setSelectedOptions([...selectedOptions, el.target.innerText]);
+  //   }
+  // };
 
   const handleInputClick = () => {
     if (selectedOptions.length === 0 || selectedOptions.length === step) {
@@ -333,9 +384,9 @@ const RoomSearch = ({
 
   const handleCount = (e) => {
     if (e.target.innerText === "+") {
-      setInputValue((prevState) => prevState + 1);
+      inputValue < 6 && setInputValue((prevState) => String(Number(prevState) + 1));
     } else if (e.target.innerText === "-") {
-      inputValue > 2 && setInputValue((prevState) => prevState - 1);
+      inputValue > 2 && setInputValue((prevState) => String(Number(prevState) - 1));
     }
   };
 
@@ -347,18 +398,27 @@ const RoomSearch = ({
     setInputValue(e.target.value);
   }
 
+  const handleClick = (e) => {
+
+    setClickedSize(true);
+    console.log(e);
+    console.log(clickedSize);
+  }
 
     return(
       <Container>
         {(step >= 1 || step <= 5) && (
           <Search
             value={inputValue}
+
             placeholder={
               step === 1 ? "작성해 주세요." 
-            : step === 2 ? "선택해 주세요." 
+            : step === 2 || step === 7 ? "선택해 주세요."
             : step === 3 ? "오후 0시" : "작성해 주세요" }
             onClick={handleInputClick}
+
             onChange={hadleInputAddress}
+            onClick={handleClick}
             isOnSearch={isOnSearch}
             >
           </Search>
@@ -366,7 +426,7 @@ const RoomSearch = ({
         {step === 4 && (
           <Count>
             <button onClick={handleCount}>-</button>
-            <input value={inputValue} onChange={handleCountChange}/>
+            <input value={inputValue} placeholder={0} onChange={handleCountChange}/>
             <button onClick={handleCount}>+</button>
           </Count>
         )}
@@ -381,7 +441,7 @@ const RoomSearch = ({
 
         {isOnSearch && (
           <>
-          {step === 1 && list.length > 0 (
+          {step === 1 && list.length > 0 && (
             <>
             <SearchResult>
               {list.map((el) => {
@@ -415,19 +475,27 @@ const RoomSearch = ({
             </SearchResult>
           )}
 
-          {step === 7 && (
-            <SearchResult>
-              {breed.filter((el) => el.breedType.includes(inputValue))
-              .map((el)=> {
-                <SearchList key={el.id} onClick={() => handleSelect(el.breedType)}>
-                    {el.breedType}
-                </SearchList>
-              })}
-            </SearchResult>
-          )}
-
+          {/* step 5와 step 7의 순서를 바꾸었습니다. */}
+          
           {step >= 5 && (
             <SearchResult onClick={handleSelect}>{inputValue}</SearchResult>
+          )}
+
+          {step === 7 && (
+            <SearchResult>
+              {/* {size.filter((el) => el.sizeType.includes(inputValue))
+              .map((el)=> {
+                <SearchList key={el.id} onClick={() => handleSelect(el.sizeType)}>
+                    {el.sizeType}
+                </SearchList>
+              })} */}
+              {clickedSize ? <div>{size.map((el) => {
+                <SearchList key={el.id} onClick={() => handleSelect(el.sizeType)}>
+                  {el.sizeType}
+                </SearchList>
+              })}</div> : null}
+              
+            </SearchResult>
           )}
           </>
         )}
