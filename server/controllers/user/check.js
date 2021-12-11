@@ -38,17 +38,17 @@ module.exports = async (req, res) => {
       });
     } else {
       // 1. 애초에 이상이 없을 때,
-    const result = await user.findOne({
-      where: {
-        id: decoded.id
-      },
-    })
+      const result = await user.findOne({
+        where: {
+          id: decoded.id,
+        },
+      });
 
-    if (!result) {
-      res.status(400).json({ message: 'Bad Request' });
-    }
-    else {
-      res.status(200).json({ message: 'ok' });
+      if (!result) {
+        res.status(400).json({ message: 'Bad Request' });
+      } else {
+        res.status(200).json({ message: 'ok' });
+      }
     }
   }
     } catch (err) {

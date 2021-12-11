@@ -6,6 +6,7 @@ import media from 'styled-media-query'
 import Roommap from './Roommap';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
+import { useSelector } from 'react-redux';
 
 
 const Container = styled.div`
@@ -234,7 +235,7 @@ const RoomSearch = ({
 }) => {
 
     const [address, setAddress] = useState([]);
-    const [position, setPosition] = useState([{}]);
+    const { position } = useSelector(({ posReducer }) => posReducer);
 
     // useEffect(() => {
     //     const getRoom = () => {
@@ -275,23 +276,6 @@ const RoomSearch = ({
       setSelectedOptions([...selectedOptions, inputValue]);
     }
   }, []);
-
-  useEffect(() => {
-    if(!navigator.geolocation) {
-        console.log('브라우저 GeoLocation 미지원')
-    }
-    const success = async (position) => {
-        const latitude = position.coords.latitude.toFixed(6)
-        const longitude = position.coords.longitude.toFixed(6)
-        setPosition({latitude, longitude});
-    }
-
-    const failed = () => {
-        console.log('위치를 찾을 수 없습니다')
-    }
-
-    navigator.geolocation.getCurrentPosition(success, failed)
-}, [])
 
   const handleSelect = (el) => {
     setIsOnSearch(false);

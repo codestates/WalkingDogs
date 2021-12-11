@@ -160,7 +160,6 @@ const RoomSearchBar = () => {
                 <SearchInput name='지역'>
                 <InputAddress
                   id='address'
-                  values={list.address}
                   placeholder="지역이 어디인가요?"
                   item={addressInput}
                   setItem={setAddressInput}/>
@@ -168,17 +167,16 @@ const RoomSearchBar = () => {
 
                 <SearchInput name='날짜'>
                     <InputDatepicker
-                      id='date' 
-                      placeholder='언제모일까요?'
-                      selectedDate={dateInput}
-                      setSelectedDate={setDateInput}/>
+                        id='date' 
+                        placeholder='언제모일까요?'
+                        selectedDate={dateInput}
+                        setSelectedDate={setDateInput}/>
                 </SearchInput>
 
                 <SearchInput name='시간'>
                   <InputDataList
                   id='time'
-                  placeholder='시간은?'
-                  timeInput={timeInput}/>
+                  placeholder='시간은?'/>
                 </SearchInput>
                 
                 <SearchInput name='인원'>
@@ -194,6 +192,7 @@ const RoomSearchBar = () => {
                   placeholder='견종 선택'
                   breed={breed}
                   setBreed={setBreed}>
+
                 </SearchInput>
             </Inputlist>
             <SearchBtnContainer>
