@@ -350,10 +350,14 @@ const RoomSearch = ({
 
     return(
       <Container>
-        {(step === 1 || step >= 5) && (
+        {(step >= 1 || step <= 5) && (
           <Search
             value={inputValue}
-            placeholder={step === 1 ? "작성해 주세요." : step === 3 ? "오후 0시" : "작성해 주세요"}
+            placeholder={
+              step === 1 ? "작성해 주세요." 
+            : step === 2 ? "선택해 주세요." 
+            : step === 3 ? "오후 0시" : "작성해 주세요" }
+            onClick={handleInputClick}
             onChange={hadleInputAddress}
             isOnSearch={isOnSearch}
             >

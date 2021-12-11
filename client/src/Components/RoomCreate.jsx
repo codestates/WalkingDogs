@@ -208,7 +208,7 @@ const RoomCreate = () => {
             id: 1,
             title: selectedOptions[4]
             ? selectedOptions[4]
-            : selectedOptions[0] && `${selectedOptions[0].slice(0, -2)} !`,
+            : selectedOptions[4] && `${selectedOptions[0].slice(0, -2)} !`,
             description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
             creater: {
                 id:'uuid',
