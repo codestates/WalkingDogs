@@ -9,7 +9,8 @@ const ButtonContainer = styled.button`
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color};
   :hover {
-    opacity: 0.7;
+    opacity: 0.1;
+    color: black;
   }
   :disabled {
     opacity: 0.5;

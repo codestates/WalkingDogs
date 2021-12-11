@@ -260,7 +260,6 @@ const RoomSearch = ({
       { id: 13, times: `20시`},
       { id: 14, times: `21시`},
       { id: 15, times: `22시`},
-
   ]
 
     const breed = [

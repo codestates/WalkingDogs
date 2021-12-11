@@ -1,4 +1,4 @@
-import React , {useEffect}from 'react';
+import React , {useEffect} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types'
 import room from '../api/room';
@@ -21,8 +21,6 @@ export const Minimap = styled.div`
     height: 17rem;
 `
 
-
-
 const Roommap = ( { address, latitude, longitude, draggable = true }) => {
 
     // const [center, setCenter] = useState({ latitude : 0, longitude: 0 })
@@ -44,14 +42,14 @@ const Roommap = ( { address, latitude, longitude, draggable = true }) => {
 
         marker.setMap(map);
 
-        kakao.maps.event.addListener(map, 'center_changed', () => {
-            const level = map.getLevel();
-            const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
+        // kakao.maps.event.addListener(map, 'center_changed', () => {
+        //     const level = map.getLevel();
+        //     const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
 
-            marker.setPosition(latlng)
+        //     marker.setPosition(latlng)
 
-            setCenter({ latitude: latlng.Ma.toFixed(6), longitude: latlng.La.toFixed(6)})
-        })
+        //     setCenter({ latitude: latlng.Ma.toFixed(6), longitude: latlng.La.toFixed(6)})
+        // })
 
     }, []);
 

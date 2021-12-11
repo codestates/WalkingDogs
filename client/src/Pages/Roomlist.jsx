@@ -108,6 +108,10 @@ const CreateRoomBtn = styled.button`
     font-size: 20px;
     cursor: pointer;
     text-align: center;
+    :hover{
+        background-color: var(--color-darkwhite);
+        border: 1px solid var(--color-mainviolet--50);
+    }
 `
 
 
@@ -169,7 +173,7 @@ useEffect(() => {
         const latitude = position.coords.latitude.toFixed(6)
         const longitude = position.coords.longitude.toFixed(6)
         
-        const result = await map.locationApi({ latitude, longitude })
+        const result = await map.locationApi({ latitude:37.637505 , longitude:126.907761 })
         
         setRooms([ ...result.data.rooms ]);
         setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}))
