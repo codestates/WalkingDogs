@@ -19,12 +19,18 @@ module.exports = async (req, res) => {
           id: id,
         },
         include: dog,
-      });
-      if (!dogList) {
-        res.status(400).json({ message: 'no such user in the database' });
-      } else {
-        res.status(200).json({ dogs: dogList.dataValues.dogs, message: 'ok' });
-      }
+      })
+      .then((result) => {
+        return res.status(200).json({ dogs: result.dataValues.dogs, message: 'ok' });
+      })
+      .catch((err) => {
+        return res.status(400).json({ message: 'no such user in the database' });
+      })
+      // if (!dogList) {
+      //   res.status(400).json({ message: 'no such user in the database' });
+      // } else {
+      //   res.status(200).json({ dogs: dogList.dataValues.dogs, message: 'ok' });
+      // }
     }
   } catch (err) {
     console.error;

@@ -4,6 +4,7 @@ import { createGatherRoomDetailModalOnAction, modalOffAction } from '../store/ac
 import {useDispatch, useSelector} from 'react-redux';
 import RoomSearch from './RoomSearch'
 import roomApi from '../api/room'
+import mypageApi from '../api/mypage'
 import AllButtons from './AllButtons';
 import media from 'styled-media-query'
 import {BsArrowLeftCircleFill, BsArrowRightCircleFill} from 'react-icons/bs'
@@ -93,6 +94,11 @@ const RoomCreate = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
 
     const [showMessage, setShowMessage] = useState(false);
+    const [clickedDog, setClickedDog] = useState(false);
+    const [clickedTime, setClickedTime] = useState(false);
+    const [clickedCalendar, setClickedCalendar] = useState(false);
+    const [dogList, setDogList] = useState([]);
+    const [selectedDogs, setSelectedDogs] = useState([]);
 
     const user = useSelector(({authReducer}) => authReducer);
    
@@ -143,50 +149,66 @@ const RoomCreate = () => {
     }
 
     const handleNextBtn = () => {
-        // if(step >= 6 && step < 8) {
-        //     setSelectedOptions([...selectedOptions, inputValue]);
 
-        //     setIsOnSearch(false);
-        //     setInputValue("");
-        //     setList([]);
-        //     setIsSelected(false);
-        //     setStep(step + 1);
-
-        // } else if(selectedOptions.length === step){
-        //         setIsOnSearch(false);
-        //         setInputValue("");
-        //         setList([]);
-        //         setIsSelected(false);
-        //         setStep(step + 1);
-        // } else if(step < 7) {
-        //     setIsOnSearch(false);
-        //     setInputValue("");
-        //     setList([]);
-        //     setIsSelected(false);
-        //     setStep(step + 1);
-
-        // }
-        if (step <= 5) {
-            setIsOnSearch(true);
-            setInputValue("");
-            setList([]);
-            setIsSelected(false);
-            setStep(step + 1);
-        } else if (step === 6) {
+        //----------------------------------------------------
+        // 첫번째 방법: 각 항목을 입력해야만 다음 단계로 넘어감
+        //----------------------------------------------------
+        if(step === 1) {
             setSelectedOptions([...selectedOptions, inputValue]);
             setIsOnSearch(true);
             setInputValue("");
             setList([]);
             setIsSelected(false);
             setStep(step + 1);
-        } else {
-            setSelectedOptions([...selectedOptions, inputValue]);
+        } else if(selectedOptions.length === step){
             setIsOnSearch(true);
             setInputValue("");
             setList([]);
             setIsSelected(false);
+            setStep(step + 1);
+            setShowMessage(false);
+        } else if(step < 7) {
+            setIsOnSearch(true);
+            setInputValue("");
+            setList([]);
+            setIsSelected(false);
+            // setStep(step + 1);
+            setShowMessage(true);
         }
+        //----------------------------------------------------------------------
+        // 두번째 방법: 빠트린 항목이 있어도 일단 다음 단계로 넘어가고
+        // 대신 맨 마지막에 '등록하기'를 누르면 빠트린 항목을 채우라는 메세지가 나옴.
+        //----------------------------------------------------------------------
+        // if (step <= 6) {
+        //     setIsOnSearch(true);
+        //     setInputValue("");
+        //     setList([]);
+        //     setIsSelected(false);
+        //     setStep(step + 1);
+        // } else if (step === 7) {
+        //     setSelectedOptions([...selectedOptions, inputValue]);
+        //     setIsOnSearch(true);
+        //     // setInputValue("");
+        //     setList([]);
+        //     setIsSelected(false);
+        //     setStep(step + 1);
+        // } else {
+        //     // setSelectedOptions([...selectedOptions, inputValue]);
+        //     setIsOnSearch(true);
+        //     // setInputValue("");
+        //     setList([]);
+        //     setIsSelected(false);
+        //     // setStep(step + 1);
+        // }
     };
+
+    useEffect(async () => {
+        // console.log('accessToken: ', document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1]);
+        // setAccessToken(document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1]);
+        const res = await mypageApi.dogListApi();
+        console.log('res: ', res.data.dogs);
+        setDogList(res.data.dogs);
+    }, []);
 
     useEffect(()=>{
         switch(step){
@@ -206,14 +228,25 @@ const RoomCreate = () => {
                 setAsk("모임을 만들 때 제목을 남겨주세요")
                 break;
             case 6:
-                setAsk("만드려는 모임의 설명을 남겨주세요")
+                setAsk("만들려는 모임의 설명을 남겨주세요")
                 break;
             case 7:
-                setAsk("아이의 크기를 선택해 주세요")
+                // setAsk("아이의 크기를 선택해 주세요")
+                setAsk("함께 갈 아이들을 선택해 주세요")
             default:
             break;
         }
         
+        // const {
+        //     latitude,
+        //     longitude,
+        //     address,
+        //     selected_dogs,
+        //     room_title,
+        //     member_limit,
+        //     meeting_time,
+        //   } = req.body;
+
         setRoomInfo({
             id: 1,
 
@@ -248,18 +281,25 @@ const RoomCreate = () => {
     const handleSave = () => {
         try {
             const payload = {
-                title: roomInfo.title,
-                description: inputValue,
-                address:roomInfo.address,
                 latitude:roomInfo.latitude,
                 longitude:roomInfo.longitude,
-                date: roomInfo.date,
-                time: roomInfo.time,
-                timeDesctiption:roomInfo.timeDesctiption,
-                totalNum: roomInfo.totalNum,
+                address:roomInfo.address,
+                // selected_dogs:,
+                room_title: roomInfo.title,
+                member_limit: roomInfo.totalNum,
+                meeting_time: roomInfo.date + roomInfo.time
+                // description: inputValue,
+                // date: roomInfo.date,
+                // time: roomInfo.time,
+                // timeDesctiption:roomInfo.timeDesctiption,
+                // totalNum: roomInfo.totalNum,
                 // address: roomInfo.areaName,
             };
-            if(payload.title && payload.description && payload.address && payload.latitude && payload.longitude && payload.date && payload.time && payload.timeDesctiption && payload.totalNum) {
+            if(payload.latitude && payload.longitude && payload.address && payload.selected_dogs && payload.room_title && payload.member_limit && payload.meeting_time) {
+                setShowMessage(false);
+                setClickedDog(false);
+                setClickedTime(false);
+                console.log(selectedOptions);
                 const res = roomApi.newRoomApi(payload);
                 console.log(res)
                 if(res.status === 200){
@@ -267,8 +307,11 @@ const RoomCreate = () => {
                     dispatch(createGatherRoomDetailModalOnAction(res.data));
                 }
             } else {
-                // 모든 내용을 입력해 주세요 라고 띄우기
                 setShowMessage(true);
+                setClickedDog(false);
+                setClickedTime(false);
+                console.log(selectedOptions);
+
             }
             
         } catch (error) {
@@ -305,9 +348,22 @@ const RoomCreate = () => {
                     isSelected={isSelected}
                     setIsSelected={setIsSelected}
                     selectedOptions={selectedOptions}
-                    setSelectedOptions={setSelectedOptions}/>
+                    setSelectedOptions={setSelectedOptions}
+                    showMessage={showMessage}
+                    setShowMessage={setShowMessage}
+                    clickedDog={clickedDog}
+                    setClickedDog={setClickedDog}
+                    clickedTime={clickedTime}
+                    setClickedTime={setClickedTime}
+                    dogList={dogList}
+                    setDogList={setDogList}
+                    selectedDogs={selectedDogs}
+                    setSelectedDogs={setSelectedDogs}
+                    clickedCalendar={clickedCalendar}
+                    setClickedCalendar={setClickedCalendar}
+                    />
                 </Container>
-                {showMessage ? <div>"모든 정보를 입력해 주세요"</div> : null}
+                {/* {showMessage ? <div>"모든 정보를 입력해 주세요"</div> : null} */}
                 <MoveNextButton isOnSearch={isOnSearch}>
                     <Btn name="prev" onClick={handlePrevBtn}>
                         {step > 1 && (
@@ -317,7 +373,7 @@ const RoomCreate = () => {
                             </>
                         )}
                     </Btn>
-                    <Btn name="next" onClick={handleNextBtn}>
+                    {/* <Btn name="next" onClick={handleNextBtn}>
                         {step < 7 ? (
                             <>
                             <div> 다음 </div>
@@ -330,7 +386,21 @@ const RoomCreate = () => {
                              </StyledBtn>
                             </>
                         )}
-                    </Btn>
+                    </Btn> */}
+                    
+                        {step < 7 ? (
+                            <Btn name="next" onClick={handleNextBtn}>
+                            <div> 다음 </div>
+                            <BsArrowRightCircleFill fontSize="2rem" style={{margin:'0.5rem'}}/>
+                            </Btn>
+                        ) : (
+                            <>
+                             <StyledBtn color='white' bgColor='#646fcb' onClick={handleSave}> 
+                                등록하기
+                             </StyledBtn>
+                            </>
+                        )}
+                    
                 </MoveNextButton>
             </CreateRoomContainer>
         </>

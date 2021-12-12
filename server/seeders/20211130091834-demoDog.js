@@ -21,7 +21,7 @@ module.exports = {
       let obj = {
         user_id : Math.floor(Math.random() * 29 + 1),
         name : "dog" + (idx + 1),
-        category : size[Math.floor(Math.random() * 3)],
+        size : size[Math.floor(Math.random() * 3)],
         neutering : neuteringList[Math.floor(Math.random() * 2)],
         createdAt : new Date(),
         updatedAt : new Date(),
