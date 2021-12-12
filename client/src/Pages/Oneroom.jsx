@@ -167,7 +167,7 @@ const Oneroom = () => {
 
   useEffect(async () => {
     const result = await room.roomDetailApi(params.room_id);
-    // console.log(result); room detail로 정보 가져오기 성공.
+    console.log(result);
 
     setRoomDetail(Object.assign({}, { ...result.data.data }))
     

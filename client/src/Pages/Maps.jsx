@@ -162,7 +162,7 @@ const Maps = () => {
             const line = new kakao.maps.Polyline({ path });
             const dist = line.getLength();
 
-            if(dist > 1000)
+            if(dist > 1500)
                 el.setMap(null)
         })
     }
@@ -210,7 +210,7 @@ const Maps = () => {
             
             searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })
 
-        }, 1000))
+        }, 500))
     }, []);
 
     return(
