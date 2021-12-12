@@ -1,35 +1,43 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import roomApi from '../api/room'
-import media from 'styled-media-query'
+import PropTypes, { instanceOf } from 'prop-types';
+import roomApi from '../api/room';
+import media from 'styled-media-query';
 import Roommap from './Roommap';
-import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 
-
 const Container = styled.div`
-    height: 13rem;
+  position: relative;
+  height: 13rem;
+  z-index: 2;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
 
-const Search = styled.input` //create-modal창의 인풋
-    background-color: white;
-    width: 25.5rem;
-    height: 5rem;
-    border: 1px solid gray;
-    border-radius: 1rem;
-    padding: 1.2rem;
-    margin-bottom: 1.25rem;
-    ${media.lessThan("medium")`
+const Search = styled.input`
+  //create-modal창의 인풋
+  background-color: white;
+  width: 25.5rem;
+  height: 5rem;
+  border: 1px solid gray;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  margin-bottom: 1.25rem;
+  ${media.lessThan('medium')`
         width: 20rem;
     `}
 `;
 
 const SearchResult = styled.ul`
-     position: absolute;
-  width: 18.5rem;
+  width: 25.5rem;
   height: auto;
   max-height: 12rem;
   border: 1px solid var(--color-lightgray);
@@ -62,7 +70,7 @@ const SearchResult = styled.ul`
     display: block;
     scrollbar-color: gray;
   }*/
-  ${media.lessThan("large")`
+  ${media.lessThan('large')`
     width: 20rem;
   `}
   filter: drop-shadow(2px 2px 6px var(--color-shadow));
@@ -70,15 +78,18 @@ const SearchResult = styled.ul`
 
 const SearchList = styled.li`
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  width: auto;
+  width: 100%;
   height: 3rem;
+  color: black;
   background-color: white;
   border-bottom: 1px solid gray;
   cursor: pointer;
-  padding: 1.2rem;
+  padding: 0px 10px;
   :hover {
-    background-color: black;
+    background-color: #eaebff;
   }
   :last-child {
     border-style: none;
@@ -89,16 +100,20 @@ const MapContainer = styled.div`
   width: 18.5rem;
   height: 12rem;
   margin-top: 1rem;
-  ${media.lessThan("medium")`
+  ${media.lessThan('medium')`
     width: 20rem;
   `}
 `;
 
 const StyledDate = styled.div`
+  width: 25.5rem;
+
+  ${media.lessThan('medium')`
+    width: 20rem;
+  `}
   .react-datepicker__tab-loop {
     margin-top: 1.75rem;
-    ${media.lessThan("medium")`
-      width: 100%;
+    ${media.lessThan('medium')`
       height: 20.5rem;
       margin-top: 1.25rem;
       margin-bottom: -0.75rem;
@@ -122,7 +137,7 @@ const StyledDate = styled.div`
   }
   .react-datepicker-popper {
     margin-top: 1.75rem;
-    ${media.lessThan("medium")`
+    ${media.lessThan('medium')`
       filter: none;
       position: absolute;
       margin: 0 !important;
@@ -136,19 +151,20 @@ const StyledDate = styled.div`
     background-color: white;
     border: none;
     border-radius: 1rem;
-    ${media.greaterThan("medium")`
+    ${media.greaterThan('medium')`
       filter: drop-shadow(0px 6px 10px var(--color-shadow));
     `};
-    ${media.lessThan("medium")`
+    ${media.lessThan('medium')`
       width: 100% !important;
       inset: 0 !important;
     `};
   }
   .react-datepicker__month-container {
+    width: 25.5rem;
     > * {
       border: 0;
     }
-    ${media.lessThan("medium")`
+    ${media.lessThan('medium')`
       width: 100% !important;
       inset: 0 !important;
     `};
@@ -211,16 +227,15 @@ const StyledDate = styled.div`
 `;
 
 const StyleDatePicker = styled(DatePicker)`
-    font-family: Interop-Bold;
-    padding: 0.65rem;
-    border-radius: 0.25rem;
-    margin-right: 0.5rem;
-    color: var(--color-gray);
-    border: 1px solid gray;
-    font-size: 1rem;
-    width:80%;
-    text-align: center;
-`
+  color: black;
+  background-color: white;
+  width: 100%;
+  height: 5rem;
+  border: 1px solid gray;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  text-align: center;
+`;
 
 const Count = styled.div`
   width: 18.5rem;
@@ -231,7 +246,9 @@ const Count = styled.div`
   padding: 1.2rem;
   display: flex;
   justify-content: space-between;
-  ${media.lessThan("medium")`
+  align-items: center;
+  color: black;
+  ${media.lessThan('medium')`
     width: 20rem;
   `}
   button {
@@ -243,428 +260,339 @@ const Count = styled.div`
 `;
 
 const CountCheck = styled.div`
-  text-align: center;  
-`
+  text-align: center;
+`;
 const AlertMessage = styled.div`
+  margin-top: 10px;
   text-align: center;
   color: red;
-`
+`;
 const DogInfo = styled.div`
   text-align: center;
   color: black;
-`
+`;
+
+const DogCheckBox = styled.div`
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+`;
+
 //styled-component Boundary
 const RoomSearch = ({
-    step,
-    isOnSearch,
-    setIsOnSearch,
-    inputValue,
-    setInputValue,
-    list,
-    setList,
-    isSelected,
-    setIsSelected,
-    selectedOptions,
-    setSelectedOptions,
-    showMessage,
-    setShowMessage,
-    clickedDog,
-    setClickedDog,
-    clickedTime,
-    setClickedTime,
-    dogList,
-    setDogList,
-    selectedDogs,
-    setSelectedDogs,
-    clickedCalendar,
-    setClickedCalendar
+  step,
+  isOnSearch,
+  setIsOnSearch,
+  inputValue,
+  setInputValue,
+  list,
+  setList,
+  isSelected,
+  setIsSelected,
+  selectedOptions,
+  setSelectedOptions,
+  showMessage,
+  setShowMessage,
+  clickedDog,
+  setClickedDog,
+  clickedTime,
+  setClickedTime,
+  dogList,
+  setDogList,
+  selectedDogs,
+  setSelectedDogs,
+  clickedCalendar,
+  setClickedCalendar,
 }) => {
+  const [address, setAddress] = useState([]);
+  const [clickedSize, setClickedSize] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [count, setCount] = useState(0);
+  const { position } = useSelector(({ posReducer }) => posReducer);
 
-    const [address, setAddress] = useState([]);
-    const [clickedSize, setClickedSize] = useState(false);
-    const [date, setDate] = useState(new Date());
-    const [count, setCount] = useState(0);
-    const { position } = useSelector(({ posReducer }) => posReducer);
+  // useEffect(() => {
+  //     const getRoom = () => {
+  //         const {data: rooms} = roomApi.newRoomApi();
+  //         setThing(thing);
+  //     };
+  //     getRoom();
+  // },[]);
 
-    // useEffect(() => {
-    //     const getRoom = () => {
-    //         const {data: rooms} = roomApi.newRoomApi();
-    //         setThing(thing);
-    //     };
-    //     getRoom();
-    // },[]);
+  const time = [
+    { id: 1, times: `8시` },
+    { id: 2, times: `9시` },
+    { id: 3, times: `10시` },
+    { id: 4, times: `11시` },
+    { id: 5, times: `12시` },
+    { id: 6, times: `13시` },
+    { id: 7, times: `14시` },
+    { id: 8, times: `15시` },
+    { id: 9, times: `16시` },
+    { id: 10, times: `17시` },
+    { id: 11, times: `18시` },
+    { id: 12, times: `19시` },
+    { id: 13, times: `20시` },
+    { id: 14, times: `21시` },
+    { id: 15, times: `22시` },
+  ];
 
-    const time = [
-      { id: 1, times: `8시` }, 
-      { id: 2, times: `9시` }, 
-      { id: 3, times: `10시`},
-      { id: 4, times: `11시`},
-      { id: 5, times: `12시`},
-      { id: 6, times: `13시`},
-      { id: 7, times: `14시`},
-      { id: 8, times: `15시`},
-      { id: 9, times: `16시`},
-      { id: 10, times: `17시`},
-      { id: 11, times: `18시`},
-      { id: 12, times: `19시`},
-      { id: 13, times: `20시`},
-      { id: 14, times: `21시`},
-      { id: 15, times: `22시`},
-    ]
-
-    const size = [
-      {id: 1, sizeType: "소"},
-      {id: 2, sizeType: "중"},
-      {id: 3, sizeType: "대"},
-
-    ]
+  const size = [
+    { id: 1, sizeType: '소' },
+    { id: 2, sizeType: '중' },
+    { id: 3, sizeType: '대' },
+  ];
   /* '🌞오전' , '🌗오후', '🌑저녁'*/
 
   useEffect(() => {
-    if(step === 6) {
+    if (step === 6) {
       setInputValue(2);
       setSelectedOptions([...selectedOptions, inputValue]);
     }
   }, []);
 
-  const handleSelect = (el) => {
-    setIsOnSearch(false);
+  const handleSelect = el => {
     setIsSelected(true);
     // setClickedSize(true);
+
     if (step === 1) {
-      setInputValue(el.place_name + " " );
-      setSelectedOptions([...selectedOptions, el.place_name]);
-    // } else if (step === 1) {
-    //   setInputValue(el.place_name);
-    //   setSelectedOptions([...selectedOptions, el]);
+      setInputValue(el.place_name + ' ');
+
+      const dummyOptions = [...selectedOptions];
+      dummyOptions[0] = el.place_name;
+
+      setSelectedOptions([...dummyOptions]);
+      // } else if (step === 1) {
+      //   setInputValue(el.place_name);
+      //   setSelectedOptions([...selectedOptions, el]);
     } else if (step === 2) {
       const formatedDate =
         el.getFullYear() +
-        "년 " +
-        (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
-        "월 " +
-        (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate()) +
-        "일";
+        '년 ' +
+        (String(el.getMonth() + 1).length === 1
+          ? '0' + (el.getMonth() + 1)
+          : el.getMonth() + 1) +
+        '월 ' +
+        (String(el.getDate() + 1).length === 1
+          ? '0' + el.getDate()
+          : el.getDate()) +
+        '일';
       setInputValue(formatedDate);
       const selectedDate =
         el.getFullYear() +
-        "-" +
-        (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
-        "-" +
-        (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate());
+        '-' +
+        (String(el.getMonth() + 1).length === 1
+          ? '0' + (el.getMonth() + 1)
+          : el.getMonth() + 1) +
+        '-' +
+        (String(el.getDate() + 1).length === 1
+          ? '0' + el.getDate()
+          : el.getDate());
       console.log('formatedDate: ', formatedDate);
       console.log('selectedDate: ', selectedDate);
+
+      const dummyOptions = [...selectedOptions];
+      dummyOptions[1] = selectedDate;
+
       setDate(selectedDate);
-      setSelectedOptions([...selectedOptions, selectedDate]);
+      setSelectedOptions([...dummyOptions]);
     } else if (step === 3) {
+      setIsOnSearch(false);
       setInputValue(el);
       // const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
       // setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
-      setSelectedOptions([...selectedOptions, el]);
-    } else if (step === 4) {
-      setInputValue(inputValue)
-      setSelectedOptions([...selectedOptions, inputValue]);
-    } else if (step === 5) {
-      setInputValue(el.target.innerText);
-      setSelectedOptions([...selectedOptions, el.target.innerText]);
+
+      const dummyOptions = [...selectedOptions];
+      dummyOptions[2] = el;
+
+      setSelectedOptions([...dummyOptions]);
     } else if (step === 6) {
-      setInputValue(el.target.innerText);
-      setSelectedOptions([...selectedOptions, el.target.innerText]);
-    } else if (step === 7) {
       setInputValue(selectedDogs);
-     
-      setSelectedOptions([...selectedOptions, selectedDogs]);
-      console.log(selectedOptions);
+
+      const dummyOptions = [...selectedOptions];
+      dummyOptions[6] = JSON.parse(JSON.stringify(selectedDogs));
+
+      setSelectedOptions([...dummyOptions]);
     } else {
       setInputValue(el.target.innerText);
       // setSelectedOptions([...selectedOptions, el.target.innerText]);
     }
+
     setShowMessage(false);
   };
 
-  // const handleSelect = (el) => {
-  //   setIsOnSearch(false);
-  //   setIsSelected(true);
-  //   if (selectedOptions && selectedOptions.length === 0) {
-  //     setInputValue(el.place_name + " " );
-  //     setSelectedOptions([...selectedOptions, el.place_name]);
-  //   }
-  //   if (selectedOptions && selectedOptions.length === 1) {
-  //     setInputValue(el.place_name);
-  //     setSelectedOptions([...selectedOptions, el]);
-  //   }
-  //   if (selectedOptions && selectedOptions.length === 2) {
-  //     const formatedDate =
-  //       el.getFullYear() +
-  //       "년 " +
-  //       (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
-  //       "월 " +
-  //       (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate()) +
-  //       "일";
-  //     setInputValue(formatedDate);
-  //     const selectedDate =
-  //       el.getFullYear() +
-  //       "-" +
-  //       (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
-  //       "-" +
-  //       (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate());
-  //     setSelectedOptions([...selectedOptions, selectedDate]);
-  //   }
-  //   if (selectedOptions && selectedOptions.length === 3) {
-  //     setInputValue(el);
-  //     const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
-  //     setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
-  //   }
-  //   if (selectedOptions && (
-  //     selectedOptions.length === 4 ||
-  //     selectedOptions.length === 6 ||
-  //     selectedOptions.length === 7)
-  //   ) {
-  //     setInputValue(el.target.innerText);
-  //     setSelectedOptions([...selectedOptions, el.target.innerText]);
-  //   }
-  // };
+  const handleCount = e => {
+    let nextState;
 
-  const handleInputClick = () => {
-    if (selectedOptions.length === 0 || selectedOptions.length === step) {
-      setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
-      setIsOnSearch(true);
-    }
-    if (step === 3 || step === 4) {
-      setIsOnSearch(true);
-    }
-    setInputValue("");
-  };
-
-  const handleCount = (e) => {
-    if (e.target.innerText === "+") {
+    if (e.target.innerText === '+') {
       // inputValue < 6 && setInputValue((prevState) => String(Number(prevState) + 1));
-
-      inputValue < 6 && setInputValue((prevState) => {
-        const nextState =String(Number(prevState) + 1);
-        setInputValue(nextState)
-        console.log(inputValue);
-      });
-    } else if (e.target.innerText === "-") {
+      if (inputValue < 6) {
+        setInputValue(inputValue + 1);
+        nextState = inputValue + 1;
+      }
+    } else if (e.target.innerText === '-') {
       // inputValue > 2 && setInputValue((prevState) => String(Number(prevState) - 1));
-
-      inputValue > 2 && setInputValue((prevState) => {
-        const nextState =String(Number(prevState) - 1);
-        setInputValue(nextState)
-        console.log(inputValue);
-      });
+      if (inputValue > 2) {
+        setInputValue(inputValue - 1);
+        nextState = inputValue - 1;
+      }
     }
+
+    const dummyOptions = [...selectedOptions];
+    dummyOptions[3] = nextState;
+    setSelectedOptions([...dummyOptions]);
   };
 
-  const handleCountChange = (e) => {
-    console.log(inputValue);
-    setInputValue(e.target.value); 
-    console.log(e.target.value);
-    setCount(inputValue);   
-  };
-
-  const hadleInputAddress = (e) =>{
+  const handleInputAddress = e => {
     setInputValue(e.target.value);
-  }
+  };
 
-  const handleClickDogs = () => {
-    setClickedDog(true);
-  }
+  const handleInputTitle = e => {
+    const dummyOptions = [...selectedOptions];
+    dummyOptions[4] = e.target.value;
+
+    setInputValue(e.target.value);
+    setSelectedOptions([...dummyOptions]);
+  };
 
   const handleClickTime = () => {
     setClickedTime(true);
-  }
-  
-  const handleClickCalendar = () => {
-    setClickedCalendar(true);
-  }
+  };
 
-  const handleSelectDog = (el) => {
-    setSelectedDogs([...selectedDogs, el])
-    const selected = selectedDogs.map((elem) => {
-      return elem.name
-    })
-    setInputValue([...selected])
-  }
+  const handleSelectDog = idx => {
+    const dummySelectedDogs = [...selectedDogs];
+    dummySelectedDogs[idx] = !dummySelectedDogs[idx];
 
-  const handleDateClick = (e) => {
-    console.log(e.target);
-  }
-    return(
-      <Container>
-        {(step === 1 || step === 2 || step === 5 || step === 6) && (
-          <Search
-            value={inputValue}
+    setSelectedDogs([...dummySelectedDogs]);
+  };
 
-            placeholder={
-              step === 1 ? "작성해 주세요." 
-            : step === 2 ? "선택해 주세요." : "작성해 주세요" }
-            onClick={handleClickCalendar}
-            onChange={hadleInputAddress}
-            isOnSearch={isOnSearch}
-            >
-          </Search>
-        )}
-        {/* { step ===2 && (
-          <Search
-            value={inputValue}
+  const handleFocusTime = () => {
+    setIsOnSearch(true);
+  };
 
-            placeholder={"선택해 주세요."}
-            onClick={handleClickCalendar}
-            onChange={hadleInputAddress}
-            isOnSearch={isOnSearch}
-            >
-          </Search>
-        )} */}
-        {(step === 3) && (
-          <Search
-            value={inputValue}
-            placeholder={"클릭해 주세요"}
-            onClick={handleClickTime}
-            isOnSearch={isOnSearch}
-            >
-          </Search>
-        )}
-        {(step === 7) && (
-          <Search
-            value={inputValue}
-            placeholder={"클릭해 주세요"}
-            onClick={handleClickDogs}
-            isOnSearch={isOnSearch}
-            >
-          </Search>
-        )}
-        {step === 4 && (
-          <>
+  return (
+    <Container>
+      {(step === 1) && (
+        <Search
+          value={inputValue}
+          placeholder={'작성해주세요'}
+          onChange={handleInputAddress}
+          isOnSearch={isOnSearch}
+        ></Search>
+      )}
+      
+      {step === 3 && (
+        <Search
+          value={inputValue}
+          placeholder={'클릭해 주세요'}
+          onClick={handleClickTime}
+          isOnSearch={isOnSearch}
+          onFocus={handleFocusTime}
+        ></Search>
+      )}
+
+      {step === 4 && (
+        <Wrapper>
           <Count>
             <button onClick={handleCount}>-</button>
-            <input value={inputValue} placeholder={0} onChange={(e) => handleCountChange(e)}/>
+            {inputValue}
             <button onClick={handleCount}>+</button>
           </Count>
-          <CountCheck>
-            <button onClick={handleSelect}>확인</button>
-          </CountCheck>
-          </>
-        )}
+        </Wrapper> 
+      )}
 
-        {!isSelected && step === 1 && (
-          <MapContainer>
-            <Roommap
-              latitude={position.latitude}
-              longitude={position.longitude}/>
-          </MapContainer>
-        )}
+      {(step === 5) && (
+        <Wrapper>
+          <Search
+            value={inputValue}
+            placeholder={'작성해주세요'}
+            onChange={handleInputTitle}
+            isOnSearch={isOnSearch}
+          ></Search>
+        </Wrapper>
+      )}
 
-        {isOnSearch && (
-          <>
-          {step === 1 && list.length > 0 && (
-            <>
-            <SearchResult>
-              {list.map((el) => {
-                <SearchList key={el.id} onClick={()=> handleSelect(el)}>
-                  {el.address}
-                </SearchList>
-              })}
-            </SearchResult>
-            </>
-          )}
-
-
-          {step === 2 && (
-            <StyledDate>
-              <StyleDatePicker
-                placeholderText={"선택해 주세요"}
-                minDate={new Date()}
-                dateFormat="yyyy-MM-dd"
-                onChange={handleSelect}
-                inline={false}
-              />
-            </StyledDate>
-          )}
-
-          {/* {step === 2 && clickedCalendar ?
-            (<StyledDate>
-              <StyleDatePicker
-                minDate={new Date()}
-                dateFormat="yyyy-MM-dd"
-                selected={date}
-                // onSelect={(e) => handleDateClick(e)}
-                onChange={setDate}
-                // onChange={(e) => setDate(e)}
-                inline={false}
-              />
-            </StyledDate>): null } */}
-
-
-          {/* {step === 3 && (
-            <SearchResult>
-              {time.filter((el) => el.times.includes(inputValue))
-              .map((el)=> {
-                <SearchList key={el.id} onClick={() => handleSelect(el.times)}>
-                  {el.times}
-                </SearchList>
-              })}
-            </SearchResult>
-          )} */}
-
-          {step === 3 && (
-            <SearchResult>
-              {clickedTime ? <div>{time.map((el) => 
-                <SearchList key={el.id} onClick={() => handleSelect(el.times)}>
-                  {el.times}
-                </SearchList>)}</div> : null}
-            </SearchResult>
-          )}
-          {/* step 5와 step 7의 순서를 바꾸었습니다. */}
-          
-          {(step === 5 || step ===6 ) && (
-            <SearchResult onClick={handleSelect}>{inputValue}</SearchResult>
-          )}
-
-
-{/* createdAt: "2021-12-11T12:52:35.000Z"
-id: 14
-image: null
-name: "dog14"
-neutering: 1
-size: "대"
-updatedAt: "2021-12-11T12:52:35.000Z"
-user_id: 20 */}
-          {step === 7 && (
-            <>
-            <SearchResult>
-              {clickedDog ? <div>{dogList.map((el) => 
-                <SearchList value={inputValue} key={el.id} onClick={() => handleSelectDog(el)}>
-                  <DogInfo>
+      {step === 6 && (
+        <Wrapper>
+          <SearchResult>
+            {dogList.map((el, idx) => (
+              <SearchList
+                value={inputValue}
+                key={el.id}
+                onClick={() => handleSelectDog(idx)}
+              >
+                <DogInfo>
                   <span>사진: {el.image} </span>
                   <span>이름: {el.name} </span>
                   <span>중성화: {el.neutering ? 'O' : 'X'} </span>
                   <span>사이즈: {el.size}</span>
-                  </DogInfo>
-                </SearchList>)}</div> : null}
-            </SearchResult>
-            <button onClick={handleSelect}>확인</button>
-            </>
+                </DogInfo>
+                {selectedDogs[idx] && <DogCheckBox>c</DogCheckBox>}
+              </SearchList>
+            ))}
+          </SearchResult>
+        </Wrapper>
+      )}
+
+      {!isSelected && step === 1 && (
+        <MapContainer>
+          <Roommap
+            latitude={position.latitude}
+            longitude={position.longitude}
+          />
+        </MapContainer>
+      )}
+
+      {isOnSearch && (
+        <>
+          {step === 2 && (
+            <StyledDate>
+              <StyleDatePicker
+                minDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                autoFocus={true}
+                onChange={handleSelect}
+                inline={false}
+                value={inputValue}
+              />
+            </StyledDate>
           )}
-          </>
-        )}
-        {showMessage ? <AlertMessage>모든 정보를 입력해 주세요.</AlertMessage> : null}
-      </Container>
-    );
-}
+
+          {step === 3 && clickedTime && (
+            <SearchResult>
+              {time.map(el => (
+                <SearchList
+                  key={el.id}
+                  onClick={() => handleSelect(el.times)}
+                >
+                  {el.times}
+                </SearchList>
+              ))}
+            </SearchResult>
+          )}
+        </>
+      )}
+      {showMessage ? (
+        <AlertMessage>모든 정보를 입력해 주세요.</AlertMessage>
+      ) : null}
+    </Container>
+  );
+};
 
 RoomSearch.propTypes = {
-    step: PropTypes.number.isRequired, // 숫자 props
-    isOnSearch: PropTypes.bool.isRequired, // boolean type
-    setIsOnSearch: PropTypes.func.isRequired,
-    inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    setInputValue: PropTypes.func.isRequired,
-    list: PropTypes.array.isRequired,
-    setList: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    setIsSelected: PropTypes.func.isRequired,
-    selectedOptions: PropTypes.array.isRequired,
-    setSelectedOptions: PropTypes.func.isRequired,
-}
+  step: PropTypes.number.isRequired, // 숫자 props
+  isOnSearch: PropTypes.bool.isRequired, // boolean type
+  setIsOnSearch: PropTypes.func.isRequired,
+  inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
+  setInputValue: PropTypes.func.isRequired,
+  list: PropTypes.array.isRequired,
+  setList: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  setIsSelected: PropTypes.func.isRequired,
+  selectedOptions: PropTypes.array.isRequired,
+  setSelectedOptions: PropTypes.func.isRequired,
+};
 
 export default RoomSearch;

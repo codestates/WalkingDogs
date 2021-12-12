@@ -41,17 +41,17 @@ const Roommap = ({ address, latitude, longitude, draggable = true }) => {
 
     marker.setMap(map);
 
-    // kakao.maps.event.addListener(map, 'center_changed', () => {
-    //   const level = map.getLevel();
-    //   const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
+    kakao.maps.event.addListener(map, 'center_changed', () => {
+      const level = map.getLevel();
+      const latlng = map.getCenter(); // .Ma : 위도, .La: 경도
 
-    //   marker.setPosition(latlng);
+      marker.setPosition(latlng);
 
-    //   setCenter({
-    //     latitude: latlng.Ma.toFixed(6),
-    //     longitude: latlng.La.toFixed(6),
-    //   });
-    // });
+      setCenter({
+        latitude: latlng.Ma.toFixed(6),
+        longitude: latlng.La.toFixed(6),
+      });
+    });
   }, [latitude, longitude]);
 
   return (
