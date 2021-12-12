@@ -37,10 +37,32 @@ const SearchResult = styled.ul`
   background-color: var(--color-white);
   z-index: 5;
   overflow: scroll;
+  overflow-x: hidden;
+  /* width */
   ::-webkit-scrollbar {
-    display: none;
+    width: 10px;
   }
-  ${media.lessThan("medium")`
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  /*
+  ::-webkit-scrollbar-thumb{
+    display: block;
+    scrollbar-color: gray;
+  }*/
+  ${media.lessThan("large")`
     width: 20rem;
   `}
   filter: drop-shadow(2px 2px 6px var(--color-shadow));
@@ -220,6 +242,17 @@ const Count = styled.div`
   }
 `;
 
+const CountCheck = styled.div`
+  text-align: center;  
+`
+const AlertMessage = styled.div`
+  text-align: center;
+  color: red;
+`
+const DogInfo = styled.div`
+  text-align: center;
+  color: black;
+`
 //styled-component Boundary
 const RoomSearch = ({
     step,
@@ -233,12 +266,24 @@ const RoomSearch = ({
     setIsSelected,
     selectedOptions,
     setSelectedOptions,
+    showMessage,
+    setShowMessage,
+    clickedDog,
+    setClickedDog,
+    clickedTime,
+    setClickedTime,
+    dogList,
+    setDogList,
+    selectedDogs,
+    setSelectedDogs,
+    clickedCalendar,
+    setClickedCalendar
 }) => {
 
     const [address, setAddress] = useState([]);
-
     const [clickedSize, setClickedSize] = useState(false);
-
+    const [date, setDate] = useState(new Date());
+    const [count, setCount] = useState(0);
     const { position } = useSelector(({ posReducer }) => posReducer);
 
     // useEffect(() => {
@@ -307,11 +352,18 @@ const RoomSearch = ({
         (String(el.getMonth() + 1).length === 1 ? "0" + (el.getMonth() + 1) : el.getMonth() + 1) +
         "-" +
         (String(el.getDate() + 1).length === 1 ? "0" + el.getDate() : el.getDate());
+      console.log('formatedDate: ', formatedDate);
+      console.log('selectedDate: ', selectedDate);
+      setDate(selectedDate);
       setSelectedOptions([...selectedOptions, selectedDate]);
     } else if (step === 3) {
       setInputValue(el);
-      const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
-      setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
+      // const filtered = time.filter((a) => a.krName.includes(el.split(" ")[1]))[0].krName;
+      // setSelectedOptions([...selectedOptions, filtered.split(" ")[1]]);
+      setSelectedOptions([...selectedOptions, el]);
+    } else if (step === 4) {
+      setInputValue(inputValue)
+      setSelectedOptions([...selectedOptions, inputValue]);
     } else if (step === 5) {
       setInputValue(el.target.innerText);
       setSelectedOptions([...selectedOptions, el.target.innerText]);
@@ -319,12 +371,15 @@ const RoomSearch = ({
       setInputValue(el.target.innerText);
       setSelectedOptions([...selectedOptions, el.target.innerText]);
     } else if (step === 7) {
-      setInputValue(el.target.innerText);
-      setSelectedOptions([...selectedOptions, el.target.innerText]);
+      setInputValue(selectedDogs);
+     
+      setSelectedOptions([...selectedOptions, selectedDogs]);
+      console.log(selectedOptions);
     } else {
       setInputValue(el.target.innerText);
-      setSelectedOptions([...selectedOptions, el.target.innerText]);
+      // setSelectedOptions([...selectedOptions, el.target.innerText]);
     }
+    setShowMessage(false);
   };
 
   // const handleSelect = (el) => {
@@ -383,51 +438,113 @@ const RoomSearch = ({
 
   const handleCount = (e) => {
     if (e.target.innerText === "+") {
-      inputValue < 6 && setInputValue((prevState) => String(Number(prevState) + 1));
+      // inputValue < 6 && setInputValue((prevState) => String(Number(prevState) + 1));
+
+      inputValue < 6 && setInputValue((prevState) => {
+        const nextState =String(Number(prevState) + 1);
+        setInputValue(nextState)
+        console.log(inputValue);
+      });
     } else if (e.target.innerText === "-") {
-      inputValue > 2 && setInputValue((prevState) => String(Number(prevState) - 1));
+      // inputValue > 2 && setInputValue((prevState) => String(Number(prevState) - 1));
+
+      inputValue > 2 && setInputValue((prevState) => {
+        const nextState =String(Number(prevState) - 1);
+        setInputValue(nextState)
+        console.log(inputValue);
+      });
     }
   };
 
   const handleCountChange = (e) => {
-    setInputValue(e.target.value);
+    console.log(inputValue);
+    setInputValue(e.target.value); 
+    console.log(e.target.value);
+    setCount(inputValue);   
   };
 
   const hadleInputAddress = (e) =>{
     setInputValue(e.target.value);
   }
 
-  const handleClick = (e) => {
-
-    setClickedSize(true);
-    console.log(e);
-    console.log(clickedSize);
+  const handleClickDogs = () => {
+    setClickedDog(true);
   }
 
+  const handleClickTime = () => {
+    setClickedTime(true);
+  }
+  
+  const handleClickCalendar = () => {
+    setClickedCalendar(true);
+  }
+
+  const handleSelectDog = (el) => {
+    setSelectedDogs([...selectedDogs, el])
+    const selected = selectedDogs.map((elem) => {
+      return elem.name
+    })
+    setInputValue([...selected])
+  }
+
+  const handleDateClick = (e) => {
+    console.log(e.target);
+  }
     return(
       <Container>
-        {(step >= 1 || step <= 5) && (
+        {(step === 1 || step === 2 || step === 5 || step === 6) && (
           <Search
             value={inputValue}
 
             placeholder={
               step === 1 ? "작성해 주세요." 
-            : step === 2 || step === 7 ? "선택해 주세요."
-            : step === 3 ? "오후 0시" : "작성해 주세요" }
-            onClick={handleInputClick}
-
+            : step === 2 ? "선택해 주세요." : "작성해 주세요" }
+            onClick={handleClickCalendar}
             onChange={hadleInputAddress}
-            onClick={handleClick}
+            isOnSearch={isOnSearch}
+            >
+          </Search>
+        )}
+        {/* { step ===2 && (
+          <Search
+            value={inputValue}
+
+            placeholder={"선택해 주세요."}
+            onClick={handleClickCalendar}
+            onChange={hadleInputAddress}
+            isOnSearch={isOnSearch}
+            >
+          </Search>
+        )} */}
+        {(step === 3) && (
+          <Search
+            value={inputValue}
+            placeholder={"클릭해 주세요"}
+            onClick={handleClickTime}
+            isOnSearch={isOnSearch}
+            >
+          </Search>
+        )}
+        {(step === 7) && (
+          <Search
+            value={inputValue}
+            placeholder={"클릭해 주세요"}
+            onClick={handleClickDogs}
             isOnSearch={isOnSearch}
             >
           </Search>
         )}
         {step === 4 && (
+          <>
           <Count>
             <button onClick={handleCount}>-</button>
-            <input value={inputValue} placeholder={0} onChange={handleCountChange}/>
+            <input value={inputValue} placeholder={0} onChange={(e) => handleCountChange(e)}/>
             <button onClick={handleCount}>+</button>
           </Count>
+          <CountCheck>
+            <button onClick={handleSelect}>확인</button>
+          </CountCheck>
+          </>
         )}
 
         {!isSelected && step === 1 && (
@@ -452,18 +569,34 @@ const RoomSearch = ({
             </>
           )}
 
+
           {step === 2 && (
             <StyledDate>
               <StyleDatePicker
+                placeholderText={"선택해 주세요"}
                 minDate={new Date()}
                 dateFormat="yyyy-MM-dd"
                 onChange={handleSelect}
-                inline
+                inline={false}
               />
             </StyledDate>
           )}
 
-          {step === 3 && (
+          {/* {step === 2 && clickedCalendar ?
+            (<StyledDate>
+              <StyleDatePicker
+                minDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                selected={date}
+                // onSelect={(e) => handleDateClick(e)}
+                onChange={setDate}
+                // onChange={(e) => setDate(e)}
+                inline={false}
+              />
+            </StyledDate>): null } */}
+
+
+          {/* {step === 3 && (
             <SearchResult>
               {time.filter((el) => el.times.includes(inputValue))
               .map((el)=> {
@@ -472,32 +605,50 @@ const RoomSearch = ({
                 </SearchList>
               })}
             </SearchResult>
-          )}
+          )} */}
 
+          {step === 3 && (
+            <SearchResult>
+              {clickedTime ? <div>{time.map((el) => 
+                <SearchList key={el.id} onClick={() => handleSelect(el.times)}>
+                  {el.times}
+                </SearchList>)}</div> : null}
+            </SearchResult>
+          )}
           {/* step 5와 step 7의 순서를 바꾸었습니다. */}
           
-          {step >= 5 && (
+          {(step === 5 || step ===6 ) && (
             <SearchResult onClick={handleSelect}>{inputValue}</SearchResult>
           )}
 
+
+{/* createdAt: "2021-12-11T12:52:35.000Z"
+id: 14
+image: null
+name: "dog14"
+neutering: 1
+size: "대"
+updatedAt: "2021-12-11T12:52:35.000Z"
+user_id: 20 */}
           {step === 7 && (
+            <>
             <SearchResult>
-              {/* {size.filter((el) => el.sizeType.includes(inputValue))
-              .map((el)=> {
-                <SearchList key={el.id} onClick={() => handleSelect(el.sizeType)}>
-                    {el.sizeType}
-                </SearchList>
-              })} */}
-              {clickedSize ? <div>{size.map((el) => {
-                <SearchList key={el.id} onClick={() => handleSelect(el.sizeType)}>
-                  {el.sizeType}
-                </SearchList>
-              })}</div> : null}
-              
+              {clickedDog ? <div>{dogList.map((el) => 
+                <SearchList value={inputValue} key={el.id} onClick={() => handleSelectDog(el)}>
+                  <DogInfo>
+                  <span>사진: {el.image} </span>
+                  <span>이름: {el.name} </span>
+                  <span>중성화: {el.neutering ? 'O' : 'X'} </span>
+                  <span>사이즈: {el.size}</span>
+                  </DogInfo>
+                </SearchList>)}</div> : null}
             </SearchResult>
+            <button onClick={handleSelect}>확인</button>
+            </>
           )}
           </>
         )}
+        {showMessage ? <AlertMessage>모든 정보를 입력해 주세요.</AlertMessage> : null}
       </Container>
     );
 }
