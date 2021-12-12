@@ -139,6 +139,8 @@ const RoomCreate = () => {
     test1:'test',
     });
 
+
+
     const handlePrevBtn = () => {
         setIsOnSearch(false);
         setInputValue("");
@@ -154,7 +156,6 @@ const RoomCreate = () => {
         // 첫번째 방법: 각 항목을 입력해야만 다음 단계로 넘어감
         //----------------------------------------------------
         if(step === 1) {
-            setSelectedOptions([...selectedOptions, inputValue]);
             setIsOnSearch(true);
             setInputValue("");
             setList([]);
@@ -271,7 +272,7 @@ const RoomCreate = () => {
             done: false,
             users : [{
                 id:'uuid',
-                username:'말티즈집사',
+                username:'',
                 image:'imageUrl',
             },
           ],
@@ -326,16 +327,13 @@ const RoomCreate = () => {
             <CreateRoomContainer>
                 <Info>
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
-                    <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
-                        {step === 3 && selectedOptions[1] &&
-                            selectedOptions[1].length !==0 &&
-                            `${selectedOptions[1].place_name} 에
-                            모임`}
-                        {(step === 4 || step === 5) && selectedOptions[0] && selectedOptions[1] &&
+                        {/* {(step === 4 || step === 5) && selectedOptions[0] && selectedOptions[1] &&
                             `${selectedOptions[1].split("-")[1]} 월 ${selectedOptions[1].split("-")[2]}일
-                            '${selectedOptions[0].place_name}에서' 모임`}
-                    </div>
+                            '${selectedOptions[0].place_name}에서' 모임`} */}
                     <h2 style={{color: 'black'}}>{ask}</h2>
+                    <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
+                        {step === 4 && `${selectedOptions[3]} 명`}
+                    </div>
                 </Info>
                 <Container>
                     <RoomSearch
@@ -400,7 +398,6 @@ const RoomCreate = () => {
                              </StyledBtn>
                             </>
                         )}
-                    
                 </MoveNextButton>
             </CreateRoomContainer>
         </>

@@ -42,26 +42,15 @@ const SearchResult = styled.ul`
   ::-webkit-scrollbar {
     width: 10px;
   }
-
-  /* Track */
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
-
-  /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #888;
   }
-
-  /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-  /*
-  ::-webkit-scrollbar-thumb{
-    display: block;
-    scrollbar-color: gray;
-  }*/
   ${media.lessThan("large")`
     width: 20rem;
   `}
@@ -78,7 +67,8 @@ const SearchList = styled.li`
   cursor: pointer;
   padding: 1.2rem;
   :hover {
-    background-color: black;
+    background-color:#ffffff;
+    color: #000000;
   }
   :last-child {
     border-style: none;
@@ -136,6 +126,8 @@ const StyledDate = styled.div`
     background-color: white;
     border: none;
     border-radius: 1rem;
+    width: 25.2rem;
+    height: 20.2rem;
     ${media.greaterThan("medium")`
       filter: drop-shadow(0px 6px 10px var(--color-shadow));
     `};
@@ -147,10 +139,11 @@ const StyledDate = styled.div`
   .react-datepicker__month-container {
     > * {
       border: 0;
+      justify-content: center !important;
     }
     ${media.lessThan("medium")`
-      width: 100% !important;
-      inset: 0 !important;
+      width: auto !important;
+      inset: 1 !important;
     `};
   }
   .react-datepicker__month {
@@ -165,7 +158,7 @@ const StyledDate = styled.div`
     margin: 0.5rem 0;
   }
   .react-datepicker__current-month {
-    color: darkgray;
+    color: black;
     margin: 0.5rem 0;
   }
   .react-datepicker__day-names {
@@ -177,7 +170,7 @@ const StyledDate = styled.div`
     width: 2rem;
     line-height: 2rem;
     margin: 0.25rem;
-    color: darkgray;
+    color: black;
   }
   .react-datepicker__week {
     > * {
@@ -195,7 +188,7 @@ const StyledDate = styled.div`
       }
     }
     .react-datepicker__day--selected {
-      color: white;
+      color: black;
       background-color: gray;
       :hover {
         color: white;
@@ -215,7 +208,7 @@ const StyleDatePicker = styled(DatePicker)`
     padding: 0.65rem;
     border-radius: 0.25rem;
     margin-right: 0.5rem;
-    color: var(--color-gray);
+    color: #000000;
     border: 1px solid gray;
     font-size: 1rem;
     width:80%;
@@ -242,8 +235,15 @@ const Count = styled.div`
   }
 `;
 
+
+const CountBox =  styled.div`
+  width: auto;
+  display: flex;
+`
+
+
 const CountCheck = styled.div`
-  text-align: center;  
+  text-align: center;
 `
 const AlertMessage = styled.div`
   text-align: center;
@@ -507,17 +507,6 @@ const RoomSearch = ({
             >
           </Search>
         )}
-        {/* { step ===2 && (
-          <Search
-            value={inputValue}
-
-            placeholder={"선택해 주세요."}
-            onClick={handleClickCalendar}
-            onChange={hadleInputAddress}
-            isOnSearch={isOnSearch}
-            >
-          </Search>
-        )} */}
         {(step === 3) && (
           <Search
             value={inputValue}
@@ -538,14 +527,21 @@ const RoomSearch = ({
         )}
         {step === 4 && (
           <>
-          <Count>
-            <button onClick={handleCount}>-</button>
-            <input value={inputValue} placeholder={0} onChange={(e) => handleCountChange(e)}/>
-            <button onClick={handleCount}>+</button>
-          </Count>
-          <CountCheck>
-            <button onClick={handleSelect}>확인</button>
-          </CountCheck>
+          <CountBox>
+            <Count>
+              <button onClick={handleCount}>-</button>
+              <input value={inputValue} placeholder={0} onChange={(e) => handleCountChange(e)}/>
+              <button onClick={handleCount}>+</button>
+            </Count>
+            <CountCheck>
+              <button 
+                onClick={handleSelect}
+                style={{
+                  backgroundColor:'white',
+                  width:'3rem',height:'5rem',
+                  borderRadius:'1rem'}}>확인</button>
+            </CountCheck>
+          </CountBox>
           </>
         )}
 
@@ -573,41 +569,18 @@ const RoomSearch = ({
 
 
           {step === 2 && (
-            <StyledDate>
-              <StyleDatePicker
-                placeholderText={"선택해 주세요"}
-                minDate={new Date()}
-                dateFormat="yyyy-MM-dd"
-                onChange={handleSelect}
-                inline={false}
-              />
-            </StyledDate>
+            <>
+              <StyledDate style={{justifyContent:'center'}}>
+                <StyleDatePicker
+                  minDate={new Date()}
+                  dateFormat="yyyy-MM-dd"
+                  onChange={handleSelect}
+                  style={{width:'100%', height:'100%'}}
+                  inline
+                />
+              </StyledDate>
+            </>
           )}
-
-          {/* {step === 2 && clickedCalendar ?
-            (<StyledDate>
-              <StyleDatePicker
-                minDate={new Date()}
-                dateFormat="yyyy-MM-dd"
-                selected={date}
-                // onSelect={(e) => handleDateClick(e)}
-                onChange={setDate}
-                // onChange={(e) => setDate(e)}
-                inline={false}
-              />
-            </StyledDate>): null } */}
-
-
-          {/* {step === 3 && (
-            <SearchResult>
-              {time.filter((el) => el.times.includes(inputValue))
-              .map((el)=> {
-                <SearchList key={el.id} onClick={() => handleSelect(el.times)}>
-                  {el.times}
-                </SearchList>
-              })}
-            </SearchResult>
-          )} */}
 
           {step === 3 && (
             <SearchResult>
@@ -619,19 +592,10 @@ const RoomSearch = ({
           )}
           {/* step 5와 step 7의 순서를 바꾸었습니다. */}
           
-          {(step === 5 || step ===6 ) && (
+          {(step === 5 && step ===6 ) && (
             <SearchResult onClick={handleSelect}>{inputValue}</SearchResult>
           )}
 
-
-{/* createdAt: "2021-12-11T12:52:35.000Z"
-id: 14
-image: null
-name: "dog14"
-neutering: 1
-size: "대"
-updatedAt: "2021-12-11T12:52:35.000Z"
-user_id: 20 */}
           {step === 7 && (
             <>
             <SearchResult>
