@@ -237,7 +237,6 @@ const RoomSearch = ({
 
     const [address, setAddress] = useState([]);
 
-    const [position, setPosition] = useState([{}]);
     const [clickedSize, setClickedSize] = useState(false);
 
     const { position } = useSelector(({ posReducer }) => posReducer);

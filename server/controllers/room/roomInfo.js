@@ -6,7 +6,7 @@ const { dog } = require('../../models');
 const { room_join_req } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
-module.exports = async (req, res) => {
+module.exports = async (req, res) => {  
   try {
     const roomId = req.params.room_id;
     const userInfo = await isAuthorized(req);
@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
     // .catch(err => {
     //   console.log(err);
     // });
+
     if (!selRoom) {
       return res.status(400).json({ message: 'bad request1' });
     }
@@ -49,14 +50,14 @@ module.exports = async (req, res) => {
           model: dog,
         },
       },
-    });
+    })
     // .then(result => {
     //   console.log(result);
     // })
     // .catch(err => {
     //   console.log(err);
-    // });
-    console.log(roomDog);
+    // });  
+
     if (!roomDog) {
       return res.status(400).json({ message: 'bad request2' });
     }
@@ -72,6 +73,7 @@ module.exports = async (req, res) => {
         },
       },
     });
+    
     if (!userRoom) {
       return res.status(400).json({ message: 'bad request3' });
     }
@@ -128,7 +130,8 @@ module.exports = async (req, res) => {
     console.log(result);
 
     return res.status(200).json({ data: result, message: 'ok' });
-  } catch (err) {
+  }
+  catch (err) {
     console.error;
     return res.status(500).json({ message: 'server error' });
   }

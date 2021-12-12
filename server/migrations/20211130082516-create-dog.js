@@ -23,6 +23,9 @@ module.exports = {
       size: {
         type: Sequelize.STRING,
       },
+      breed: {
+        type: Sequelize.STRING,
+      },
       image: {
         type: Sequelize.STRING,
       },
