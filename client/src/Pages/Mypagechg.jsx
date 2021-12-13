@@ -13,7 +13,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import PwChange from '../Components/PwChange';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { previousTuesday } from 'date-fns/esm';
+import userApi from '../api/users';
 // 순상 : 강아지 list 쪽 CSS 스타일 임시로 넣어놓았습니다.
 // 순상 : CSS 수정 부탁드립니다. ( contents 정렬 )
 
@@ -63,15 +67,21 @@ const ModalContainer = styled.div`
   justify-content: center;
 `;
 
+const Wrap = styled.div`
+`
+
 //styled-component Boundary
 const Mypagechg = () => {
+  
   const [infos, setInfos] = useState({ userName: '', dogs: [], image: '' });
 
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [pwChgMode, setPwChgMode] = useState(false);
   const [isMypage, setIsMyPage] = useState(false);
 
-  const { password } = useSelector(({ authReducer }) => authReducer);
+  const [files, setFiles] = useState('');
+
+  const { image, username, dogs } = useSelector(({ authReducer }) => authReducer);
 
   const { isPasswordChgModal } = useSelector(
     ({ modalReducer }) => modalReducer,
@@ -110,7 +120,7 @@ const Mypagechg = () => {
     const data = e.target.value;
 
     if (field.className === 'myinfo_chg_username_input') {
-      setInfos(Object.assign({ ...infos }, { userName: data }));
+      // setInfos(Object.assign({ ...infos }, { userName: data }));
     } else if (field.className === 'myinfo_chg_petname') {
       setChoice(Object.assign({ ...choice }, { name: data }));
     }
@@ -135,7 +145,7 @@ const Mypagechg = () => {
       dogs: [...infos.dogs],
       image: infos.image,
     });
-
+    
     setInfos(
       Object.assign(
         { ...infos },
@@ -147,7 +157,15 @@ const Mypagechg = () => {
       ),
     );
 
-    dispatch(updateInfoAction({ username: result.data.data.username, image: result.data.data.image }));
+    dispatch(
+      updateInfoAction({
+        username: result.data.data.username,
+        image: result.data.data.image,
+        dogs: result.data.data.dogs
+      }),
+    );
+
+    localStorage.setItem('userData', JSON.stringify({ username: result.data.data.username, image:result.data.data.image }));
   };
 
   const handleChangePasswordBtnClick = () => {
@@ -173,16 +191,55 @@ const Mypagechg = () => {
     setInfos(Object.assign({ ...infos }, { dogs: [...list] }));
   };
 
+  const handleImage = async event => {
+    let formData = new FormData();
+    console.log('formData: ',formData);
+    console.log('event.target.files: ', event.target.files);
+    formData.append('image', event.target.files[0]);
+    console.log('formData2: ', formData);
+    try {
+      await userApi.userImageApi(formData)
+      .then((result) => {
+        console.log('result: ', result);
+        const file = result.data.data.image;
+        console.log(file);
+        setFiles(file);
+        // const newObj = Object.assign({}, {image: file})
+        // setInfos(newObj);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      
+    } catch (error) {
+      console.log(error);
+      alert('server error');
+    }
+  };
+
   useEffect(async () => {
     const result = await mypage.dogListApi();
-
-    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
-  }, []);
+    console.log(result.data.dogs);
+    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs], image: files ? files : image}));
+  }, [files]);
 
   return (
     <>
       <div className="myinfo_chg_container">
-        <div className="myinfo_chg_img"></div>
+        <div className="myinfo_chg_img">
+          <Wrap>
+            <div id="imageEdit">
+              <input
+                type="file"
+                id="image_uploads"
+                name="image"
+                accept="image/*"
+                onChange={handleImage}
+              ></input>
+              {files ? <img src={files} width='100' height='100'/>: <img src={image} width='100' height='100'/>}
+            </div>
+          </Wrap>
+        </div>
 
         <div className="myinfo_chg_input_container">
           <div className="myinfo_chg_box">

@@ -42,7 +42,8 @@ module.exports = {
 
   isAuthorized: async req => {
     // const { generateAccessToken, generateRefreshToken } = require('./tokenFunctions')
-
+    console.log('req.cookies: ', req.cookies);
+    console.log('req.file: ', req.file);
     const generateAccessToken = data => {
       return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
     };
@@ -88,12 +89,6 @@ module.exports = {
                 }
               },
             );
-            // .then((result) => {
-            //   return result;
-            // })
-            // .catch((err) => {
-            //   return err;
-            // })
 
             if (refreshInfo instanceof Error) {
               return err;
@@ -123,6 +118,12 @@ module.exports = {
           }
         },
       );
+      //   .then(result => {
+      //     console.log('tokenFunction result3: ', result);
+      //   })
+      //   .catch(err => {
+      //     console.log('tokenFunction error3: ', err);
+      //   });
     }
 
     if (result instanceof Error) {

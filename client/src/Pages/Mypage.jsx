@@ -102,11 +102,10 @@ const Mypage = () => {
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
-        const storageKey = document.cookie.split('; ').find(row => row.startsWith('accessToken')).split('=')[1];
-        const parsedData = JSON.parse(localStorage.getItem(storageKey));
-        const [ img, username ] = [ parsedData.user_image, parsedData.username ];
+        const parsedData = JSON.parse(localStorage.getItem('userData'));
+        const { image, username } = parsedData;
 
-        setProfileImg(img);
+        setProfileImg(image);
         setUserName(username);
         setDogs([ ...resDogList.data.dogs ]);
         setRooms([ ...resRoomList.data.rooms ]);

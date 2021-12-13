@@ -70,12 +70,12 @@ function App() {
       .then(res => {
         if(res.data.data) {
           // 로그인 작업을 실시
-          localStorage.setItem(cookies.accessToken, JSON.stringify({ ...res.data.data }))
-          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))));
+          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
         }
         else {
           // 원래 쓰던거 사용
-          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
+          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
         }
       })
       .catch(err => {
