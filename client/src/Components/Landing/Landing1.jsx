@@ -28,23 +28,23 @@ const Landing1Container = styled.div`
   background-position: center;
   background-size: cover;
   background-image: url("img/landingbackground1.jpeg");
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   object-fit: fit-content;
 `
 
 const Landing1Script = styled.span`
+  background-color: #ffffffc0;
   font-size: 45px;
   margin-left: 10rem;
   animation: ${boxLeftFade} 3s ease-in-out;
-  
 `
 
 const Landing1Image = styled.img`
-    width: 50rem;
-    height: 39rem;
-    border-radius: 100%;
-    animation: ${imageFade} 3s ease-in-out;
+  width: 45rem;
+  height: 45rem;
+  border-radius: 100%;
+  animation: ${imageFade} 3s ease-in-out;
 `
 
 const Image = styled.img`

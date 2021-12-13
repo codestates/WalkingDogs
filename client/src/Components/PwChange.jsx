@@ -150,9 +150,7 @@ const PwChange = () => {
                 setErrMsg("비밀번호가 일치하지 않습니다.");
             }
         }
-    },200)
-
-
+    }, 200)
 
     return(
         <>
@@ -165,14 +163,12 @@ const PwChange = () => {
                     placeholder='현재 비밀번호'
                     onChange={handleInputChange}
                     ></Input>
-                    <ErrorMessage>{errMsg}</ErrorMessage>
                     <Input
                     name='newpassword'
                     type='password'
                     placeholder='새로운 비밀번호'
                     onChange={handleInputChange}
                     ></Input>
-                    <ErrorMessage>{errMsg}</ErrorMessage>
                     <Input
                     name='newpasswordConfirm'
                     type='password'

@@ -1,6 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
-const user_room = require('../../models/user_room');
+const { user_room } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 // 남은 것
@@ -20,6 +20,7 @@ const { isAuthorized } = require('../tokenFunctions');
 // 2 - 1. address 저장할 때, 도, 시, 동 등 행정구역별로 나누어서 저장할 지 결정하기 -> 통째로 저장하기
 
 module.exports = async (req, res) => {
+  console.log('newRoomAPI')
   try {
     const {
       latitude,
@@ -65,12 +66,15 @@ module.exports = async (req, res) => {
       res.status(401).json({ message: 'unauthorized' });
     }
 
+    console.log(meeting_time)
+
     const roomInfo = await room.findAll({
       where: {
         title: room_title,
       },
     });
-    console.log(roomInfo);
+    console.log('roomInfo : \n', roomInfo);
+
     // room_title이 데이터베이스에 이미 존재할 경우 조건문을 통해서 분기시켰습니다.
     // createRoom을 할 때, user_room에 leader_id에 해당하는 유저를 추가해야 하는지 test하기
     if (roomInfo.length !== 0) {
@@ -85,14 +89,27 @@ module.exports = async (req, res) => {
         meeting_time: meeting_time,
         address: address,
       });
-      if (!createRoom) {
+      
+      if (!createdRoom) {
         res.status(400).json({ message: 'bad request' });
       }
+
+      const createdUserRoom = await user_room.create({
+        user_id: userInfo.id,
+        room_id: createdRoom.dataValues.id,
+      });
+
+      console.log(createdRoom)
+      console.log(createdUserRoom)
+
       for (let i = 0; i < selected_dogs.length; i++) {
         const dogInfo = await room_dog.create({
           dog_id: selected_dogs[i].id,
           room_id: createdRoom.dataValues.id,
         });
+
+        console.log(dogInfo)
+
         if (!dogInfo) {
           res.status(400).json({ message: 'bad request' });
         }
@@ -100,7 +117,7 @@ module.exports = async (req, res) => {
       return res.status(200).json({ message: 'ok' });
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };

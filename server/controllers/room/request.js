@@ -11,6 +11,7 @@ const { isAuthorized } = require('../tokenFunctions');
 // ---------------------------------------------------------
 
 module.exports = async (req, res) => {
+  console.log('requestAPI')
   try {
     const leaderInfo = await isAuthorized(req);
 

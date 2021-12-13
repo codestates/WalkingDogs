@@ -11,6 +11,7 @@ require('dotenv').config();
 // 2021.12.1 진행 중
 // logout 된 유저 검증 미완
 module.exports = async (req, res) => {
+  console.log('loginAPI')
   try {
     const { email, password } = req.body;
 
@@ -52,7 +53,7 @@ module.exports = async (req, res) => {
       }
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };

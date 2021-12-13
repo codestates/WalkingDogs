@@ -88,9 +88,6 @@ const FriendsList = styled.div`
     border-radius: 10px;
 `
 
-
-
-
 //styled-component Boundary
 const Mypage = () => {
 
@@ -103,7 +100,7 @@ const Mypage = () => {
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
         const parsedData = JSON.parse(localStorage.getItem('userData'));
-        const { image, username } = parsedData;
+        const { image, username } = parsedData
 
         setProfileImg(image);
         setUserName(username);

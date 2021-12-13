@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
-import {createGatherRoomModalOnAction, initPosAction, signinAction,singoutAction} from '../store/actions'
+import {createGatherRoomModalOnAction, initPosAction, signinAction,signinModalOnAction,singoutAction} from '../store/actions'
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
@@ -106,6 +106,7 @@ const CreateRoomBtn = styled.button`
     width: 11rem;
     height: 3rem;
     font-size: 20px;
+    color: black;
     cursor: pointer;
     text-align: center;
     :hover{
@@ -147,7 +148,6 @@ const SuggestMent = styled.div`
 const Roomlist = () => {
 
 const [isListLoading, setIsListLoading] = useState(true);
-const [Post, setPost] = useState([]);
 const [rooms, setRooms] = useState([]);
 const conditionOptions = {
     location: {
@@ -160,32 +160,41 @@ const conditionOptions = {
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
+const { isLogin } = useSelector(({ authReducer }) => authReducer);
 const dispatch = useDispatch();
-const history = useHistory();
 
-useEffect(() => {
+useEffect(async () => {
+    let latitude = 37.564213, longitude = 127.001698; // 서울 중앙
+    
+    const geoLocation = () => {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject)
+        })
+    }
+    
     if(!navigator.geolocation) {
         console.log('브라우저 GeoLocation 미지원')
-    }
-    const success = async (pos) => {
-        
-        const latitude = Number(pos.coords.latitude.toFixed(6))
-        const longitude = Number(pos.coords.longitude.toFixed(6))
         dispatch(initPosAction({ latitude, longitude }))
-
-        const result = await map.locationApi({ latitude, longitude })
-        
-        setRooms([ ...result.data.rooms ]);
-        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
-        setIsListLoading(false);
     }
-
-    const failed = () => {
-        console.log('위치를 찾을 수 없습니다')
-        setIsListLoading(false)
+    else {
+        await geoLocation()
+        .then((pos) => {
+            latitude = Number(pos.coords.latitude.toFixed(6))
+            longitude = Number(pos.coords.longitude.toFixed(6))
+            dispatch(initPosAction({ latitude, longitude }))
+            
+            // setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
+        })
+        .catch((err) => {
+            console.log(err)
+            console.log('위치를 찾을 수 없습니다')
+        })
     }
+    
+    const result = await map.locationApi({ latitude, longitude })
+    setRooms([ ...result.data.rooms ]);
+    setIsListLoading(false)
 
-    navigator.geolocation.getCurrentPosition(success, failed)
 }, [])
 
 // useDeepCompareEffect(()=> {
@@ -196,7 +205,6 @@ useEffect(() => {
 //         }, 500)
 //     }
 // }, [conditions])
-
 
     return(
         <>
@@ -210,7 +218,12 @@ useEffect(() => {
                             </h2>
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
-                                <CreateRoomBtn disabled={isListLoading} onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
+                                <CreateRoomBtn disabled={isListLoading} onClick={() => {
+                                    if(!isLogin)
+                                        dispatch(signinModalOnAction())
+                                    else
+                                        dispatch(createGatherRoomModalOnAction())}
+                                }> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapLinkBox to='/maps'>
                                     <MapBtn disabled={isListLoading} style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                                 </MapLinkBox>
@@ -228,7 +241,7 @@ useEffect(() => {
                         </CardList>
                     ) : (
                         <EmptyBox> 모임이 없네요😢
-                        <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
+                            <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
                         </EmptyBox>
                         
                     )}

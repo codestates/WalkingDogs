@@ -7,6 +7,7 @@ const { room_join_req } = require('../../models');
 
 // 요청 수락 및 거절 api
 module.exports = async (req, res) => {
+  console.log('reqPermisstionAPI')
   try {
     const { candidate_id, room_id, is_accepted } = req.body;
 

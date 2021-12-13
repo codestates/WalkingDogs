@@ -7,6 +7,7 @@ const { room_join_req } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {  
+  console.log('roomInfoAPI')
   try {
     const roomId = req.params.room_id;
     const userInfo = await isAuthorized(req);
@@ -73,7 +74,7 @@ module.exports = async (req, res) => {
         },
       },
     });
-    
+
     if (!userRoom) {
       return res.status(400).json({ message: 'bad request3' });
     }

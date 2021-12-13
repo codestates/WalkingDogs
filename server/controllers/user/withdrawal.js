@@ -5,6 +5,7 @@ require('dotenv').config();
 
 // 2021.12.1 완료
 module.exports = async (req, res) => {
+  console.log('withdrawalAPI')
   try {
     //   const token = req.cookies['accessToken'];
     const decoded = await isAuthorized(req);

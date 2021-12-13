@@ -8,6 +8,7 @@ const {
 require('dotenv').config();
 
 module.exports = async (req, res) => {
+  console.log('checkAPI')
   try {
     const decoded = await isAuthorized(req);
 

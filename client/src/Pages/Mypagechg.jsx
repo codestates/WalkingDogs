@@ -13,10 +13,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import PwChange from '../Components/PwChange';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { previousTuesday } from 'date-fns/esm';
+import { eachYearOfInterval, previousTuesday } from 'date-fns/esm';
 import userApi from '../api/users';
 // 순상 : 강아지 list 쪽 CSS 스타일 임시로 넣어놓았습니다.
 // 순상 : CSS 수정 부탁드립니다. ( contents 정렬 )
@@ -26,13 +27,22 @@ import userApi from '../api/users';
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
 // 전체 스타일링 (중요도 낮음)
 
+const ProfileChgBtn = styled.button`
+  border: 0.5px solid white;
+  background-color: #646fcb;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 25px;
+`;
+
 const PasswordChgBtn = styled.button`
   border: 0.5px solid white;
   background-color: #646fcb;
   color: white;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 1.8rem;
+  font-size: 25px;
 `;
 
 const ModalContainer = styled.div`
@@ -72,7 +82,7 @@ const Wrap = styled.div`
 
 //styled-component Boundary
 const Mypagechg = () => {
-  
+
   const [infos, setInfos] = useState({ userName: '', dogs: [], image: '' });
 
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
@@ -80,16 +90,16 @@ const Mypagechg = () => {
   const [isMypage, setIsMyPage] = useState(false);
 
   const [files, setFiles] = useState('');
-
-  const { image, username, dogs } = useSelector(({ authReducer }) => authReducer);
+  const { image, username } = useSelector(({authReducer}) => authReducer)
 
   const { isPasswordChgModal } = useSelector(
-    ({ modalReducer }) => modalReducer,
+    ({ modalReducer }) => modalReducer
   );
 
   const [choice, setChoice] = useState({
     name: '',
     breed: '',
+    size: '',
     neutering: false,
   });
 
@@ -115,12 +125,23 @@ const Mypagechg = () => {
     return <option value={breed}>{breed}</option>;
   });
 
+  const choiceSizeOpt = [
+    '--크기를 선택하세요--',
+    '대형견',
+    '중형견',
+    '소형견',
+  ]
+
+  const sizeOptions = choiceSizeOpt.map(size => {
+    return <option value={size}>{size}</option>
+  })
+
   const handleChangeNameField = e => {
     const field = e.target;
     const data = e.target.value;
 
     if (field.className === 'myinfo_chg_username_input') {
-      // setInfos(Object.assign({ ...infos }, { userName: data }));
+      setInfos(Object.assign({ ...infos }, { userName: data }));
     } else if (field.className === 'myinfo_chg_petname') {
       setChoice(Object.assign({ ...choice }, { name: data }));
     }
@@ -130,12 +151,13 @@ const Mypagechg = () => {
     if (
       choice.name !== '' &&
       choice.breed !== '' &&
-      choice.breed !== '--견종을 선택하세요--'
+      choice.breed !== '--견종을 선택하세요--' &&
+      choice.size !== '' &&
+      choice.size !== '--크기를 선택하세요--'
     )
-      // 강아지 이름이 적혀있지 않거나, 강아지 견종을 선택한 적이 없거나, 강아지 견종을 바꾸었다가 다시 --견종을 선택하세요--를 선택했거나
       setInfos(Object.assign({ ...infos }, { dogs: [...infos.dogs, choice] }));
     else {
-      // 순상 : 채워지지 않은 필드에 안내를 해주는 것도 좋을 것 같습니다. (강아지 정보 한정)
+      alert('강아지 이름, 크기, 견종을 전부 입력하였는지 확인해주세요.')
     }
   };
 
@@ -145,7 +167,7 @@ const Mypagechg = () => {
       dogs: [...infos.dogs],
       image: infos.image,
     });
-    
+
     setInfos(
       Object.assign(
         { ...infos },
@@ -157,15 +179,7 @@ const Mypagechg = () => {
       ),
     );
 
-    dispatch(
-      updateInfoAction({
-        username: result.data.data.username,
-        image: result.data.data.image,
-        dogs: result.data.data.dogs
-      }),
-    );
-
-    localStorage.setItem('userData', JSON.stringify({ username: result.data.data.username, image:result.data.data.image }));
+    dispatch(updateInfoAction({ username: result.data.data.username, image: result.data.data.image }));
   };
 
   const handleChangePasswordBtnClick = () => {
@@ -175,8 +189,13 @@ const Mypagechg = () => {
 
   const handleClickOpts = e => {
     const data = e.target.value;
-
-    setChoice(Object.assign({ ...choice }, { breed: data }));
+    
+    if(e.target.name === 'breed') { // 견종을 입력했을 때,
+      setChoice(Object.assign({ ...choice }, { breed: data }));
+    }
+    else { // 사이즈를 입력했을 때,
+      setChoice(Object.assign({ ...choice }, { size: data }));
+    }
   };
 
   const handleRadioClick = e => {
@@ -217,28 +236,31 @@ const Mypagechg = () => {
     }
   };
 
+  const handleMouseOverOnImg = (e) => {
+    e.target.textContent = '사진 변경'
+  }
+
+  const handleMouseLeaveOnImg = (e) => {
+    e.target.textContent = ''
+  }
+
   useEffect(async () => {
     const result = await mypage.dogListApi();
-    console.log(result.data.dogs);
-    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs], image: files ? files : image}));
-  }, [files]);
 
+    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
+  }, []);
+  
   return (
     <>
       <div className="myinfo_chg_container">
         <div className="myinfo_chg_img">
-          <Wrap>
-            <div id="imageEdit">
-              <input
-                type="file"
-                id="image_uploads"
-                name="image"
-                accept="image/*"
-                onChange={handleImage}
-              ></input>
-              {files ? <img src={files} width='100' height='100'/>: <img src={image} width='100' height='100'/>}
-            </div>
-          </Wrap>
+          <img className="myinfo_img" src={image}/>
+          <button className="myinfo_chg_img_btn"
+            onMouseOver={(e) => handleMouseOverOnImg(e)}
+            onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
+            onClick={handleImage}
+          >
+            </button>
         </div>
 
         <div className="myinfo_chg_input_container">
@@ -248,17 +270,20 @@ const Mypagechg = () => {
               type="text"
               className="myinfo_chg_username_input"
               onChange={e => handleChangeNameField(e)}
+              style={{ border: '1px solid black' }}
             />
             <br />
-            <label className="myinfo_chg_petname">펫 이름</label>
+            <label className="myinfo_chg_petname">강아지 이름</label>
             <input
               type="text"
               className="myinfo_chg_petname"
               onChange={e => handleChangeNameField(e)}
+              style={{ border: '1px solid black' }}
             />
             <br />
             <label className="myinfo_chg_petbreef">견종</label>
-            <select onChange={e => handleClickOpts(e)}>{options}</select>
+            <select name='size' onChange={e => handleClickOpts(e)}>{sizeOptions}</select>
+            <select name='breed' onChange={e => handleClickOpts(e)}>{options}</select>
             <input
               type="radio"
               name="neutering"
@@ -287,6 +312,7 @@ const Mypagechg = () => {
                   >
                     <span>{el.name}</span>
                     <span>{el.breed}</span>
+                    <span>{el.size}</span>
                     <span>{el.neutering ? '중성화 O' : '중성화 X'}</span>
                     <button onClick={() => handleDiscardBtnClick(idx)}>
                       X
@@ -296,15 +322,15 @@ const Mypagechg = () => {
               })}
             </div>
             <div className="profile_btn_container">
-              <button
+              <ProfileChgBtn
                 className="profile_chg_btn"
                 onClick={handleChangeProfileBtnClick}
               >
                 Profile Change Button
-              </button>
+              </ProfileChgBtn>
 
               {!isPasswordChgModal && (
-                <PasswordChgBtn onClick={() => passwordChgModalOnAction()}>
+                <PasswordChgBtn onClick={() => dispatch(passwordChgModalOnAction())}>
                   비밀번호 변경
                 </PasswordChgBtn>
               )}

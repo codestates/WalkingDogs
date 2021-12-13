@@ -8,7 +8,6 @@ const initialState = {
     image:'',
 }
 
-
 const authReducer = (prevState = initialState, action) => {
     let state;
 

@@ -7,6 +7,7 @@ import Roommap from './Roommap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const Container = styled.div`
   position: relative;
@@ -287,26 +288,18 @@ const RoomSearch = ({
   setIsOnSearch,
   inputValue,
   setInputValue,
-  list,
-  setList,
   isSelected,
   setIsSelected,
   selectedOptions,
   setSelectedOptions,
   showMessage,
   setShowMessage,
-  clickedDog,
-  setClickedDog,
   clickedTime,
   setClickedTime,
   dogList,
-  setDogList,
   selectedDogs,
   setSelectedDogs,
-  clickedCalendar,
-  setClickedCalendar,
 }) => {
-  const [address, setAddress] = useState([]);
   const [clickedSize, setClickedSize] = useState(false);
   const [date, setDate] = useState(new Date());
   const [count, setCount] = useState(0);
@@ -356,17 +349,7 @@ const RoomSearch = ({
     setIsSelected(true);
     // setClickedSize(true);
 
-    if (step === 1) {
-      setInputValue(el.place_name + ' ');
-
-      const dummyOptions = [...selectedOptions];
-      dummyOptions[0] = el.place_name;
-
-      setSelectedOptions([...dummyOptions]);
-      // } else if (step === 1) {
-      //   setInputValue(el.place_name);
-      //   setSelectedOptions([...selectedOptions, el]);
-    } else if (step === 2) {
+    if (step === 2) {
       const formatedDate =
         el.getFullYear() +
         '년 ' +
@@ -516,21 +499,29 @@ const RoomSearch = ({
       {step === 6 && (
         <Wrapper>
           <SearchResult>
-            {dogList.map((el, idx) => (
-              <SearchList
-                value={inputValue}
-                key={el.id}
-                onClick={() => handleSelectDog(idx)}
-              >
+            {dogList.length === 0 ? 
+              <SearchList>
                 <DogInfo>
-                  <span>사진: {el.image} </span>
-                  <span>이름: {el.name} </span>
-                  <span>중성화: {el.neutering ? 'O' : 'X'} </span>
-                  <span>사이즈: {el.size}</span>
+                  <span>등록된 강아지가 없네요. 모임을 등록할 수는 없어요...</span>
                 </DogInfo>
-                {selectedDogs[idx] && <DogCheckBox>c</DogCheckBox>}
               </SearchList>
-            ))}
+            :
+              dogList.map((el, idx) => (
+                <SearchList
+                  value={inputValue}
+                  key={el.id}
+                  onClick={() => handleSelectDog(idx)}
+                >
+                  <DogInfo>
+                    <span>사진: {el.image} </span>
+                    <span>이름: {el.name} </span>
+                    <span>중성화: {el.neutering ? 'O' : 'X'} </span>
+                    <span>사이즈: {el.size}</span>
+                  </DogInfo>
+                  {selectedDogs[idx] && <DogCheckBox>c</DogCheckBox>}
+                </SearchList>
+              ))
+            }
           </SearchResult>
         </Wrapper>
       )}
@@ -540,6 +531,8 @@ const RoomSearch = ({
           <Roommap
             latitude={position.latitude}
             longitude={position.longitude}
+            selectedOptions={selectedOptions}
+            setSelectedOptions={setSelectedOptions}
           />
         </MapContainer>
       )}
@@ -587,8 +580,6 @@ RoomSearch.propTypes = {
   inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     .isRequired,
   setInputValue: PropTypes.func.isRequired,
-  list: PropTypes.array.isRequired,
-  setList: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   setIsSelected: PropTypes.func.isRequired,
   selectedOptions: PropTypes.array.isRequired,

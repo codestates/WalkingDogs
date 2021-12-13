@@ -31,6 +31,7 @@ const oauth2Client = new google.auth.OAuth2(
 const { OAuth2Client } = require('google-auth-library');
 
 module.exports = async (req, res) => {
+  console.log('googleAPI')
   try {
     const authorizationCode = req.body.authorizationCode;
 
@@ -89,7 +90,7 @@ module.exports = async (req, res) => {
         return res.status(200).json({
           data: {
             username: currentUser.dataValues.username,
-            user_image: currentUser.dataValues.image,
+            image: currentUser.dataValues.image,
           },
           message: 'ok',
         });
@@ -99,10 +100,12 @@ module.exports = async (req, res) => {
           email: email,
           image: image,
           is_member: true,
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json({ message: 'Server Error' });
         });
-        if (!userInfo) {
-          return res.status(400).json({ message: 'bad request' });
-        }
+
         delete userInfo.dataValues.email;
         delete userInfo.dataValues.password;
 
@@ -122,16 +125,20 @@ module.exports = async (req, res) => {
         return res.status(200).json({
           data: {
             username: userInfo.dataValues.username,
-            user_image: userInfo.dataValues.image,
+            image: userInfo.dataValues.image,
           },
           message: 'ok',
         });
       }
     }
 
-    verify().catch(console.error);
+    verify()
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({ message: 'Server Error' });
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'server error' });
+    return res.status(500).json({ message: 'Server Error' });
   }
 };

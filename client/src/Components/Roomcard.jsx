@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux';
@@ -42,13 +42,15 @@ const ContentContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
+    display: flex;
     border: 1px solid #000000;
     margin-left: 3px;
     width: 9rem;
     height: 8rem;
+    justify-content: center;
     align-items: center;
     border-radius: 100%;
-    display: fixed;
+    overflow: hidden;
 `
 const Roominfo = styled.div`
     
@@ -94,19 +96,27 @@ const RoomContentBox = styled.div`
 
 const Roomcard = ({ listKey, room }) => {
 
-
+const [leaderInfo, setLeaderInfo] = useState({})
 const {isCreateGatherModal} = useSelector(({modalReducer})=>modalReducer);
 const dispatch = useDispatch();
 const handleGathDetailRoomModalOn = () =>{
     // if(!isCreateGatherModal) dispatch(createGatherRoomDetailModalOnAction(gathering));
 };
 
+    useEffect(() => {
+        if(room){
+            const leaderId = room.leader_id;
+            const leader = room.user_rooms.filter(el => el.user_id === leaderId)[0].user
+            setLeaderInfo({ ...leader })
+        }
+    }, [room])
+
     return(
         <Link to={`/room/${listKey}`} style={{textDecoration:'none', color:'black'}}>
             <CardContainer key={listKey}>
                 <ImageBox>
-                    <img src='image/puppy-test.jpeg'
-                        style={{objectFit:'scale-down', width:'auto', height:'auto'}}/>
+                    <img src={leaderInfo.image}
+                        style={{maxWidth: '100%', height: 'auto', display: 'block'}}/>
                 </ImageBox>
                 <Roominfo>
                 <AddressesBox> {room.address} </AddressesBox>

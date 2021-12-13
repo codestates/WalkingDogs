@@ -322,14 +322,12 @@ const Text = styled.span`
   `}
 `;
 
-
 const UserImg = styled.img`
-  border: 1px solid gray;
   width: 3rem;
   height: 3rem;
-  border-radius: 100%;
+  max-width: 100%;
+  border-radius: 50%;
   object-fit: fill;
-
 `
 const UserName = styled.span`
   font-size: 20px;
@@ -410,6 +408,10 @@ function Nav() {
       history.push("/")
     }
   };
+
+  useEffect(() => {
+    console.log(image)
+  }, [])
 
   return (
       <HeaderStyle>
