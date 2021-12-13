@@ -36,6 +36,7 @@ const modalReducer = (prevState = initialState, action) => {
             break;
         case PASSWORDCHG_MODAL_ON:
             state = {...prevState, isPasswordChgModal:true};
+            break;
         case MODAL_OFF:
             state = {...initialState};
             break;
@@ -44,6 +45,7 @@ const modalReducer = (prevState = initialState, action) => {
             break;
         default:
             state={...initialState};
+            break;
     }
     return state;
 };

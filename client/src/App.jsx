@@ -48,12 +48,9 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    const token = document.cookie.split('; ')
-    .find(row => row.startsWith('accessToken'))
-    .split('=')[1]
-
-    localStorage.setItem(token, JSON.stringify({ ...result.data.data }))
-    dispatch(signinAction(JSON.parse(localStorage.getItem(token))))
+    console.log(result)
+    localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
+    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
   }
 
   useEffect(async () => {
@@ -61,8 +58,6 @@ function App() {
     const authorizationCode = url.searchParams.get('code')
     if(authorizationCode) {
       await getAccessToken(url)
-    }
-    else {
     }
 
     if(cookies.accessToken){

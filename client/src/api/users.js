@@ -43,4 +43,23 @@ const checkApi = async () => {
     return result
 }
 
-export default { loginApi, logoutApi, signupApi, checkApi };
+const userImageApi = async (data) => {
+    const result = await api({
+        method: 'POST',
+        url: 'user-image',
+        data: data
+    })
+    return result;
+}
+
+const dogImageApi = async (data) => {
+    const result = await api({
+        method: 'POST',
+        url: 'dog-image',
+        data: data
+    })
+    return result;
+}
+
+
+export default { loginApi, logoutApi, signupApi, checkApi, userImageApi, dogImageApi };

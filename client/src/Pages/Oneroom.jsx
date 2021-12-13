@@ -7,7 +7,6 @@ import room from '../api/room';
 import {useDispatch, useSelector} from 'react-redux'
 import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
 
-
 export const OneroomContainer = styled.div`
   border: 1px solid #000000;
   width: auto;
@@ -38,10 +37,10 @@ const RoomBtnBox = styled.div`
   justify-content: space-around;
 `;
 
-export const ImageBox = styled.div`
+export const ImageBox = styled.img`
   border: 1px solid black;
-  width: 20%;
-  height: 70%;
+  width: 20rem;
+  height: 20rem;
   border-radius: 50%;
   object-fit: fill;
 `;
@@ -217,7 +216,7 @@ const Oneroom = () => {
     <>
       <OneroomContainer>
         <RoomBox>
-          <ImageBox src="../puppy-test.jpeg" />
+          <ImageBox src={roomDetail.image} />
           <RoominfoBox>
             <UsernameBox className="username">
               {roomDetail.username}

@@ -135,7 +135,7 @@ const RoomCreate = () => {
 
     const handleNextBtn = () => {
 
-        console.log(selectedOptions)
+        console.log('selectedOptions : ', selectedOptions)
 
         if(selectedOptions.length === step){
             setIsOnSearch(true);

@@ -454,10 +454,6 @@ const RoomSearch = ({
     setIsOnSearch(true);
   };
 
-  useDeepCompareEffect(() => {
-    console.log('selectedOptions : ', selectedOptions)
-  }, [selectedOptions])
-
   return (
     <Container>
       {(step === 1) && (

@@ -15,6 +15,8 @@ const httpsPort = 443;
 const httpsServer = https.createServer(options, app);
 const controllers = require('./controllers');
 
+const upload = require('./modules/multer');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -50,23 +52,23 @@ app.get('/', (req, res) => {
 //   fs.mkdirSync('uploads');
 // }
 
-AWS.config.update({
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-  region: process.env.S3_REGION,
+// AWS.config.update({
+//   accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//   region: process.env.S3_REGION,
   
-});
+// });
 
-const upload = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: 'walkingdogs',
-    key(req, file, cb) {
-      cb(null, `original/${Date.now()}${path.basename(file.originalname)}`);
-    },
-  }),
-  limits: { filesize: 5 * 1024 * 1024 },
-});
+// const upload = multer({
+//   storage: multerS3({
+//     s3: new AWS.S3(),
+//     bucket: 'walkingdogs',
+//     key(req, file, cb) {
+//       cb(null, `original/${Date.now()}${path.basename(file.originalname)}`);
+//     },
+//   }),
+//   limits: { filesize: 5 * 1024 * 1024 },
+// });
 
 //-----------------------------------------------
 // routers
@@ -77,7 +79,8 @@ app.get('/check', controllers.user.check);
 app.post('/login', controllers.user.login);
 app.post('/logout', controllers.user.logout);
 app.post('/signup', controllers.user.signup);
-app.post('/image', upload.single('image'), controllers.user.image);
+app.post('/user-image', upload.single('image'), controllers.user.userImage);
+app.post('/dog-image', upload.single('image'), controllers.user.dogImage);
 app.delete('/withdrawal', controllers.user.withdrawal);
 
 // oauth

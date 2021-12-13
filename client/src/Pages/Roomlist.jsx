@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import AllButtons from '../Components/AllButtons'
-import {createGatherRoomModalOnAction, initPosAction, signinAction,singoutAction} from '../store/actions'
+import {createGatherRoomModalOnAction, initPosAction, signinAction,signinModalOnAction,singoutAction} from '../store/actions'
 import { useHistory } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
@@ -106,6 +106,7 @@ const CreateRoomBtn = styled.button`
     width: 11rem;
     height: 3rem;
     font-size: 20px;
+    color: black;
     cursor: pointer;
     text-align: center;
     :hover{
@@ -159,6 +160,7 @@ const conditionOptions = {
     breed: '',
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
+const { isLogin } = useSelector(({ authReducer }) => authReducer);
 const dispatch = useDispatch();
 
 useEffect(async () => {
@@ -216,7 +218,12 @@ useEffect(async () => {
                             </h2>
                             <RoomSearchBar setConditions={setConditions}/>
                             <BtnContainer>
-                                <CreateRoomBtn disabled={isListLoading} onClick={() => dispatch(createGatherRoomModalOnAction())}> 새로운 모임 만들기</CreateRoomBtn>
+                                <CreateRoomBtn disabled={isListLoading} onClick={() => {
+                                    if(!isLogin)
+                                        dispatch(signinModalOnAction())
+                                    else
+                                        dispatch(createGatherRoomModalOnAction())}
+                                }> 새로운 모임 만들기</CreateRoomBtn>
                                 <MapLinkBox to='/maps'>
                                     <MapBtn disabled={isListLoading} style={{textDecoration:'none', color:'black'}}> 지도로 찾기 </MapBtn>
                                 </MapLinkBox>

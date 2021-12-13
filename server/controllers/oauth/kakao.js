@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
         expiresIn: '7d',
       });
       return res.status(200).json({
-        data: { user_image: image, username },
+        data: { image, username },
         message: 'successfully logined',
       });
     }

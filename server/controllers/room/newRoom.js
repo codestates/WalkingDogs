@@ -1,6 +1,6 @@
 const { room } = require('../../models');
 const { room_dog } = require('../../models');
-const user_room = require('../../models/user_room');
+const { user_room } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 // 남은 것
@@ -94,7 +94,13 @@ module.exports = async (req, res) => {
         res.status(400).json({ message: 'bad request' });
       }
 
+      const createdUserRoom = await user_room.create({
+        user_id: userInfo.id,
+        room_id: createdRoom.dataValues.id,
+      });
+
       console.log(createdRoom)
+      console.log(createdUserRoom)
 
       for (let i = 0; i < selected_dogs.length; i++) {
         const dogInfo = await room_dog.create({

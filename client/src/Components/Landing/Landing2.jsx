@@ -48,6 +48,7 @@ const Landing2Image = styled.div`
 `
 
 const Landing2Script = styled.span`
+  background-color: #ffffff65;
   font-size: 2.5rem;
   margin-right: 10rem;
   font-family: BlackHanSans;

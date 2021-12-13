@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       const { username, dogs, image } = req.body;
 
       // console.log(dogs);
-
+      
       if (username) {
         // 들어온 username이 있다면
         await user
@@ -79,6 +79,7 @@ module.exports = async (req, res) => {
                 {
                   name: dogs[i].name,
                   breed: dogs[i].breed,
+                  size: dogs[i].size,
                   image: dogs[i].image,
                   neutering: dogs[i].neutering,
                 },
@@ -98,6 +99,7 @@ module.exports = async (req, res) => {
               .create({
                 user_id: userInfo.id,
                 name: dogs[i].name,
+                size: dogs[i].size,
                 breed: dogs[i].breed,
                 image: dogs[i].image,
                 neutering: dogs[i].neutering,

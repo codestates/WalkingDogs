@@ -88,9 +88,6 @@ const FriendsList = styled.div`
     border-radius: 10px;
 `
 
-
-
-
 //styled-component Boundary
 const Mypage = () => {
 

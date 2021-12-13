@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
         return res.status(200).json({
           data: {
             username: currentUser.dataValues.username,
-            user_image: currentUser.dataValues.image,
+            image: currentUser.dataValues.image,
           },
           message: 'ok',
         });
@@ -125,7 +125,7 @@ module.exports = async (req, res) => {
         return res.status(200).json({
           data: {
             username: userInfo.dataValues.username,
-            user_image: userInfo.dataValues.image,
+            image: userInfo.dataValues.image,
           },
           message: 'ok',
         });
