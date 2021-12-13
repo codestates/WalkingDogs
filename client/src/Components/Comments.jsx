@@ -6,11 +6,9 @@ import comment from '../api/comment';
 
 
 const Container = styled.div`
-    border: 1px solid #000000;
-    width: 100%; 
+    border: 1rem solid var(--color-mainviolet--100);
+    width: auto; 
     height: 30rem;
-    margin:10px 10px;
-    border-radius: 10px;
     display:flex;
     flex-direction: column;
     align-items: center;

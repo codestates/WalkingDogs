@@ -42,7 +42,6 @@ const MoveNextButton = styled.div`
     justify-content: space-between;
     width: 44rem;
     height: 12rem;
-    z-index: ${(props) => props.inOnSearch && -1};
     padding: 2rem 2rem 2rem;
     ${media.lessThan("medium")`
         width: 20rem;
@@ -104,50 +103,71 @@ const RoomCreate = () => {
    
     const dispatch = useDispatch();
 
-    const [roomInfo, setRoomInfo] = useState({
-        id: 1,
-        title: '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
-        description: '마포구 포메라니안 집사입니다. 최근에 애견카페 괜찮을 곳 찾았어요!',
-        creater:{
-            id:'uuid',
-            image:"",
-        },
-        address:"마포구",
-        latitude: "37.56820203278462",
-        longitude: "126.8990406557216",
-        date: "2021-12-27",
-        time:"evening",
-        meeting_time: "18시",
-        totalNum: 4,
-        currentNum: 1,
-        done: false,
-        dogs: {
-            id: 27, 
-            name: "dog27",
-            breed: "진도",
-            image: null,
-            gender: "female",
-            createdAt: "2021-12-02T10:53:47.000Z",
-            updatedAt: "2021-12-02T10:53:47.000Z",
-        },
-        users : [{
-            id:'uuid',
-            username:'말티즈집사',
-            image:'imageUrl',
-        },
-      ],
-    test1:'test',
-    });
+    // const [roomInfo, setRoomInfo] = useState({
+    //     id: 1,
+    //     title: '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
+    //     description: '마포구 포메라니안 집사입니다. 최근에 애견카페 괜찮을 곳 찾았어요!',
+    //     creater:{
+    //         id:'uuid',
+    //         image:"",
+    //     },
+    //     address:"마포구",
+    //     latitude: "37.56820203278462",
+    //     longitude: "126.8990406557216",
+    //     date: "2021-12-27",
+    //     time:"evening",
+    //     meeting_time: "18시",
+    //     totalNum: 4,
+    //     currentNum: 1,
+    //     done: false,
+    //     dogs: {
+    //         id: 27, 
+    //         name: "dog27",
+    //         breed: "진도",
+    //         image: null,
+    //         gender: "female",
+    //         createdAt: "2021-12-02T10:53:47.000Z",
+    //         updatedAt: "2021-12-02T10:53:47.000Z",
+    //     },
+    //     users : [{
+    //         id:'uuid',
+    //         username:'말티즈집사',
+    //         image:'imageUrl',
+    //     },
+    //   ],
+    // test1:'test',
+    // });
 
 
 
     const handlePrevBtn = () => {
-        setIsOnSearch(false);
-        setInputValue("");
-        setList([]);
-        setIsSelected(false);
-        setSelectedOptions(selectedOptions.slice(0, selectedOptions.length - 1));
-        setStep(step-1);
+        if(step === 5){
+            setIsOnSearch(false);
+            setInputValue(2);
+            setList([]);
+            setIsSelected(false);
+            setSelectedOptions([ ...selectedOptions.slice(0, step - 2), 2 ]);
+            setStep(step-1);
+        }
+        else if(step === 3) {
+            const now = new Date();
+            const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+            const formedDate = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`
+            setIsOnSearch(true);
+            setInputValue(formedDate);
+            setList([]);
+            setIsSelected(false);
+            setSelectedOptions([ ...selectedOptions.slice(0, step - 2), date ]);
+            setStep(step-1);
+        }
+        else {
+            setIsOnSearch(false);
+            setInputValue("");
+            setList([]);
+            setIsSelected(false);
+            setSelectedOptions(selectedOptions.slice(0, step - 2));
+            setStep(step-1);
+        }
     }
 
     const handleNextBtn = () => {
@@ -161,20 +181,28 @@ const RoomCreate = () => {
             setList([]);
             setIsSelected(false);
             setStep(step + 1);
+            setSelectedDogs([])
         } else if(selectedOptions.length === step){
             setIsOnSearch(true);
-            setInputValue("");
+            if(step === 3) {
+                setInputValue(2);
+                setSelectedOptions([...selectedOptions, 2])
+            }
+            else
+                setInputValue('');
             setList([]);
             setIsSelected(false);
             setStep(step + 1);
             setShowMessage(false);
-        } else if(step < 7) {
+            setSelectedDogs([])
+        } else if(step < 6) {
             setIsOnSearch(true);
             setInputValue("");
             setList([]);
             setIsSelected(false);
             // setStep(step + 1);
             setShowMessage(true);
+            setSelectedDogs([])
         }
         //----------------------------------------------------------------------
         // 두번째 방법: 빠트린 항목이 있어도 일단 다음 단계로 넘어가고
@@ -209,6 +237,7 @@ const RoomCreate = () => {
         const res = await mypageApi.dogListApi();
         console.log('res: ', res.data.dogs);
         setDogList(res.data.dogs);
+        setSelectedDogs(new Array(res.data.dogs.length).fill(false));
     }, []);
 
     useEffect(()=>{
@@ -229,13 +258,10 @@ const RoomCreate = () => {
                 setAsk("모임을 만들 때 제목을 남겨주세요")
                 break;
             case 6:
-                setAsk("만들려는 모임의 설명을 남겨주세요")
-                break;
-            case 7:
-                // setAsk("아이의 크기를 선택해 주세요")
                 setAsk("함께 갈 아이들을 선택해 주세요")
+                break;
             default:
-            break;
+                break;
         }
         
         // const {
@@ -248,60 +274,72 @@ const RoomCreate = () => {
         //     meeting_time,
         //   } = req.body;
 
-        setRoomInfo({
-            id: 1,
+        // setRoomInfo({
+        //     id: 1,
 
-            title: selectedOptions[4] ? selectedOptions[4] : selectedOptions[0] && `${selectedOptions[0].slice(0, -2)} !`,
+        //     title: selectedOptions[4] ? selectedOptions[4] : selectedOptions[0] && `${selectedOptions[0].slice(0, -2)} !`,
 
-            description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
-            creater: {
-                id:'uuid',
-                username:user.username,
-                image:user.image,
-            },
+        //     description: selectedOptions[6] || '월드컵경기장에서 산책겸 애견카페 같이가요 !~',
+        //     creater: {
+        //         id:'uuid',
+        //         username:user.username,
+        //         image:user.image,
+        //     },
 
-            address: (selectedOptions[0] && selectedOptions[0].address && selectedOptions[0].address.split(" ")[1]) || "00구",
+        //     address: (selectedOptions[0] && selectedOptions[0].address && selectedOptions[0].address.split(" ")[1]) || "00구",
 
-            latitude: "37.56820203278462",
-            longitude: "126.8990406557216",
-            date: selectedOptions[2] || "2021-12-27",
-            time: selectedOptions[3] || "오후",
-            timeDesctiption: selectedOptions[3] || "18시",
-            totalNum: selectedOptions[4] || 0,
-            currentNum: selectedOptions[4] - 3 || 0,
-            done: false,
-            users : [{
-                id:'uuid',
-                username:'',
-                image:'imageUrl',
-            },
-          ],
-        });
+        //     latitude: "37.56820203278462",
+        //     longitude: "126.8990406557216",
+        //     date: selectedOptions[2] || "2021-12-27",
+        //     time: selectedOptions[3] || "오후",
+        //     timeDesctiption: selectedOptions[3] || "18시",
+        //     totalNum: selectedOptions[4] || 0,
+        //     currentNum: selectedOptions[4] - 3 || 0,
+        //     done: false,
+        //     users : [{
+        //         id:'uuid',
+        //         username:'말티즈집사',
+        //         image:'imageUrl',
+        //     },
+        //   ],
+        // });
     },[step, selectedOptions]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         try {
+            // ! server Api 보면서 작성.
+
+            // ! map에서 받아온 좌표를 selectedOption에 저장하는 logic 구현 필요
+            // ! meeting_time을 서버가 원하는 Date 형식으로 변환해서 보내주는 작업 필요
+            // ! 미완성은 주석처리 해놓았음.
+
+            // latitude: roomInfo.latitude,
+            // longitude: roomInfo.longitude,
+            // address: roomInfo.address,
+            // selected_dogs: [...roomInfo.selected_dogs],
+            // room_title: roomInfo.room_title,
+            // member_limit: roomInfo.member_limit,
+            // meeting_time: roomInfo.meeting_time,
+            const dummySelectedDogs = dogList.filter((_, idx) => selectedDogs[idx])
             const payload = {
-                latitude:roomInfo.latitude,
-                longitude:roomInfo.longitude,
-                address:roomInfo.address,
-                // selected_dogs:,
-                room_title: roomInfo.title,
-                member_limit: roomInfo.totalNum,
-                meeting_time: roomInfo.date + roomInfo.time
-                // description: inputValue,
-                // date: roomInfo.date,
-                // time: roomInfo.time,
-                // timeDesctiption:roomInfo.timeDesctiption,
-                // totalNum: roomInfo.totalNum,
-                // address: roomInfo.areaName,
+                // latitude: selectedOptions[0].latitude,
+                // longitude: selectedOptions[0].longitude,
+                // address: selectedOptions[0].address,
+                // meeting_time: selectedOptions[1] + selectedOptions[2],
+                member_limit: selectedOptions[3],
+                room_title: selectedOptions[4],
+                selected_dogs: dummySelectedDogs,
             };
-            if(payload.latitude && payload.longitude && payload.address && payload.selected_dogs && payload.room_title && payload.member_limit && payload.meeting_time) {
+
+            // ! 어차피 options를 작성할 때, 값을 넣지 않으면 다음으로 넘어갈 수 없게 구현이 되어있기 때문에
+            // ! 가장 마지막으로 입력을 받는 값은 selected_dogs의 length가 0이 아닐 때에만 Room Create 요청을 보낼 수 있게 컨트롤
+
+            if(payload.selected_dogs.length !== 0) {
                 setShowMessage(false);
                 setClickedDog(false);
                 setClickedTime(false);
                 console.log(selectedOptions);
-                const res = roomApi.newRoomApi(payload);
+                const res = await roomApi.newRoomApi(payload);
                 console.log(res)
                 if(res.status === 200){
                     dispatch(modalOffAction);
@@ -318,7 +356,6 @@ const RoomCreate = () => {
         } catch (error) {
             console.error(error);
         }
-        console.log('aaaaa');
     };
 
 
@@ -327,9 +364,6 @@ const RoomCreate = () => {
             <CreateRoomContainer>
                 <Info>
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
-                        {/* {(step === 4 || step === 5) && selectedOptions[0] && selectedOptions[1] &&
-                            `${selectedOptions[1].split("-")[1]} 월 ${selectedOptions[1].split("-")[2]}일
-                            '${selectedOptions[0].place_name}에서' 모임`} */}
                     <h2 style={{color: 'black'}}>{ask}</h2>
                     <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
                         {step === 4 && `${selectedOptions[3]} 명`}
@@ -337,28 +371,28 @@ const RoomCreate = () => {
                 </Info>
                 <Container>
                     <RoomSearch
-                    step={step}
-                    isOnSearch={isOnSearch}
-                    setIsOnSearch={setIsOnSearch}
-                    inputValue={inputValue}
-                    setInputValue={setInputValue}
-                    list={list}
-                    isSelected={isSelected}
-                    setIsSelected={setIsSelected}
-                    selectedOptions={selectedOptions}
-                    setSelectedOptions={setSelectedOptions}
-                    showMessage={showMessage}
-                    setShowMessage={setShowMessage}
-                    clickedDog={clickedDog}
-                    setClickedDog={setClickedDog}
-                    clickedTime={clickedTime}
-                    setClickedTime={setClickedTime}
-                    dogList={dogList}
-                    setDogList={setDogList}
-                    selectedDogs={selectedDogs}
-                    setSelectedDogs={setSelectedDogs}
-                    clickedCalendar={clickedCalendar}
-                    setClickedCalendar={setClickedCalendar}
+                        step={step}
+                        isOnSearch={isOnSearch}
+                        setIsOnSearch={setIsOnSearch}
+                        inputValue={inputValue}
+                        setInputValue={setInputValue}
+                        list={list}
+                        isSelected={isSelected}
+                        setIsSelected={setIsSelected}
+                        selectedOptions={selectedOptions}
+                        setSelectedOptions={setSelectedOptions}
+                        showMessage={showMessage}
+                        setShowMessage={setShowMessage}
+                        clickedDog={clickedDog}
+                        setClickedDog={setClickedDog}
+                        clickedTime={clickedTime}
+                        setClickedTime={setClickedTime}
+                        dogList={dogList}
+                        setDogList={setDogList}
+                        selectedDogs={selectedDogs}
+                        setSelectedDogs={setSelectedDogs}
+                        clickedCalendar={clickedCalendar}
+                        setClickedCalendar={setClickedCalendar}
                     />
                 </Container>
                 {/* {showMessage ? <div>"모든 정보를 입력해 주세요"</div> : null} */}
@@ -386,7 +420,7 @@ const RoomCreate = () => {
                         )}
                     </Btn> */}
                     
-                        {step < 7 ? (
+                        {step < 6 ? (
                             <Btn name="next" onClick={handleNextBtn}>
                             <div> 다음 </div>
                             <BsArrowRightCircleFill fontSize="2rem" style={{margin:'0.5rem'}}/>

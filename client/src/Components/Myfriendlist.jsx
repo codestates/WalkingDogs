@@ -1,16 +1,48 @@
 import React from 'react'
-import './ComponentStyles/Myfriendlist.css'
+import styled from 'styled-components';
 
+
+const Container = styled.div`
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #000;
+    height: 80px;
+    margin: 10px 10px;
+    border-radius: 10px;
+    list-style: none;
+`;
+
+const ImageBox = styled.div`
+    border: 1px solid #000000;
+    width: 15%;
+    height: 70%;
+    border-radius: 50%;
+`
+
+const FriendInfo = styled.div`
+    border: 1px solid #000000;
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+    padding: 10px;
+    .li{
+        padding: 3.5px 3.5px;
+    }
+`
+
+
+//styled-component Boundary
 const Myfriendlist = ({ listKey, dog }) => {
     return(
         <>
-        <div key={listKey} className="myfriend_list_container">
-            <div className="myfriend_img"></div>
-            <div className="myfriend_info">
+        <Container key={listKey}>
+            <ImageBox></ImageBox>
+            <FriendInfo>
                 <li>이름 : {dog.name} / 중성화 : {dog.neutering ? 'O' : 'X'}</li>
                 <li>견종 : {dog.breed}</li>
-            </div>
-        </div>
+            </FriendInfo>
+        </Container>
         </>
     );
 }

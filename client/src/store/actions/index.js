@@ -29,6 +29,8 @@ export const updateInfoAction = (data) => ({
     },
 });
 
+
+
 //MODAL ACTIONS
 
 export const createGatherRoomModalOnAction = (data) => ({
@@ -48,7 +50,7 @@ export const signinModalOnAction = (data) => ({
     type: SIGNIN_MODAL_ON,
 })
 
-export const passwordChgModalOnAction = (data) => ({
+export const passwordChgModalOnAction=(data) => ({
     type: PASSWORDCHG_MODAL_ON,
 })
 

@@ -9,25 +9,30 @@ import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
 
 
 export const OneroomContainer = styled.div`
-  border: 1px solid #000000;
   width: auto;
   height: 50rem;
-  margin: 10px 10px;
-  border-radius: 10px;
+  margin: 0.1rem
+  border-radius: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 1rem solid var(--color-mainviolet--100);
 `;
 
-export const RoomBox = styled.div`
-  border: 1px solid green;
+const OneroomBox = styled.div`
+  border-radius: 10px;
+`
+
+const RoomBox = styled.div`
   display: flex;
   min-width: 100rem;
   height: 25rem;
   justify-content: space-around;
   align-items: center;
   margin: 15px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px 1px gray;
 `;
 
 const RoomBtnBox = styled.div`
@@ -38,16 +43,15 @@ const RoomBtnBox = styled.div`
   justify-content: space-around;
 `;
 
-export const ImageBox = styled.div`
-  border: 1px solid black;
-  width: 20%;
-  height: 70%;
-  border-radius: 50%;
+const ImageBox = styled.div`
+  border: 0.1rem solid grey;
+  width: 23rem;
+  height: 23rem;
+  border-radius: 100%;
   object-fit: fill;
 `;
 
-export const RoominfoBox = styled.div`
-  border: 1px solid black;
+const RoominfoBox = styled.div`
   width: 50%;
   height: 70%;
   display: flex;
@@ -55,30 +59,40 @@ export const RoominfoBox = styled.div`
   justify-content: center;
   align-items: center;
   margin: 5px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px gray; 
+  background-color: var(--color-mainviolet--25);
 `;
 
 export const UsernameBox = styled.div`
-  border: 1px solid green;
   min-width: 30%;
   height: 30px;
-  margin: 5px;
+  margin: 10px;
+  text-align: center;
 `;
 
 export const ContentsBox = styled.div`
-  border: 1px solid #000000;
   min-width: 96%;
   height: 30rem;
   margin: 5px;
+  background-color: var(--color-darkwhite);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 2rem;
 `;
 
 export const AllianceBox = styled.div`
-  border: 1px solid green;
   min-width: 96%;
   height: 70%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  border-radius:10rem;
   align-items: center;
+  text-align: center;
   margin: 10px;
+  :hover{
+    box-shadow: 1px 1px var(--color-darkgray);
+  }
 `;
 
 export const OtherUserImg = styled.img`
@@ -109,23 +123,23 @@ const JoinBtn = styled.button`
 `;
 
 const GathCrewBox = styled.div`
-  border: 1px solid #000000;
   width: 50%;
   height: 55px;
-  justify-content: flex-end;
   margin: 5px 10px;
   cursor: pointer;
+  background-color: var(--color-darkwhite);
+  border-radius: 1rem;
+  justify-content: space-between;
 `
 
 const MapBox = styled.div`
   width: auto;
   height: 100%;
-  border: 2px solid #000000;
+  border: 1rem solid var(--color-mainviolet--100);
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0.5rem;
 `
 
 const MapBoxAddres = styled.div`
@@ -144,6 +158,7 @@ const Oneroom = () => {
   const [isOpenCom, setIsOpenCom] = useState(false);
   const [roomDetail, setRoomDetail] = useState({});
   const [isGatherJoin, setIsGatherJoin] = useState(false);
+  const [gathCrew, setGathCrew] = useState([]);
 
   const dispatch = useDispatch();
   const {isGatherCrewModal} = useSelector(({modalReducer}) => modalReducer);
@@ -167,7 +182,7 @@ const Oneroom = () => {
 
   useEffect(async () => {
     const result = await room.roomDetailApi(params.room_id);
-    // console.log(result); room detail로 정보 가져오기 성공.
+    console.log(result);
 
     setRoomDetail(Object.assign({}, { ...result.data.data }))
     
@@ -189,6 +204,7 @@ const Oneroom = () => {
   return (
     <>
       <OneroomContainer>
+        <OneroomBox>
         <RoomBox>
           <ImageBox src="../puppy-test.jpeg" />
           <RoominfoBox>
@@ -211,14 +227,18 @@ const Oneroom = () => {
                 같이 가는 친구들은 누굴까요?
               </span>
               <GathCrewBox onClick={handleCrewModalOpen}>
+                {gathCrew.map((el)=> {
+                  return <OtherUserImg key={el.id}/>
+                })}
+                
+                {/* <OtherUserImg />
                 <OtherUserImg />
-                <OtherUserImg />
-                <OtherUserImg />
-                <OtherUserImg />
+                <OtherUserImg /> */}
               </GathCrewBox>
             </AllianceBox>
           </RoominfoBox>
         </RoomBox>
+        </OneroomBox>
         
         {roomDetail.isJoined ?
             <></>

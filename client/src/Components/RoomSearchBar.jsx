@@ -192,7 +192,6 @@ const RoomSearchBar = () => {
                   placeholder='견종 선택'
                   breed={breed}
                   setBreed={setBreed}>
-
                 </SearchInput>
             </Inputlist>
             <SearchBtnContainer>

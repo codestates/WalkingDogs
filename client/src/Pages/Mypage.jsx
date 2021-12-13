@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
-import './PageStyle/Mypage.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import { faCog } from '@fortawesome/free-solid-svg-icons'
 import Myroomlist from '../Components/Myroomlist'
 import Myfriendlist from "../Components/Myfriendlist";
 import {Link} from 'react-router-dom'
 import mypage from "../api/mypage";
-import styled from 'styled-components'
+import styled from 'styled-components';
 
+
+// import {authReducer, } from '../store/actions';
 
 
 const MypageContainer = styled.div`
     border: 1px solid red;
-    width: 100%;
-    height: auto;
-    margin: 10px 10px;
+    width: auto;
+    height: 33rem;
+    margin: 2px 2px;
     display: flex;
     align-items: center;
     *{
@@ -41,29 +42,33 @@ const MypageInfo = styled.div`
     border: 1px solid red;
     margin: 10px 10px;
     width: 50%;
-    height: 50%;
+    height: 15rem;
     border-radius: 10px;
 `;
 
 const ImgBox = styled.div`
-    margin: 10px 10px;
-    width: 6rem;
+    margin: 20% 10px;
+    width: 8em;
+    height: 7em;
+    border: 1px solid red;
+    border-radius: 100%;
 `;
 
 const Img = styled.img`
     width: 6rem;
     height: 80px;
     margin-top: 10px;
-    border-radius: 50%;
-    object-fit: scale-down;
+    border-radius: 100%;
+    object-fit: fit-content;
 `
 
 const Profile = styled.div`
-    border: 1px solid red;
+    border-radius: 10px;
     margin: 10px 10px;
     width: 100%;
     height: auto;
     list-style: none;
+    box-shadow: 1px 1px grey;
 `
 
 const Li = styled.li`
@@ -75,7 +80,7 @@ const ExRoomList = styled.div`
     border: 1px solid red;
     margin: 10px 10px;
     width: 50%;
-    height: 2rem;
+    height: auto;
     border-radius: 10px;
 `
 
@@ -84,7 +89,7 @@ const FriendsList = styled.div`
     border: 1px solid red;
     margin: 10px 10px;
     width: 50%;
-    height: 50%;
+    height: auto;
     border-radius: 10px;
 `
 
@@ -93,7 +98,6 @@ const FriendsList = styled.div`
 
 //styled-component Boundary
 const Mypage = () => {
-
     const [dogs, setDogs] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
