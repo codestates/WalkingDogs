@@ -2,6 +2,7 @@ const { comment, user } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
+  console.log('allCommentsAPI')
   try {
     const userInfo = await isAuthorized(req);
     const { room_id } = req.query;

@@ -2,6 +2,7 @@ const { room, user, user_room } = require('../../models');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {
+  console.log('locationAPI')
   // const { lat, lon } = req.query;
 
   //----------------------------------

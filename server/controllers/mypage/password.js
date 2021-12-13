@@ -3,6 +3,7 @@ const { isAuthorized } = require('../tokenFunctions');
 const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
+  console.log('passwordAPI')
   try {
     const userInfo = await isAuthorized(req);
 

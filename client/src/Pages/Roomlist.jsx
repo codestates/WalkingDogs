@@ -147,7 +147,6 @@ const SuggestMent = styled.div`
 const Roomlist = () => {
 
 const [isListLoading, setIsListLoading] = useState(true);
-const [Post, setPost] = useState([]);
 const [rooms, setRooms] = useState([]);
 const conditionOptions = {
     location: {
@@ -161,31 +160,39 @@ const conditionOptions = {
 };
 const [conditions, setConditions] = useState({ ...conditionOptions });
 const dispatch = useDispatch();
-const history = useHistory();
 
-useEffect(() => {
+useEffect(async () => {
+    let latitude = 37.564213, longitude = 127.001698; // 서울 중앙
+    
+    const geoLocation = () => {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject)
+        })
+    }
+    
     if(!navigator.geolocation) {
         console.log('브라우저 GeoLocation 미지원')
-    }
-    const success = async (pos) => {
-        
-        const latitude = Number(pos.coords.latitude.toFixed(6))
-        const longitude = Number(pos.coords.longitude.toFixed(6))
         dispatch(initPosAction({ latitude, longitude }))
-
-        const result = await map.locationApi({ latitude, longitude })
-        
-        setRooms([ ...result.data.rooms ]);
-        setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
-        setIsListLoading(false);
     }
-
-    const failed = () => {
-        console.log('위치를 찾을 수 없습니다')
-        setIsListLoading(false)
+    else {
+        await geoLocation()
+        .then((pos) => {
+            latitude = Number(pos.coords.latitude.toFixed(6))
+            longitude = Number(pos.coords.longitude.toFixed(6))
+            dispatch(initPosAction({ latitude, longitude }))
+            
+            // setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
+        })
+        .catch((err) => {
+            console.log(err)
+            console.log('위치를 찾을 수 없습니다')
+        })
     }
+    
+    const result = await map.locationApi({ latitude, longitude })
+    setRooms([ ...result.data.rooms ]);
+    setIsListLoading(false)
 
-    navigator.geolocation.getCurrentPosition(success, failed)
 }, [])
 
 // useDeepCompareEffect(()=> {
@@ -196,7 +203,6 @@ useEffect(() => {
 //         }, 500)
 //     }
 // }, [conditions])
-
 
     return(
         <>
@@ -228,7 +234,7 @@ useEffect(() => {
                         </CardList>
                     ) : (
                         <EmptyBox> 모임이 없네요😢
-                        <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
+                            <SuggestMent> 찾는모임이 없다면 모임을 만들어볼까요?</SuggestMent>    
                         </EmptyBox>
                         
                     )}

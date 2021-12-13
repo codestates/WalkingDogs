@@ -23,6 +23,7 @@ const util = {
 require('dotenv').config();
 
 module.exports = async (req, res) => {
+  console.log('imageAPI')
   try {
     const image = req.file;
     console.log(req.file);

@@ -2,6 +2,7 @@ const { room, user_room } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
+  console.log('myroomAPI')
   try {
     const userInfo = await isAuthorized(req);
 

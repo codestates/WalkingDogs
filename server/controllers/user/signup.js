@@ -4,6 +4,7 @@ require('dotenv').config();
 
 // 2021.12.1 완료
 module.exports = async (req, res) => {
+  console.log('signupAPI')
   try {
     const { email, password, username, image } = req.body;
 
@@ -18,24 +19,24 @@ module.exports = async (req, res) => {
       } else {
         const hashedPass = await bcrypt.hashSync(password, 10);
 
-        // console.log(hashedPass);
-
-        const createUser = await user.create({
+        await user.create({
           email: email,
           password: hashedPass,
           username: username,
           image: image ? image : 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/1639132435227defaultProfile.jpeg',
           is_member: true,
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json({ message: 'server Error' })
         });
-        if (!createUser) {
-          res.status(400).json({ message: 'bad request' });
-        }
+        
         return res.status(201).json({ message: 'ok' });
       }
     }
   } catch (err) {
-    console.error;
-    res.status(500).json({ message: 'server error' });
+    console.log(err);
+    res.status(500).json({ message: 'server Error' });
   }
 };
 

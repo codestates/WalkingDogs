@@ -108,6 +108,33 @@ const JoinBtn = styled.button`
 
 `;
 
+const CancelBtn = styled.button`
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
+  width: 20rem;
+  height: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
+`;
+
+const DogSelectBox = styled.div`
+
+`
+
+const DogList = styled.li`
+
+
+`
+
 const GathCrewBox = styled.div`
   border: 1px solid #000000;
   width: 50%;
@@ -226,18 +253,25 @@ const Oneroom = () => {
             roomDetail.isJoinRequested ?
                 <RoomBtnBox>
                     <JoinBtn disabled={true}>신청완료</JoinBtn>
+                    <CancelBtn>신청취소</CancelBtn>
                 </RoomBtnBox>
             :
+              <>
                 <RoomBtnBox>
                     <JoinBtn onClick={handleButtonClickJoin}>참여하기</JoinBtn>
                 </RoomBtnBox>
+                <DogSelectBox>
+                    <DogList>
+                      1
+                    </DogList>
+                </DogSelectBox>
+              </>
         }
       </OneroomContainer>
       <Comments roomId={params.room_id} />
       <MapBox>
         <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
         <Roommap 
-          address={roomDetail.address} 
           latitude={roomDetail.latitude} 
           longitude={roomDetail.longitude} 
           draggable={false}/>
