@@ -385,7 +385,7 @@ function Nav() {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const {id, username, user_image, isLogin} = useSelector(({authReducer})=> authReducer);
+  const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
   
 
   const handleUserInfoClick = () => {
@@ -428,7 +428,7 @@ function Nav() {
         {isLogin && (
               <Navs isNav={isHambugBtnClicked}>
                 <MobileUserContainer>
-                  <UserIcon size={1.2} user={{id, username, image: user_image}} isDisabled/>
+                  <UserIcon size={1.2} user={{id, username, image}} isDisabled/>
                 </MobileUserContainer>  
                 <MobileStyledH4> Page</MobileStyledH4>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
@@ -463,7 +463,7 @@ function Nav() {
         {isLogin && (
           <UserBox>
             <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
-              <UserImg src={user_image} onClick={() => history.push('/mypage')}/>
+              <UserImg src={image} onClick={() => history.push('/mypage')}/>
             <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>
           </UserBox>
         )}

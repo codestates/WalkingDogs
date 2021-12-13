@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
         sendRefreshToken(res, refreshToken);
         return res.status(200).json({
           data: {
-            user_image: copy.dataValues.image,
+            image: copy.dataValues.image,
             username: copy.dataValues.username,
           },
           message: 'ok',

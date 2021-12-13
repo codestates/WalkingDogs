@@ -6,8 +6,6 @@ const initialState = {
     email: '',
     username: '',
     image:'',
-    breed:'',
-    gender:'',
 }
 
 

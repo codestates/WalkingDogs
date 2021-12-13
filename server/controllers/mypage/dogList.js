@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
         return res.status(200).json({ dogs: result.dataValues.dogs, message: 'ok' });
       })
       .catch((err) => {
+        // console.log(err);
         return res.status(400).json({ message: 'no such user in the database' });
       })
       // if (!dogList) {
