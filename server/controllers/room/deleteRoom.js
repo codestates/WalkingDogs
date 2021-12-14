@@ -1,4 +1,4 @@
-const { room } = require('../../models');
+const { room, user_room, room_dog, dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
@@ -27,7 +27,8 @@ module.exports = async (req, res) => {
         })
         .then(async (result) => {
           console.log(result);
-          if (result.dataValues.leader_id === userInfo.id) {
+
+          if (result.dataValues.leader_id === userInfo.id) { // 요청을 넣은 유저가 leader라면 방을 삭제함.
             await room
               .destroy({
                 where: {
@@ -37,23 +38,58 @@ module.exports = async (req, res) => {
               })
               .then((data) => {
                 console.log(data);
-                res.status(200).json({ message: 'success' });
+                return res.status(200).json({ message: 'success' });
               })
               .catch((err) => {
                 console.log(err);
-                res.status(400).json({ message: 'fail' });
+                return res.status(400).json({ message: 'fail' });
               });
-          } else {
-              res.status(400).json({ message: 'you are not the leader of this room' });
+          }
+          else { // 요청을 넣은 유저가 leader가 아니면 방을 떠남.
+            await user_room
+              .destroy({
+                where: {
+                  room_id,
+                  user_id: userInfo.id,
+                }
+              })
+              .then((data) => {
+                console.log(data);
+                return res.status(200).json({ message: 'success' });
+              })
+              .catch((err) => {
+                console.log(err);
+                return res.status(400).json({ message: 'fail' });
+              });
+            
+            const dogList = await dog.findAll({
+              where: {
+                user_id: userInfo.id,
+              },
+            })
+
+            dogList.forEach(async (el) => {
+              await room_dog
+              .destroy({
+                where: {
+                  room_id,
+                  dog_id: el.id,
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                return res.status(400).json({ message: 'fail' });
+              })
+            })
           }
         })
         .catch((err) => {
           console.log(err);
-          res.status(400).json({ message: 'cannot find this room' });
+          return res.status(400).json({ message: 'cannot find this room' });
         });
     }
-  } catch {
-    console.error;
-    res.status(500).json({ message: 'server error' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'server error' });
   }
 };

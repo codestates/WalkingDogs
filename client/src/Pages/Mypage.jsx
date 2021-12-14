@@ -17,15 +17,6 @@ const MypageContainer = styled.div`
     margin: 2px 2px;
     display: flex;
     align-items: center;
-    button {
-        margin: 18% 5px;
-        width: 5rem;
-        height: 2rem;
-        font-size: 20px;
-        cursor: pointer; 
-        background-color: ivory;
-        border-radius: 100%;
-    }
     span {
         display: table-cell;
         vertical-align:middle;
@@ -43,7 +34,9 @@ const Span = styled.span`
 const MypageInfo = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 10px 10px;
+    padding: 10px;
     width: 50%;
     height: 20rem;
     border-radius: 10px;
@@ -53,10 +46,10 @@ const MypageInfo = styled.div`
 
 const ImgBox = styled.div`
     margin: 10% 10px;
-    width: 15em;
+    width: 10em;
     height: 10em;
     border: 1px solid lightgray;
-    border-radius: 100%;
+    border-radius: 50%;
 `;
 
 const Img = styled.img`
@@ -67,19 +60,22 @@ const Img = styled.img`
 `
 
 const Profile = styled.div`
+    align-self: stretch;
     border-radius: 10px;
-    margin: 6px 5px;
-    width: 100%;
-    height: 19rem;
+    margin: 5px 10px;
+    width: 15rem;
     list-style: none;
     box-shadow: 1px 1px grey;
     background-color: var(--color-darkwhite);
 `
 
 const Li = styled.li`
-    padding: 8px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    padding: 10px 10px;
     font-size: 18px;
-    border: 1px solid black;
 `
 
 const ExRoomList = styled.div`
@@ -103,6 +99,18 @@ const FriendsList = styled.div`
     background-color: var(--color-mainviolet--25);
     flex-direction: column;
     justify-content: space-around;
+`
+
+const SettingButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    margin: 0px;
+    padding: 5px;
 `
 
 //styled-component Boundary
@@ -137,36 +145,36 @@ const Mypage = () => {
                 </ImgBox>
 
                 <Profile>
-                    <Span className='myinfo_title'> My Information</Span>
+                    <Span className='myinfo_title' style={{flex: '1'}}> My Information</Span>
                     <Li>
                         {username}
                     </Li>
                 </Profile>
 
                 
-                <button className="mypage_profile_change_btn">
-                <Link to="/mypagechange" style={{color:'black'}}>
-                    <FontAwesomeIcon icon={ faCog } />
-                </Link>
-                </button>
+                <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
+                    <Link to="/mypagechange" style={{color:'black'}}>
+                        <FontAwesomeIcon icon={ faCog } />
+                    </Link>
+                </SettingButton>
             </MypageInfo>
             
             <ExRoomList className="myinfo_roomlist">
                 <Span className="roomlist_title">
                     참가한 모임 목록
                 </Span>
-                    {rooms.map((el) => 
-                        <Myroomlist listKey={el.id} room={el}/>
-                    )}
+                {rooms.map((el) => 
+                    <Myroomlist listKey={el.id} room={el}/>
+                )}
             </ExRoomList>
 
             <FriendsList className="myfrend_list">
                 <Span className="myfriendlist_title">
                     함께한 친구들 목록
                 </Span>
-                    {dogs.map((el) => 
-                        <Myfriendlist listKey={el.id} dog={el}/>
-                    )}
+                {dogs.map((el) => 
+                    <Myfriendlist listKey={el.id} dog={el}/>
+                )}
             </FriendsList>
 
         </MypageContainer>
