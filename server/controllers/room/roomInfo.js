@@ -88,6 +88,7 @@ module.exports = async (req, res) => {
     });
 
     userRoom.user_rooms.forEach(el => {
+      delete el.dataValues.user.dataValues.password;
       userList.push(el.dataValues.user);
     });
 
@@ -124,8 +125,7 @@ module.exports = async (req, res) => {
           },
         },
       })
-
-
+    
     const result = {
       // Response
       image: leaderInfo.dataValues.image,
@@ -141,7 +141,7 @@ module.exports = async (req, res) => {
       isJoinRequested: isJoinRequested ? true : false,
       isLeader: leaderInfo.dataValues.id === userInfo.id ? true : false,
     };
-
+    
     return res.status(200).json({ data: result, message: 'ok' });
   }
   catch (err) {

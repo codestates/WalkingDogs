@@ -25,7 +25,8 @@ const util = {
 require('dotenv').config();
 
 module.exports = async (req, res) => {
-  console.log('userImageApi')
+  console.log('userImageApi');
+  // console.log(JSON.parse(JSON.stringify(req.body.image)));
   console.log(req.cookies);
   try {
     const userInfo = await isAuthorized(req)

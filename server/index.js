@@ -95,6 +95,7 @@ app.post('/new-room', controllers.room.newRoom);
 app.post('/reqPermission', controllers.room.reqPermission);
 app.put('/room/:room_id/cancel', controllers.room.cancelReq);
 app.put('/room/:room_id/join', controllers.room.joinRoom);
+app.delete('/room/:room_id', controllers.room.deleteRoom);
 
 // mypage
 app.get('/dog-list', controllers.mypage.dogList);

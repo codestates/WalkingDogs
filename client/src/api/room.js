@@ -19,6 +19,7 @@ const newRoomApi = async roomInfo => {
 
 const roomDetailApi = async (roomId) => {
   const result = await api({
+    method: 'GET',
     url: `/room/${roomId}`,
   });
   return result;
@@ -57,4 +58,12 @@ const reqPermissionApi = async (candidate_id, room_id, is_accepted) => {
   return result
 }
 
-export default { newRoomApi, roomDetailApi, joinRoomApi, cancelRoomApi, reqPermissionApi };
+const deleteRoomApi = async (roomId) => {
+  const result = await api({
+    method: 'DELETE',
+    url: `room/${roomId}`
+  })
+  return result;
+}
+
+export default { newRoomApi, roomDetailApi, joinRoomApi, roomInfoApi, cancelRoomApi, reqPermissionApi, deleteRoomApi };

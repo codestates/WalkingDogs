@@ -13,12 +13,13 @@ module.exports = async (req, res) => {
 
     // console.log('userInfo: ', userInfo);
     const passwords = req.body;
-    // console.log('password', passwords);
+    console.log('password', passwords);
     const userData = await user.findOne({
       where: {
         id: userInfo.id,
       },
     });
+    console.log('userData.dataValues: ', userData.dataValues);
     if (!userData) {
       res.status(400).json({ message: 'no such user in the database' });
     } else {
@@ -28,6 +29,7 @@ module.exports = async (req, res) => {
         res.status(400).json({ message: 'old password does not match' });
       } else {
         if (passwords.new_password === passwords.new_password_check) {
+          console.log(passwords.new_password);
           const hashedPass = await bcrypt.hashSync(passwords.new_password, 10);
           if (!hashedPass) {
             res.status(400).json({ message: 'hash not created' });

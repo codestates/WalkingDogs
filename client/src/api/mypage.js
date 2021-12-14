@@ -2,6 +2,7 @@ import api from './index';
 
 const dogListApi = async () => {
   const result = await api({
+    method: 'GET',
     url: `/dog-list`,
   });
   return result;
@@ -9,6 +10,7 @@ const dogListApi = async () => {
 
 const myroomApi = async () => {
   const result = await api({
+    method: 'GET',
     url: `/myroom`,
   });
   return result;

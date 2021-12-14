@@ -4,6 +4,7 @@ import styled, {css} from 'styled-components';
 
 
 const Container = styled.div`
+    border: none;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -12,6 +13,7 @@ const Container = styled.div`
     border: none;
     border-radius: 10px;
     list-style: none;
+    background-color:var(--color-darkwhite);
 `;
 
 const ImageBox = styled.div`
@@ -23,8 +25,7 @@ const ImageBox = styled.div`
 const FriendInfo = styled.div`
     width: 50%;
     height: auto;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 5px;
     .li{
         padding: 3.5px 3.5px;
     }

@@ -414,16 +414,18 @@ const RoomSearch = ({
         setInputValue(inputValue + 1);
         nextState = inputValue + 1;
       }
-      else
-        nextState = inputValue
+      else {
+        nextState = inputValue;
+      }
     } else if (e.target.innerText === '-') {
       // inputValue > 2 && setInputValue((prevState) => String(Number(prevState) - 1));
       if (inputValue > 2) {
         setInputValue(inputValue - 1);
         nextState = inputValue - 1;
       }
-      else
-        nextState = inputValue
+      else {
+        nextState = inputValue;
+      }
     }
 
     const dummyOptions = [...selectedOptions];
