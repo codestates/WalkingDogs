@@ -14,14 +14,14 @@ const Container = styled.div`
   margin-top: 0.5rem;
   width: 100%;
   .react-datepicker__tab-loop {
-    margin-top: 1.75rem;
+    margin-top: 1.5rem;
     ${media.lessThan("medium")`
       width: 100%;
       height: 20.5rem;
       margin-top: 1.25rem;
       margin-bottom: -0.75rem;
       border-radius: 1rem;
-      border: 1px solid var(--color-maingreen--50);
+      border: 1px solid black;
       position: relative;
     `};
   }
@@ -39,7 +39,7 @@ const Container = styled.div`
     }
   }
   .react-datepicker-popper {
-    margin-top: 1.75rem;
+    margin-top: 0.9rem;
     ${media.lessThan("medium")`
       filter: none;
       position: absolute;

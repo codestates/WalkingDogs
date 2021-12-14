@@ -24,7 +24,6 @@ export const HeaderStyle = styled.header`
   position: sticky;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid var(--color-lightgray);
   z-index: 10;
 
   ${media.lessThan("medium")`
@@ -433,9 +432,6 @@ function Nav() {
                 <MobileStyledH4> Page</MobileStyledH4>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
                   <Text> 모임 </Text>
-                </StyleNavLink>
-                <StyleNavLink to='/community' onClick={closeAll}>
-                  <Text>커뮤니티</Text>
                 </StyleNavLink>
                 <MobileStyledH4> Account </MobileStyledH4>
                   <MobileNavBtn onClick={handleSignOut}>

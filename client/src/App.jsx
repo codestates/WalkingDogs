@@ -8,7 +8,6 @@ import Landingpage from './Pages/Landingpage'
 import Roomlist from './Pages/Roomlist';
 import Footer from './Components/Footer'
 import Oneroom from './Pages/Oneroom'
-import Community from './Pages/Community'
 import {BrowserRouter as Brouter, Route, Switch, Redirect} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Modal from './Components/Modal';
@@ -109,7 +108,6 @@ function App() {
           <Route path='/mypagechange' component={Mypagechg}/>
           <Route path='/roomlist' component={Roomlist}/>
           <Route path='/room/:room_id' component={Oneroom}/>
-          <Route path='/community' component={Community}/>
           <Route path='/maps' component={Maps}/>
           <Redirect from='*' to='/'/>
         </Switch>

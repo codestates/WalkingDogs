@@ -8,21 +8,22 @@ const InputWrapper = styled.label`
     height:100%;
     ${media.greaterThan('medium')`
         min-width: ${(props) => {
-            if(props.sort === '지역') return '9rem';
-            if(props.sort === '날짜') return '11.5rem';
+            if(props.sort === '지역') return '10rem';
+            if(props.sort === '날짜') return '10rem';
             if(props.sort === '시간') return '5rem';
                 return '6.5rem';
         }};
 
         max-width: ${(props) => {
-            if(props.sort === '지역') return '12rem';
-            if(props.sort === '날짜') return '15rem';
+            if(props.sort === '지역') return '25rem';
+            if(props.sort === '날짜') return '20rem';
             if(props.sort === '시간') return '8rem';
                 return '10rem';
         }};
     `}
     border-radius: 1rem;
     display: flex;
+    width: 20rem;
     :hover {
         ${media.greaterThan("medium")`
         background-color: var(--color-darkwhite);
@@ -49,7 +50,6 @@ const InputArea = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 0.75rem 0;
     ${media.lessThan("medium")`
     height: fit-content;
   `};
@@ -58,7 +58,7 @@ const InputArea = styled.div`
 const Name = styled.div`
     margin: 0 1rem;
     font-size: 0.9rem;
-    color: var(--color-darkgray);
+    color: black;
     flex: 0 0 1;
 `
 
@@ -77,7 +77,7 @@ const SearchInput = ({name, children, hideDivider}) => {
         <InputWrapper
             onFocus={()=> {
                 box.current.style.cssText = css`
-                    border: 1px solid var(--color-darkwhite);
+                    border: 1px solid black;
                 `;
             }}
             onBlur={()=> {
@@ -92,7 +92,7 @@ const SearchInput = ({name, children, hideDivider}) => {
                 <Name>{name}</Name>
                 {children}
             </InputArea>
-            {!hideDivider && <Divider className="divider"/>}
+            {/* {!hideDivider && <Divider className="divider"/>} */}
         </InputWrapper>
     )
 }
@@ -104,7 +104,6 @@ SearchInput.defaultProps = {
 SearchInput.propTypes = {
     name: PropTypes.string.isRequired,
     children: PropTypes.oneOfType([PropTypes.bool, PropTypes.element]).isRequired,
-    hideDivider: PropTypes.bool,
 }
 
 export default SearchInput;

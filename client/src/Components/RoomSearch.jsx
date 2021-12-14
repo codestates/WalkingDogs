@@ -91,9 +91,8 @@ const SearchList = styled.li`
 `;
 
 const MapContainer = styled.div`
-  width: 18.5rem;
-  height: 12rem;
-  margin-top: 1rem;
+  width: 29rem;
+  height: 3rem;
   ${media.lessThan('medium')`
     width: 20rem;
   `}
@@ -474,15 +473,6 @@ const RoomSearch = ({
 
   return (
     <Container>
-      {(step === 1) && (
-        <Search
-          value={inputValue}
-          placeholder={'작성해주세요'}
-          onChange={handleInputAddress}
-          isOnSearch={isOnSearch}
-        ></Search>
-      )}
-      
       {step === 3 && (
         <Search
           value={inputValue}
@@ -497,7 +487,7 @@ const RoomSearch = ({
         <Wrapper>
           <Count>
             <button onClick={handleCount}>-</button>
-            {inputValue}
+            {inputValue <=6 ? inputValue : '최대 인원은 6명입니다.'}
             <button onClick={handleCount}>+</button>
           </Count>
         </Wrapper> 

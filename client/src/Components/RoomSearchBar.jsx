@@ -10,22 +10,23 @@ import {useDispatch} from 'react-redux'
 import { searchGatherAction } from "../store/actions";
 import roomApi from '../api/room';
 import AllButtons from './AllButtons'
+import Roommap from './Roommap'
 
 import {FcSearch} from 'react-icons/fc'
 
 const InputContainer = styled.form`
   margin-bottom: 2rem;
-  height: 4rem;
+  height: 15rem;
   background-color: var(--color-darkwhite);
   border-radius: 0.5rem;
   display: flex;
   ${media.lessThan("medium")`
     margin-bottom: 1.25rem;
-    width: calc(100% - 6rem);
+    width: calc(100% - 2rem);
   `}
   ${media.lessThan("small")`
     width: 100%;
-    min-width: 20rem;
+    min-width: 30rem;
   `}
   .gath-search-btn {
     width: 4rem;
@@ -70,9 +71,9 @@ const Placeholder = styled.div`
 `;
 
 const Inputlist = styled.div`
-    flex: 1 1 auto;
     display: flex;
     align-items: center;
+    margin-bottom: 18rem;
 `
 
 const SearchBtnContainer = styled.div`
@@ -99,6 +100,7 @@ const RoomSearchBar = () => {
   const [totalNumInput, setTotalNumInput] = useState(null);
   const [searchable, setSearchable] = useState(false); //검색할 수 있는  state
   const [breed, setBreed] = useState([]);
+  
   const [list, setList] = useState({
     address: [],
     time: [],
@@ -110,6 +112,8 @@ const RoomSearchBar = () => {
   })
 
   // 
+
+  
 
     const dispatch = useDispatch();
 

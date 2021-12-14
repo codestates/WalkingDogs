@@ -9,14 +9,14 @@ const { kakao } = window;
 const MapContainer = styled.div`
   border-radius: 1rem;
   filter: drop-shadow(2px 2px 6px var(--color-shadow));
-  width: 25.1rem;
+  width: 28.1rem;
   height: auto;
 `;
 
 export const Minimap = styled.div`
   border-radius: 1rem;
-  width: 25rem;
-  height: 17rem;
+  width: 28rem;
+  height: 24rem;
 `;
 
 const Roommap = ({ address, latitude, longitude, draggable = true }) => {
