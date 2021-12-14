@@ -3,8 +3,6 @@ import styled, {css} from 'styled-components';
 import PropTypes from 'prop-types'
 import media from 'styled-media-query';
 import {FiPlus, FiMinus} from 'react-icons/fi';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {IoCloseCircle} from  "react-icons/io5";
 
 
@@ -122,12 +120,11 @@ const DisabledPlus = styled(MinusBtn)`
   }
 `;
 
-const ClearBtn = styled(PlusBtn)`
+const ClearBtn = styled.button`
   position: absolute;
   right: 1rem;
-  top: 1.375rem;
-  /* top: 50%;
-  transform: translateY(-50%); */
+  top: 50%;
+  transform: translateY(-50%);
   width: 1.25rem;
   height: 1.25rem;
   font-size: 1.25rem;
@@ -136,6 +133,8 @@ const ClearBtn = styled(PlusBtn)`
     color: var(--color-gray);
   }
 `;
+
+
 
 //styled-component Boundary
 
@@ -177,7 +176,7 @@ const InputTotalNum =({inputId, placeholder, total, setTotal}) => {
             <Input value={total ? `전체 ${total} 명` : ""} placeholder={placeholder} readOnly/>
                 <Popper ref={popper}>
                     <PopperInner>
-                        {total && total >= 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
+                        {total >= 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
                         <PopperInput id={inputId} value={total || 1} disabled={!total} readOnly/>
                         {total <= 5 ? <PlusBtn onClick={handlePlusClick}/> : <DisabledPlus/>}
                     </PopperInner>

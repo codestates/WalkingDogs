@@ -45,7 +45,7 @@ export const RoomlistContainer = styled.div`
 
 const LocationBox = styled.div`
   background-color: var(--color-mainviolet--75);
-  min-height: 20rem;
+  min-height: 30rem;
   flex: 0 0 1;
   ${media.lessThan("medium")`
     padding : 4rem 2rem;

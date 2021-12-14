@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 import {
   modalOffAction,
   updateInfoAction,
-  passwordChgModalOnAction,
 } from '../store/actions';
 
 import AllButtons from './AllButtons';
@@ -33,6 +32,7 @@ const Form = styled.form`
   input {
     height: 2.4rem;
     border: 1px solid #000000;
+    background-color: var(--color-darkwhite);
     border-radius: 0.4rem;
     :first-of-type {
       margin-top: 1rem;
@@ -110,7 +110,6 @@ const PwChange = () => {
 
     const handleTypeChange = () => {
         dispatch(modalOffAction)
-        dispatch(passwordChgModalOnAction)
     }
 
     const handleInputChange = debounce((e) => {
@@ -158,26 +157,26 @@ const PwChange = () => {
             <Logo src="img/WalkingDogsTitleLogo.png" />
                 <InputContainer>
                     <Input 
-                    name='oldpassword'
-                    type="password"
-                    placeholder='현재 비밀번호'
-                    onChange={handleInputChange}
+                      name='oldpassword'
+                      type="password"
+                      placeholder='현재 비밀번호'
+                      onChange={handleInputChange}
                     ></Input>
                     <Input
-                    name='newpassword'
-                    type='password'
-                    placeholder='새로운 비밀번호'
-                    onChange={handleInputChange}
+                      name='newpassword'
+                      type='password'
+                      placeholder='새로운 비밀번호'
+                      onChange={handleInputChange}
                     ></Input>
                     <Input
-                    name='newpasswordConfirm'
-                    type='password'
-                    placeholder='새로운 비밀번호 확인'
-                    onChange={handleInputChange}
+                      name='newpasswordConfirm'
+                      type='password'
+                      placeholder='새로운 비밀번호 확인'
+                      onChange={handleInputChange}
                     ></Input>
                     <ErrorMessage>{errMsg}</ErrorMessage>
                 </InputContainer>
-                <Button>확인</Button>
+              <Button>확인</Button>
         </Form>
         </>
     );

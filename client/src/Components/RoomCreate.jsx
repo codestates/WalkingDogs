@@ -300,6 +300,9 @@ const RoomCreate = () => {
                 <Info>
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
                     <h2 style={{color: 'black'}}>{ask}</h2>
+                    <div style={{width: '100%', height: '0.2rem', color: 'black'}}>
+                        {step === 4 && `${selectedOptions[3]} 명`}
+                    </div>
                 </Info>
                 <Container>
                     <RoomSearch
@@ -364,7 +367,6 @@ const RoomCreate = () => {
                              </StyledBtn>
                             </>
                         )}
-                    
                 </MoveNextButton>
             </CreateRoomContainer>
         </>

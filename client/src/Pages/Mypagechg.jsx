@@ -11,11 +11,8 @@ import styled, { css } from 'styled-components';
 import media from 'styled-media-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Modal from '../Components/Modal';
-import PwChange from '../Components/PwChange';
+import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { eachYearOfInterval, previousTuesday } from 'date-fns/esm';
 import userApi from '../api/users';
@@ -27,14 +24,19 @@ import userApi from '../api/users';
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
 // 전체 스타일링 (중요도 낮음)
 
-const ProfileChgBtn = styled.button`
-  border: 0.5px solid white;
-  background-color: #646fcb;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 25px;
-`;
+const Container = styled.div`
+  border: 2rem solid var(--color-mainviolet--100);
+  border-bottom: none;
+  width: auto;
+  height:  60rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  input {
+    border: 1px solid red;
+  }
+`
+
 
 const PasswordChgBtn = styled.button`
   border: 0.5px solid white;
@@ -45,37 +47,161 @@ const PasswordChgBtn = styled.button`
   font-size: 25px;
 `;
 
-const ModalContainer = styled.div`
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 0 auto;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 1rem;
-  color: darkgray;
+
+const ProfileChgBtn = styled.button`
+  border: 0.5px solid white;
   background-color: #646fcb;
-  ${props => {
-    props.bgColor &&
-      css`
-        background-color: ${props.bgColor};
-      `;
-  }};
-  ${media.lessThan('medium')`
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    transform: translateY(0)
-    min-height: 100%;
-    min-width: 100%;
-    border-radius: 0;
-  `};
-  display: flex;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.8rem;
+`;
+
+const ImageEditInput = styled.div`
+    align-items: left;
+    border: 1px solid red;
+    padding: 0rem 0.5rem;
+    flex-direction: row;
+    border-radius: 0.3rem;
+    width: 11.5rem;
+    label {
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 10rem;
+      height: 2rem;
+      color: black;
+      list-style: none;
+      cursor: pointer;
+      margin: 4px;
+    }
+`
+
+const InfoChgContainer = styled.div`
   flex-direction: column;
   justify-content: center;
+  border: 2px solid green;
+  width: 28rem;
+  height: 40rem;
+  margin-bottom: 0.5rem;
+`
+
+const ProfileImage = styled.img`
+  width: 24rem;
+  height: 24rem;
+  border-radius: 100%;
+  margin: 1rem;
+  border: 2px solid red;
+`
+
+const NicknameBox = styled.label`
+  border: 1px solid red;
+  
+`
+
+const BtnContainer= styled.div`
+  justify-content: center;
+`
+
+const StyledDefaultProfile = styled.img`
+  width: 24rem;
+  height: 24rem;
+  border-radius: 100%;
+  margin: 1rem;
+  border: 1px solid gray;
+  aspect-ratio: 1;
+  ${media.lessThan("medium")`
+    margin: auto 2.5em 2rem 2.5rem;
+  `}
+`
+
+const EditDetails = styled.details`
+  position: relative;
+  width: 7rem;
+  height: 1.2rem;
+  margin: 1px;
+  border: 1px solid gray;
+  ${media.lessThan("medium")`
+    margin-top: 1rem;
+    margin-left: -7rem;
+  `}
 `;
+
+const EditTooltip = styled.div`
+  width: 1rem;
+  height: 1rem;
+  border: 0.6rem solid transparent;
+  border-bottom-color: var(--color-maingreen--100);
+  margin-left: 0.5rem;
+  margin-bottom: -0.2rem;
+  div {
+    position: absolute;
+    margin: -0.3rem auto auto -0.48rem;
+    border: 0.45rem solid transparent;
+    border-bottom-color: var(--color-darkwhite);
+    width: 0.8rem;
+    height: 0.8rem;
+    z-index: 99;
+  }
+`;
+
+const EditSummary =styled.summary`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size:1rem;
+  font-family:Jua;
+  width: 7rem;
+  height: 1.5rem;
+  color: black;
+  background-color: var(--color-mainviolet-100);
+  list-style: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  margin-bottom: -0.5rem;
+`
+
+const ImageEditBox = () => {
+
+  const [seletedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange =(e) => {
+    setSelectedFile(e.target.file[0]);
+  }
+
+  const handleFileUpload = () => {
+    const formData = new FormData();
+
+    formData.append('userfile', seletedFile, seletedFile.name);
+  }
+
+  return (
+    <EditDetails>
+      <EditSummary>
+        이미지 불러오기
+      </EditSummary>
+      <details-menu role="menu">
+        <ImageEditInput>
+          <label>
+            이미지 업로드
+              <input
+              id="photo"
+              type="file"
+              style={{display: "none"}}
+              accept='image/*, video/mp4'
+              />
+          </label>
+            <label tabIndex='0' role='menuitem'>
+              기본사진으로 되돌리기 
+            </label>
+        </ImageEditInput>
+      </details-menu>
+    </EditDetails>
+  )
+}
+
 
 const Wrap = styled.div`
 `
@@ -84,8 +210,10 @@ const Wrap = styled.div`
 const Mypagechg = () => {
 
   const [infos, setInfos] = useState({ userName: '', dogs: [], image: '' });
+  const [photo, setPhoto] = useState("");
 
-  const [isPwModalOpen, setIsPwModalOpen] = useState(false);
+  const [isChgMode, setIsChgMode] = useState(false);
+
   const [pwChgMode, setPwChgMode] = useState(false);
   const [isMypage, setIsMyPage] = useState(false);
 
@@ -167,7 +295,6 @@ const Mypagechg = () => {
       dogs: [...infos.dogs],
       image: infos.image,
     });
-
     setInfos(
       Object.assign(
         { ...infos },
@@ -179,13 +306,15 @@ const Mypagechg = () => {
       ),
     );
 
-    dispatch(updateInfoAction({ username: result.data.data.username, image: result.data.data.image }));
+    dispatch(updateInfoAction({
+         username: result.data.data.username,
+         image: result.data.data.image,
+        }),
+        );
+
+        localStorage.setItem('userData', JSON.stringify({username, image}));
   };
 
-  const handleChangePasswordBtnClick = () => {
-    // 순상 : 진희님 패스워드 변경 modal 창 추가 부탁드립니다.
-    setIsPwModalOpen(!isPwModalOpen);
-  };
 
   const handleClickOpts = e => {
     const data = e.target.value;
@@ -252,9 +381,9 @@ const Mypagechg = () => {
   
   return (
     <>
-      <div className="myinfo_chg_container">
+      <Container className="container">
         <div className="myinfo_chg_img">
-          <img className="myinfo_img" src={image}/>
+          <ProfileImage className="myinfo_img" src={image}/>
           <button className="myinfo_chg_img_btn"
             onMouseOver={(e) => handleMouseOverOnImg(e)}
             onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
@@ -265,7 +394,7 @@ const Mypagechg = () => {
 
         <div className="myinfo_chg_input_container">
           <div className="myinfo_chg_box">
-            <label className="myinfo_chg_username">닉네임</label>
+            <NicknameBox className="myinfo_chg_username">닉네임</NicknameBox>
             <input
               type="text"
               className="myinfo_chg_username_input"
@@ -321,7 +450,7 @@ const Mypagechg = () => {
                 );
               })}
             </div>
-            <div className="profile_btn_container">
+            <BtnContainer className="profile_btn_container">
               <ProfileChgBtn
                 className="profile_chg_btn"
                 onClick={handleChangeProfileBtnClick}
@@ -334,12 +463,24 @@ const Mypagechg = () => {
                   비밀번호 변경
                 </PasswordChgBtn>
               )}
+              </BtnContainer>
             </div>
           </div>
-        </div>
-      </div>
+        </Container>
     </>
   );
 };
 
+
+
+
+
 export default Mypagechg;
+
+ImageEditBox.propTypes = {
+  setInfos : PropTypes.func,
+  setPhoto: PropTypes.func,
+  image: PropTypes.string,
+};
+
+//setInfos, setPhoto, image

@@ -51,18 +51,12 @@ const SearchResult = styled.ul`
   ::-webkit-scrollbar {
     width: 10px;
   }
-
-  /* Track */
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
-
-  /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #888;
   }
-
-  /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
@@ -98,9 +92,8 @@ const SearchList = styled.li`
 `;
 
 const MapContainer = styled.div`
-  width: 18.5rem;
-  height: 12rem;
-  margin-top: 1rem;
+  width: 29rem;
+  height: 3rem;
   ${media.lessThan('medium')`
     width: 20rem;
   `}
@@ -164,6 +157,7 @@ const StyledDate = styled.div`
     width: 25.5rem;
     > * {
       border: 0;
+      justify-content: center !important;
     }
     ${media.lessThan('medium')`
       width: 100% !important;
@@ -182,7 +176,7 @@ const StyledDate = styled.div`
     margin: 0.5rem 0;
   }
   .react-datepicker__current-month {
-    color: darkgray;
+    color: black;
     margin: 0.5rem 0;
   }
   .react-datepicker__day-names {
@@ -194,7 +188,7 @@ const StyledDate = styled.div`
     width: 2rem;
     line-height: 2rem;
     margin: 0.25rem;
-    color: darkgray;
+    color: black;
   }
   .react-datepicker__week {
     > * {
@@ -212,7 +206,7 @@ const StyledDate = styled.div`
       }
     }
     .react-datepicker__day--selected {
-      color: white;
+      color: black;
       background-color: gray;
       :hover {
         color: white;
@@ -259,6 +253,12 @@ const Count = styled.div`
     text-align: center;
   }
 `;
+
+
+const CountBox =  styled.div`
+  width: auto;
+  display: flex;
+`
 
 const CountCheck = styled.div`
   text-align: center;
@@ -456,15 +456,6 @@ const RoomSearch = ({
 
   return (
     <Container>
-      {(step === 1) && (
-        <Search
-          value={inputValue}
-          placeholder={'작성해주세요'}
-          onChange={handleInputAddress}
-          isOnSearch={isOnSearch}
-        ></Search>
-      )}
-      
       {step === 3 && (
         <Search
           value={inputValue}
@@ -479,7 +470,7 @@ const RoomSearch = ({
         <Wrapper>
           <Count>
             <button onClick={handleCount}>-</button>
-            {inputValue}
+            {inputValue <=6 ? inputValue : '최대 인원은 6명입니다.'}
             <button onClick={handleCount}>+</button>
           </Count>
         </Wrapper> 

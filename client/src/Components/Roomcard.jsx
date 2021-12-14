@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux';
-import {createGatherRoomDetailModalOnAction} from  '../store/actions';
 import room from '../api/room';
 import PropTypes from 'prop-types';
 import UserIcon from './UserIcon';
 
 
 const CardContainer = styled.div`
-    border: 0.5rem solid var(--color-mainviolet--50);
+    border: 0.5rem solid var(--color-mainviolet--25);
     border-radius: 1rem;
-    background-color: white;
+    background-color: var(--color-mainviolet--25);
     filter: drop-shadow(2px 2px 6px lightgray);
     padding: 1.25rem;
     display: flex;
@@ -28,10 +27,10 @@ const CardContainer = styled.div`
         overflow: hidden;
     }
     position: relative;
-    .hovered {
-        background-color: var(--color-maingreen--50);
-    }
     cursor: pointer;
+    :hover{
+        box-shadow: 1px 1px lightgray;
+    }
 `;
 
 const ContentContainer = styled.div`
@@ -53,7 +52,6 @@ const ImageBox = styled.div`
     overflow: hidden;
 `
 const Roominfo = styled.div`
-    
     width: 14rem;
     height: auto;
     display: flex;
@@ -63,25 +61,16 @@ const Roominfo = styled.div`
     margin: 5px;
 `;
 
-const TitleBox = styled.div`
-    border: 1px solid green;
-    width: 13rem;
-    height: 2rem;
-    margin: 3px;
-    border-radius: 10px;
-`
-
 const AddressesBox = styled.div`
-    border: 1px solid green;
     width: 12rem;
     height: 30px;
     margin: 5px;
     text-align: center;
     border-radius: 10px;
+    background-color: var(--color-darkwhite);
 `
 
-const RoomContentBox = styled.div`
-    border: 1px solid green;
+const RoomTitleBox = styled.div`
     width: 13rem;
     height: 8rem;
     margin: 3px;
@@ -90,6 +79,7 @@ const RoomContentBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    background-color: var(--color-darkwhite);
 `
 
 //styled-component boundary
@@ -120,7 +110,7 @@ const handleGathDetailRoomModalOn = () =>{
                 </ImageBox>
                 <Roominfo>
                 <AddressesBox> {room.address} </AddressesBox>
-                <RoomContentBox>{room.title}</RoomContentBox>
+                <RoomTitleBox>{room.title}</RoomTitleBox>
                 </Roominfo>
             </CardContainer>
         </Link>
