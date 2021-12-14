@@ -5,28 +5,28 @@ import media from 'styled-media-query'
 
 
 const InputWrapper = styled.label`
-    height:100%;
+    height:3.2rem;
+    background-color: var(--color-darkwhite);
+    flex-direction: row;
     ${media.greaterThan('medium')`
         min-width: ${(props) => {
-            if(props.sort === '지역') return '10rem';
-            if(props.sort === '날짜') return '10rem';
+            if(props.sort === '지역') return '20rem';
+            if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '5rem';
                 return '6.5rem';
         }};
 
         max-width: ${(props) => {
-            if(props.sort === '지역') return '25rem';
-            if(props.sort === '날짜') return '20rem';
+            if(props.sort === '지역') return '32rem';
+            if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '8rem';
                 return '10rem';
         }};
     `}
-    border-radius: 1rem;
     display: flex;
-    width: 20rem;
     :hover {
         ${media.greaterThan("medium")`
-        background-color: var(--color-darkwhite);
+        background-color: none;
         `};
     }
     position: relative;
@@ -48,7 +48,7 @@ const InputArea = styled.div`
     flex: 1 1 0;
     box-sizing: content-box;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;   
     justify-content: space-between;
     ${media.lessThan("medium")`
     height: fit-content;
@@ -95,7 +95,7 @@ const SearchInput = ({name, children, hideDivider}) => {
             {/* {!hideDivider && <Divider className="divider"/>} */}
         </InputWrapper>
     )
-}
+};
 
 SearchInput.defaultProps = {
     hideDivider: false,

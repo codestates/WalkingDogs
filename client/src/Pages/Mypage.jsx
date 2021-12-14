@@ -12,85 +12,97 @@ import styled from 'styled-components';
 
 
 const MypageContainer = styled.div`
-    border: 1px solid red;
     width: auto;
     height: 33rem;
     margin: 2px 2px;
     display: flex;
     align-items: center;
-    *{
-        margin:0;
-    }
     button {
-        margin: 10px 10px;
-        width: 8%;
-        height: 20%;
+        margin: 18% 5px;
+        width: 5rem;
+        height: 2rem;
         font-size: 20px;
         cursor: pointer; 
+        background-color: ivory;
+        border-radius: 100%;
     }
     span {
-        padding: 0px 10px;
-        margin-top: 10px;
-        border: 1px solid #000000;
-        height:auto;
+        display: table-cell;
+        vertical-align:middle;
     }
 `;
+
+const Span = styled.span`
+    background-color: var(--color-darkwhite);
+    text-align: center;
+    width: 8rem;
+    border-radius: 10rem;
+    line-height: 20px;
+`
 
 const MypageInfo = styled.div`
     display: flex;
     justify-content: space-between;
-    border: 1px solid red;
     margin: 10px 10px;
     width: 50%;
-    height: 15rem;
+    height: 20rem;
     border-radius: 10px;
+    box-shadow: 1px 1px grey;
+    background-color: var(--color-mainviolet--100);
 `;
 
 const ImgBox = styled.div`
-    margin: 20% 10px;
-    width: 8em;
-    height: 7em;
-    border: 1px solid red;
+    margin: 10% 10px;
+    width: 15em;
+    height: 10em;
+    border: 1px solid lightgray;
     border-radius: 100%;
 `;
 
 const Img = styled.img`
-    width: 6rem;
-    height: 80px;
-    margin-top: 10px;
+    width: auto;
+    height: 100%;
     border-radius: 100%;
-    object-fit: fit-content;
+    object-fit: fill;
 `
 
 const Profile = styled.div`
     border-radius: 10px;
-    margin: 10px 10px;
+    margin: 6px 5px;
     width: 100%;
-    height: auto;
+    height: 19rem;
     list-style: none;
     box-shadow: 1px 1px grey;
+    background-color: var(--color-darkwhite);
 `
 
 const Li = styled.li`
     padding: 8px 12px;
     font-size: 18px;
+    border: 1px solid black;
 `
+
 const ExRoomList = styled.div`
-    align-items: center;
-    border: 1px solid red;
-    margin: 10px 10px;
-    width: 50%;
-    height: auto;
+    margin: 10px;
+    width: 60%;
+    height: 20rem !important;
     border-radius: 10px;
+    background-color: var(--color-mainviolet--25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 `
 
 const FriendsList = styled.div`
+    justify-content: center;
     align-items: center;
-    border: 1px solid red;
-    margin: 10px 10px;
-    width: 50%;
-    height: auto;
+    margin: 10px;
+    width: 40%;
+    height: 20rem;
     border-radius: 10px;
+    background-color: var(--color-mainviolet--25);
+    flex-direction: column;
+    justify-content: space-around;
 `
 
 //styled-component Boundary
@@ -125,10 +137,9 @@ const Mypage = () => {
                 </ImgBox>
 
                 <Profile>
-                    <span className='myinfo_title'> My Information</span>
+                    <Span className='myinfo_title'> My Information</Span>
                     <Li>
                         {username}
-                        {/* 유저이름 데이터 props.username*/}
                     </Li>
                 </Profile>
 
@@ -141,18 +152,18 @@ const Mypage = () => {
             </MypageInfo>
             
             <ExRoomList className="myinfo_roomlist">
-                <span className="roomlist_title">
+                <Span className="roomlist_title">
                     참가한 모임 목록
-                </span>
+                </Span>
                     {rooms.map((el) => 
                         <Myroomlist listKey={el.id} room={el}/>
                     )}
             </ExRoomList>
 
             <FriendsList className="myfrend_list">
-                <span className="myfriendlist_title">
+                <Span className="myfriendlist_title">
                     함께한 친구들 목록
-                </span>
+                </Span>
                     {dogs.map((el) => 
                         <Myfriendlist listKey={el.id} dog={el}/>
                     )}

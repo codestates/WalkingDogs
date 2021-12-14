@@ -7,11 +7,14 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid #000;
-    height: auto;
-    margin: 10px 10px;
+    height: 2.9rem;
+    margin: 0.3rem 0.1rem;
     border-radius: 10px;
     list-style: none;
+    background-color: var(--color-darkwhite);
+    li {
+        font-size: 1.1rem;
+    }
 `
 
 
