@@ -29,9 +29,11 @@ const Container = styled.div`
     > input {
       padding: 0 1rem;
       width: 100%;
+      height: 2rem;
       ::placeholder {
-        color: var(--color-gray);
+        color: black;
         font-family: Interop-Light;
+        font-size: 20px
       }
     }
     > button {

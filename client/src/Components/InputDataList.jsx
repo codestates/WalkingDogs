@@ -83,20 +83,7 @@ const InputDataList = ({ values, placeholder, item, setItem }) => {
 
     const onInput = (newVal) => {
         setItem(newVal);
-    }
-
-    // const items = useMemo(
-    //   () => 
-    //     values.map((oneItem)=> {
-    //       const valueList = {};
-    //       valueList.key = oneItem.id;
-    //       if (oneItem.timeName) {
-    //         valueList.label = oneItem.timeName;
-    //       }
-    //       return {...valueList};
-    //     }),
-    //     [values]
-    //   );
+    };
 
     const match = (currentInput, item) => {
         return item.label.toLowerCase().includes(currentInput.toLowerCase());

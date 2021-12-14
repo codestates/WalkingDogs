@@ -4,29 +4,29 @@ import styled, {css} from 'styled-components';
 
 
 const Container = styled.div`
+    border: none;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid #000;
-    height: 80px;
-    margin: 10px 10px;
+    height: 4.8rem;
+    margin: 5px 5px;
     border-radius: 10px;
     list-style: none;
+    background-color:var(--color-darkwhite);
 `;
 
 const ImageBox = styled.div`
-    border: 1px solid #000000;
+    border: 1px solid lightgray;
     width: 15%;
     height: 70%;
     border-radius: 50%;
 `
 
 const FriendInfo = styled.div`
-    border: 1px solid #000000;
-    width: 50%;
+    border: 1px solid lightgray;
+    width: 60%;
     height: auto;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 5px;
     .li{
         padding: 3.5px 3.5px;
     }

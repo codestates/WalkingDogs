@@ -11,15 +11,19 @@ import { searchGatherAction } from "../store/actions";
 import roomApi from '../api/room';
 import AllButtons from './AllButtons'
 import Roommap from './Roommap'
+import InputCheckbox from "./InputCheckbox";
 
 import {FcSearch} from 'react-icons/fc'
 
 const InputContainer = styled.form`
   margin-bottom: 2rem;
-  height: 15rem;
-  background-color: var(--color-darkwhite);
+  height: auto;
+  width: auto;
+  background-color: var(--color-mainviolet-50);
+  border: 2px solid var(--color-darkwhite);
   border-radius: 0.5rem;
   display: flex;
+  gap: 1px;
   ${media.lessThan("medium")`
     margin-bottom: 1.25rem;
     width: calc(100% - 2rem);
@@ -37,7 +41,6 @@ const InputContainer = styled.form`
   .gath-search-btn.pc {
     padding: 0;
     border-radius: 0.1rem;
-
   }
   .gath-search-btn.mobile {
     width: 100%;
@@ -73,8 +76,23 @@ const Placeholder = styled.div`
 const Inputlist = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 18rem;
+    justify-content: space-evenly;
+    gap: 2px;
 `
+
+const SearchBox = styled.div`
+  border: 1px solid black;
+  width: 28rem;
+  justify-content: space-between;
+  ${media.greaterThan("medium")`
+    max-width: ${(props) => {
+      if(props.name === '지역') return '28rem'
+      if(props.name === '날짜') return '20rem'
+      return "10rem";
+    }};
+  `}
+`
+
 
 const SearchBtnContainer = styled.div`
   flex: 0 0 auto;
@@ -103,18 +121,30 @@ const RoomSearchBar = () => {
   
   const [list, setList] = useState({
     address: [],
-    time: [],
+    time: [
+      { id: 1, times: `8시` },
+      { id: 2, times: `9시` },
+      { id: 3, times: `10시` },
+      { id: 4, times: `11시` },
+      { id: 5, times: `12시` },
+      { id: 6, times: `13시` },
+      { id: 7, times: `14시` },
+      { id: 8, times: `15시` },
+      { id: 9, times: `16시` },
+      { id: 10, times: `17시` },
+      { id: 11, times: `18시` },
+      { id: 12, times: `19시` },
+      { id: 13, times: `20시` },
+      { id: 14, times: `21시` },
+      { id: 15, times: `22시` },
+    ],
     breed: [
       { id: 1, breed: "소형"},
       { id: 2, breed: "중형"},
       { id: 3, breed: "대형"},
     ],
   })
-
   // 
-
-  
-
     const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
@@ -143,7 +173,7 @@ const RoomSearchBar = () => {
 
         const res = roomApi.roomDetailApi({
           address: refinedAddressInput,
-          date:dateInput,
+          date:refinedDateInput,
           time: timeInput,
           totalNum:totalNumInput,
         });
@@ -159,14 +189,10 @@ const RoomSearchBar = () => {
 
     
     return(
-        <InputContainer onSubmit={handleSubmit}>
+        <InputContainer className='input-container'onSubmit={handleSubmit}>
             <Inputlist>
                 <SearchInput name='지역'>
-                <InputAddress
-                  id='address'
-                  placeholder="지역이 어디인가요?"
-                  item={addressInput}
-                  setItem={setAddressInput}/>
+                  <InputCheckbox/>
                 </SearchInput>
 
                 <SearchInput name='날짜'>
@@ -180,7 +206,10 @@ const RoomSearchBar = () => {
                 <SearchInput name='시간'>
                   <InputDataList
                   id='time'
-                  placeholder='시간은?'/>
+                  placeholder='시간은?'
+                  values={list.time}
+                  item={timeInput}
+                  setItem={setTimeInput}/>
                 </SearchInput>
                 
                 <SearchInput name='인원'>
@@ -198,16 +227,6 @@ const RoomSearchBar = () => {
                   setBreed={setBreed}>
                 </SearchInput>
             </Inputlist>
-            <SearchBtnContainer>
-              <AllButtons
-                type='submit'
-                onClick={handleSubmit}
-                className='gath-search-btn pc'
-                disabled={!searchable}
-                >
-                검색
-              </AllButtons>
-            </SearchBtnContainer>
         </InputContainer>
     );
 }
