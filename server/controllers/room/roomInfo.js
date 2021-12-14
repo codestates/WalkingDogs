@@ -87,6 +87,7 @@ module.exports = async (req, res) => {
     });
 
     userRoom.user_rooms.forEach(el => {
+      delete el.dataValues.user.dataValues.password;
       userList.push(el.dataValues.user);
     });
 
@@ -108,12 +109,11 @@ module.exports = async (req, res) => {
         console.log(result);
       })
       .catch(err => {
-        console.log(err);
+        console.log('err1: ', err);
         return res.status(400).json({ message: 'no room join request' });
       });
 
     isJoinRequested = reqList ? true : false;
-
     const result = {
       // Response
       image: leaderInfo.dataValues.image,
@@ -128,7 +128,6 @@ module.exports = async (req, res) => {
       isJoinRequested,
     };
 
-    console.log(result);
 
     return res.status(200).json({ data: result, message: 'ok' });
   }

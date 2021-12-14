@@ -11,7 +11,9 @@ import {
 } from '../store/actions';
 
 import AllButtons from './AllButtons';
-import authApi from '../api/auth';
+import mypageApi from '../api/mypage';
+import { IoConstructOutline } from 'react-icons/io5';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 
 const Form = styled.form`
@@ -95,17 +97,17 @@ const PwChange = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [inputValue, setInputValue] = useState({
-        oldPassword:'',
-        newPassword:'',
-        newPasswordConfirm:'',
+        old_password:'',
+        new_password:'',
+        new_password_check:'',
     })
 
     const [errMsg, setErrMsg] = useState("")
 
     const [validated, setValidated] = useState({
-        oldPassword: true,
-        newPassword: true,
-        newPasswordConfirm: true,
+        old_password: true,
+        new_password: true,
+        new_password_check: true,
     })
 
     const handleTypeChange = () => {
@@ -113,73 +115,112 @@ const PwChange = () => {
     }
 
     const handleInputChange = debounce((e) => {
+        
         const {name, value} = e.target;
         setInputValue({ ...inputValue, [name]:value });
-        if(name === 'oldpassword'){
+        if(name === 'old_password'){
             const oldPwVal = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
             setValidated({...validated, [name]:oldPwVal});
+            
             if(value === "") setErrMsg("");
             else if (oldPwVal){
                 setErrMsg("");
-                try{
-                    const res = authApi.passwordApi(value);
-                    res.status === 200 && setErrMsg("");
-                } catch(error){
-                    setErrMsg("현재 비밀번호가 일치하지 않습니다. ");
-                }
+                setInputValue(Object.assign({...inputValue}, { old_password: value }));
+               
             } else {
                 setErrMsg("올바른 비밀번호를 입력해주세요")
             }
-        } else if (name === 'newpassword'){
+        } else if (name === 'new_password'){
             const newPwVal = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
             setValidated({ ...validated, [name]:newPwVal});
+         
             if(value === "") setErrMsg("");
             else if (newPwVal) {
                 setErrMsg("");
+                setInputValue(Object.assign({...inputValue}, { new_password: value }));
+                
             } else {
                 setErrMsg('6-20정도 길이의 숫자 혹은 문자, 특수문자를 포함해야 합니다.');
             }
-        } else if (name === 'newpasswordConfirm') {
+        } else if (name === 'new_password_check') {
             const newPwVal = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(value);
-            const newPwConfirmVal = value === inputValue.password;
+            const newPwConfirmVal = value === inputValue.new_password;
+           
+            
             if(value === "") setErrMsg("");
             else if (newPwVal && newPwConfirmVal) {
                 setErrMsg("");
+                setInputValue(Object.assign({...inputValue}, { new_password_check: value }));
+            
             } else {
                 setErrMsg("비밀번호가 일치하지 않습니다.");
             }
         }
+       
+        
     }, 200)
 
+    const handleConfirm = (e) => {
+      // e.preventDefault();
+       try {
+          const res = mypageApi.passwordApi(inputValue);
+          if(res.status === 200) {
+            setErrMsg("");
+            handleTypeChange();
+          } else {
+            setErrMsg("입력하신 정보를 확인해 주세요")
+            // setInputValue({
+            //   old_password:'',
+            //   new_password:'',
+            //   new_password_check:'',
+            // })
+          }
+        } catch(err) {
+          console.log(err);
+        }
+    }
+    useDeepCompareEffect(() => console.log(inputValue), [inputValue]);
     return(
         <>
         <Form>
             <Logo src="img/WalkingDogsTitleLogo.png" />
                 <InputContainer>
                     <Input 
-                      name='oldpassword'
+                      name='old_password'
                       type="password"
+                      
                       placeholder='현재 비밀번호'
                       onChange={handleInputChange}
                     ></Input>
                     <Input
-                      name='newpassword'
+                      name='new_password'
                       type='password'
+                    
                       placeholder='새로운 비밀번호'
                       onChange={handleInputChange}
                     ></Input>
                     <Input
-                      name='newpasswordConfirm'
+                      name='new_password_check'
                       type='password'
+                    
                       placeholder='새로운 비밀번호 확인'
                       onChange={handleInputChange}
                     ></Input>
                     <ErrorMessage>{errMsg}</ErrorMessage>
                 </InputContainer>
-              <Button>확인</Button>
+              <Button onClick={handleConfirm}>확인</Button>
         </Form>
         </>
     );
 }
 
 export default PwChange;
+
+
+
+// try{
+//   const res = authApi.passwordApi(value);
+//   res.status === 200 && setErrMsg("");
+// } catch(error){
+//   setErrMsg("현재 비밀번호가 일치하지 않습니다. ");
+// }

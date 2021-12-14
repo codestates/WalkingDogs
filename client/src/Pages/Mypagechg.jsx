@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import mypage from '../api/mypage';
-import './PageStyle/Mypagechg.css';
 import {
   passwordChgModalOnAction,
   modalOffAction,
@@ -88,12 +87,16 @@ const InfoChgContainer = styled.div`
 `
 
 const ProfileImage = styled.img`
-  width: 24rem;
-  height: 24rem;
-  border-radius: 100%;
-  margin: 1rem;
-  border: 2px solid red;
+  position: absolute;
+  max-width: 100%;
+  height: auto;
+  display: block;
 `
+  // width: 24rem;
+  // height: 24rem;
+  // border-radius: 100%;
+  // margin: 1rem;
+  // border: 2px solid red;
 
 const NicknameBox = styled.label`
   border: 1px solid red;
@@ -163,6 +166,70 @@ const EditSummary =styled.summary`
   margin-bottom: -0.5rem;
 `
 
+// .myinfo_chg_img{
+//   position: relative;
+//   display: flex;
+//   align-items: center;
+//   border: 1px solid red;
+//   margin: 10px 10px;
+//   width: 50%;
+//   height: 50%;
+//   padding: 0px;
+//   width: 25rem;
+//   height: 25rem;
+//   border-radius: 50%;
+//   overflow: hidden;
+// }
+
+// .myinfo_img{
+//   position: absolute;
+//   max-width: 100%;
+//   height: auto;
+//   display: block;
+// }
+
+// .myinfo_chg_img_btn{
+//   position: absolute;
+//   width: 25rem;
+//   height: 25rem;
+//   border-radius: 50%;
+//   z-index: 10;
+// }
+// .myinfo_chg_img_btn:hover{
+//   background-color: rgba(128, 128, 128, 0.1);
+// }
+
+const ChangeImage = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid red;
+  margin: 10px 10px;
+  width: 50%;
+  height: 50%;
+  padding: 0px;
+  width: 25rem;
+  height: 25rem;
+  border-radius: 50%;
+  overflow: hidden;
+`
+
+const ImageAddButton = styled.button`
+  position: absolute;
+  width: 25rem;
+  height: 25rem;
+  border-radius: 50%;
+  z-index: 10;
+`
+
+const ImageAddFile= styled.input`
+  position: absolute;
+  width: 25rem;
+  height: 25rem;
+  border-radius: 50%;
+  z-index: 10;
+`
+
 const ImageEditBox = () => {
 
   const [seletedFile, setSelectedFile] = useState(null);
@@ -202,9 +269,6 @@ const ImageEditBox = () => {
   )
 }
 
-
-const Wrap = styled.div`
-`
 
 //styled-component Boundary
 const Mypagechg = () => {
@@ -312,7 +376,7 @@ const Mypagechg = () => {
         }),
         );
 
-        localStorage.setItem('userData', JSON.stringify({username, image}));
+    localStorage.setItem('userData', JSON.stringify({username, image}));
   };
 
 
@@ -341,24 +405,19 @@ const Mypagechg = () => {
 
   const handleImage = async event => {
     let formData = new FormData();
-    console.log('formData: ',formData);
-    console.log('event.target.files: ', event.target.files);
     formData.append('image', event.target.files[0]);
-    console.log('formData2: ', formData);
+ 
     try {
       await userApi.userImageApi(formData)
       .then((result) => {
         console.log('result: ', result);
         const file = result.data.data.image;
-        console.log(file);
         setFiles(file);
-        // const newObj = Object.assign({}, {image: file})
-        // setInfos(newObj);
       })
       .catch((err) => {
         console.log(err);
       })
-      
+
     } catch (error) {
       console.log(error);
       alert('server error');
@@ -376,21 +435,27 @@ const Mypagechg = () => {
   useEffect(async () => {
     const result = await mypage.dogListApi();
 
-    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
+    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs],  image: files ? files : image }));
   }, []);
   
   return (
     <>
       <Container className="container">
-        <div className="myinfo_chg_img">
-          <ProfileImage className="myinfo_img" src={image}/>
-          <button className="myinfo_chg_img_btn"
-            onMouseOver={(e) => handleMouseOverOnImg(e)}
-            onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
-            onClick={handleImage}
-          >
-            </button>
-        </div>
+        <ChangeImage className="myinfo_chg_img">
+          <ProfileImage className="myinfo_img" src={files}/>
+            {/* <ImageAddButton className="myinfo_chg_img_btn"
+              onMouseOver={(e) => handleMouseOverOnImg(e)}
+              onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
+              onClick={handleImage}
+            ></ImageAddButton> */}
+            <ImageAddFile className="myinfo_chg_img_btn"
+              type='file'
+              accept="image/*"
+              onMouseOver={(e) => handleMouseOverOnImg(e)}
+              onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
+              onChange={handleImage}
+            />
+        </ChangeImage>
 
         <div className="myinfo_chg_input_container">
           <div className="myinfo_chg_box">
@@ -439,6 +504,8 @@ const Mypagechg = () => {
                     key={idx}
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
+
+                    {/* <img src={dogImage} width={100} height={100}/> */}
                     <span>{el.name}</span>
                     <span>{el.breed}</span>
                     <span>{el.size}</span>
