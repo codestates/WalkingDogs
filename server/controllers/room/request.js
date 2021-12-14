@@ -2,7 +2,7 @@ const { room_join_req } = require('../../models');
 const { room } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
-// --------------- request의 역할
+// --------------- request의 역할 ----------------------------
 // 모든 유저가 room join request에 대한 요청이 가능하다.
 // 리더의 정보를 token으로 받아서
 // 그 리더가 모임의 리더로 있는 방들을 전부 조회

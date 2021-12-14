@@ -36,7 +36,6 @@ const Container = styled.div`
   }
 `
 
-
 const PasswordChgBtn = styled.button`
   border: 0.5px solid white;
   background-color: #646fcb;
@@ -357,8 +356,9 @@ const Mypagechg = () => {
     const result = await mypage.profileApi({
       username: infos.userName,
       dogs: [...infos.dogs],
-      image: infos.image,
+      image: files,
     });
+
     setInfos(
       Object.assign(
         { ...infos },
@@ -371,12 +371,12 @@ const Mypagechg = () => {
     );
 
     dispatch(updateInfoAction({
-         username: result.data.data.username,
-         image: result.data.data.image,
-        }),
-        );
+        username: result.data.data.username,
+        image: result.data.data.image,
+      }),
+    );
 
-    localStorage.setItem('userData', JSON.stringify({username, image}));
+    localStorage.setItem('userData', JSON.stringify({ username: result.data.data.username, image: result.data.data.image }));
   };
 
 
@@ -404,9 +404,8 @@ const Mypagechg = () => {
   };
 
   const handleImage = async event => {
-    let formData = new FormData();
+    let formData = new FormData(););
     formData.append('image', event.target.files[0]);
- 
     try {
       await userApi.userImageApi(formData)
       .then((result) => {
@@ -434,28 +433,24 @@ const Mypagechg = () => {
 
   useEffect(async () => {
     const result = await mypage.dogListApi();
-
-    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs],  image: files ? files : image }));
+    
+    setFiles(image);
+    setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
   }, []);
   
   return (
     <>
       <Container className="container">
-        <ChangeImage className="myinfo_chg_img">
+        <div className="myinfo_chg_img">
           <ProfileImage className="myinfo_img" src={files}/>
-            {/* <ImageAddButton className="myinfo_chg_img_btn"
-              onMouseOver={(e) => handleMouseOverOnImg(e)}
-              onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
-              onClick={handleImage}
-            ></ImageAddButton> */}
-            <ImageAddFile className="myinfo_chg_img_btn"
-              type='file'
-              accept="image/*"
-              onMouseOver={(e) => handleMouseOverOnImg(e)}
-              onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
-              onChange={handleImage}
-            />
-        </ChangeImage>
+          <input className="myinfo_chg_img_btn"
+            type='file'
+            accept='image/*'
+            onMouseOver={(e) => handleMouseOverOnImg(e)}
+            onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
+            onChange={handleImage}
+          />
+        </div>
 
         <div className="myinfo_chg_input_container">
           <div className="myinfo_chg_box">

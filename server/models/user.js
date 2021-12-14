@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
       });
 
+      models.user.hasMany(models.room_join_req, {
+        foreignKey: 'user_id',
+        targetKey: 'id',
+      });
+
       models.user.hasMany(models.dog, {
         foreignKey: 'user_id',
         targetKey: 'id',

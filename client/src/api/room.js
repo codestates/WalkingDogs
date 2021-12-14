@@ -25,20 +25,37 @@ const roomDetailApi = async (roomId) => {
   return result;
 };
 
-const joinRoomApi = async (roomId) => {
+const joinRoomApi = async (roomId, dogs) => {
   const result = await api({
     method: 'PUT',
     url: `/room/${roomId}/join`,
+    data: {
+      dogs,
+    },
   });
   return result;
 };
 
-const roomInfoApi = async (roomId) => {
+const cancelRoomApi = async (roomId) => {
   const result = await api({
-    method: 'GET',
-    url: `room/${roomId}`
-  })
+    method: 'PUT',
+    url: `/room/${roomId}/cancel`,
+  });
   return result;
+};
+
+const reqPermissionApi = async (candidate_id, room_id, is_accepted) => {
+  const result = await api({
+    method: 'POST',
+    url: `/reqPermission`,
+    data: {
+      candidate_id,
+      room_id,
+      is_accepted,
+    }
+  })
+
+  return result
 }
 
 const deleteRoomApi = async (roomId) => {
@@ -49,4 +66,4 @@ const deleteRoomApi = async (roomId) => {
   return result;
 }
 
-export default { newRoomApi, roomDetailApi, joinRoomApi, roomInfoApi, deleteRoomApi };
+export default { newRoomApi, roomDetailApi, joinRoomApi, roomInfoApi, cancelRoomApi, reqPermissionApi, deleteRoomApi };

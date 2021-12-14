@@ -90,10 +90,11 @@ app.post('/google', controllers.oauth.google);
 
 // room
 app.get('/room/:room_id', controllers.room.roomInfo);
-app.post('/new-room', controllers.room.newRoom);
-app.put('/room/:room_id/join', controllers.room.joinRoom);
-app.post('/reqPermission', controllers.room.reqPermission);
 app.get('/request', controllers.room.request);
+app.post('/new-room', controllers.room.newRoom);
+app.post('/reqPermission', controllers.room.reqPermission);
+app.put('/room/:room_id/cancel', controllers.room.cancelReq);
+app.put('/room/:room_id/join', controllers.room.joinRoom);
 app.delete('/room/:room_id', controllers.room.deleteRoom);
 
 // mypage

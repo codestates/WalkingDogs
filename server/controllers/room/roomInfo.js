@@ -4,6 +4,7 @@ const { user_room } = require('../../models');
 const { room_dog } = require('../../models');
 const { dog } = require('../../models');
 const { room_join_req } = require('../../models');
+const { room_join_req_dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {  
@@ -92,28 +93,39 @@ module.exports = async (req, res) => {
     });
 
     let isJoined = false;
-    let isJoinRequested = false;
 
     userList.forEach(el => {
       if (el.dataValues.id === userInfo.id) isJoined = true;
     });
 
-    const reqList = await room_join_req
+    const isJoinRequested = await room_join_req
       .findOne({
         where: {
           user_id: userInfo.id,
           room_id: roomId,
         },
+    })
+    
+    const reqList = await room_join_req
+      .findAll({
+        where: {
+          room_id: roomId,
+        },
+        include: {
+          model: user,
+          attributes: { exclude: ['email', 'password'] },
+          include: {
+            model: dog,
+            include: {
+              model: room_join_req_dog,
+              where: {
+                room_id: roomId, 
+              },
+            },
+          },
+        },
       })
-      .then(result => {
-        console.log(result);
-      })
-      .catch(err => {
-        console.log('err1: ', err);
-        return res.status(400).json({ message: 'no room join request' });
-      });
-
-    isJoinRequested = reqList ? true : false;
+    
     const result = {
       // Response
       image: leaderInfo.dataValues.image,
@@ -121,18 +133,19 @@ module.exports = async (req, res) => {
       title: selRoom.dataValues.title,
       dogs: dogList,
       users: userList,
+      reqUsers: reqList.map(el => el.dataValues.user),
       address: selRoom.dataValues.address,
       latitude: selRoom.dataValues.latitude,
       longitude: selRoom.dataValues.longitude,
       isJoined,
-      isJoinRequested,
+      isJoinRequested: isJoinRequested ? true : false,
+      isLeader: leaderInfo.dataValues.id === userInfo.id ? true : false,
     };
-
-
+    
     return res.status(200).json({ data: result, message: 'ok' });
   }
   catch (err) {
-    console.error;
+    console.log(err);
     return res.status(500).json({ message: 'server error' });
   }
 };

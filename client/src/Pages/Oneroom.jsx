@@ -4,13 +4,15 @@ import styled from 'styled-components';
 import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
 import room from '../api/room';
+import mypage from '../api/mypage';
 import {useDispatch, useSelector} from 'react-redux'
 import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 export const OneroomContainer = styled.div`
   width: auto;
   height: 50rem;
-  margin: 0.1rem
+  margin: 0.1rem;
   border-radius: 10rem;
   display: flex;
   flex-direction: column;
@@ -42,8 +44,7 @@ const RoomBtnBox = styled.div`
   justify-content: space-around;
 `;
 
-const ImageBox = styled.div`
-  border: 0.1rem solid grey;
+const ImageBox = styled.img`
   width: 23rem;
   height: 23rem;
   border-radius: 100%;
@@ -139,13 +140,125 @@ const CancelBtn = styled.button`
   }
 `;
 
-const DogSelectBox = styled.div`
+const PermissionBox = styled.ul`
+  width: 300px;
+  padding: 10px;
+`
 
+const PermissionList = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  border: 1px solid gray;
+  border-radius: 1.5rem;
+  box-shadow: 1px 1px 3px gray;
+  padding: 5px;
+  margin: 10px;
+`
+
+const ToggleDogListContainer = styled.ul`
+  display: ${props => props.toggled ? 'block' : 'none'};
+  width: 280px;
+  margin: 0px;
+`
+
+const ToggleDogList = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+  flex-direction: row;
+  padding: 5px;
+  margin: 10px;
+`
+
+const UserImg = styled.img`
+  width: 3rem;
+  height: 3rem;
+  max-width: 100%;
+  border-radius: 50%;
+  object-fit: fill;
+`
+
+const DogImg = styled.img`
+  width: 3rem;
+  height: 3rem;
+  max-width: 100%;
+  border-radius: 50%;
+  object-fit: fill;
+`
+
+const BtnContainer = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+`
+
+const AcceptBtn = styled.button`
+  background-color: ${props => props.selected ? 'var(--color-mainviolet--25)' : ''};
+  color: ${props => props.selected ? 'var(--color-darkwhite)' : ''};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
+`
+
+const DenyBtn = styled.button`
+  background-color: ${props => props.selected ? 'var(--color-mainviolet--25)' : ''};
+  color: ${props => props.selected ? 'var(--color-darkwhite)' : ''};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
 `
 
 const DogList = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  border: 1px solid gray;
+  border-radius: 1.5rem;
+  box-shadow: 1px 1px 3px gray;
+  padding: 5px;
+  margin: 10px;
+`
 
-
+const MyDogsContainer = styled.ul`
+  width: 300px;
+  padding: 10px;
+  overflow-y: auto;
 `
 
 const GathCrewBox = styled.div`
@@ -181,10 +294,13 @@ const MapBoxAddres = styled.div`
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
+
   const [isOpenCom, setIsOpenCom] = useState(false);
-  const [roomDetail, setRoomDetail] = useState({});
-  const [isGatherJoin, setIsGatherJoin] = useState(false);
+  const [roomDetail, setRoomDetail] = useState({}); // 방 정보
+  const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
+  const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
   const [gathCrew, setGathCrew] = useState([]);
+  const [toggle, setToggle] = useState(false)
 
   const dispatch = useDispatch();
   const {isGatherCrewModal} = useSelector(({modalReducer}) => modalReducer);
@@ -195,23 +311,92 @@ const Oneroom = () => {
   }
 
   const handleButtonClickJoin = async () => {
-    const result = await room.joinRoomApi(params.room_id)
+    const result = await room.joinRoomApi(params.room_id, [ ...myDogs.filter((_, idx) => selectedDogs[idx]) ])
     
     if(result.status === 200) {
         setRoomDetail(Object.assign({}, { ...roomDetail }, { isJoinRequested: true }))
     }
   }
 
+  const handleClickReqCancel = async () => {
+    const result = await room.cancelRoomApi(params.room_id)
+
+    if(result.status === 200) {
+      setRoomDetail(Object.assign({}, { ...roomDetail }, { isJoinRequested: false }))
+    }
+  }
+
+  const handleClickPermissionBtn = async (e, id, code) => {
+    e.stopPropagation();
+
+    if(code === 1) { // (유저) 참가신청 수락 버튼
+      // 서버에 permission true
+      // 서버에서 200
+      // roomDetail 새로 받아옴.
+      await room.reqPermissionApi(id, params.room_id, true)
+      .then(async result => {
+        if(result.status === 200) {
+          const resRoom = await room.roomDetailApi(params.room_id);
+          console.log(resRoom);
+
+          setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
+        }
+      })
+      .catch(err => { console.log(err) })
+    }
+    else if(code === 2) { // (유저) 참가신청 거절 버튼
+      // 서버에 permission false
+      // 서버에서 200
+      // roomDetail 새로 받아옴.
+      await room.reqPermissionApi(id, params.room_id, false)
+      .then(async result => {
+        if(result.status === 200) {
+          const resRoom = await room.roomDetailApi(params.room_id);
+          console.log(resRoom);
+
+          setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
+        }
+      })
+      .catch(err => { console.log(err) })
+    }
+    else if(code === 3) { // (강아지) 추가
+      setSelectedDogs(
+        [ ...selectedDogs.map((el, idx) => {
+            return myDogs[idx].id === id ? true : el
+          })
+        ]
+      )
+    }
+    else { // (강아지) 제거
+      setSelectedDogs(
+        [ ...selectedDogs.map((el, idx) => {
+            return myDogs[idx].id === id ? false : el
+          })
+        ]
+      )
+    }
+  }
+
+  const handleToggleOn = () => {
+    setToggle(!toggle)
+  }
+
   const handleOpenComment = () => {
     setIsOpenCom(!isOpenCom);
   };
-
+  
   useEffect(async () => {
-    const result = await room.roomDetailApi(params.room_id);
-    console.log(result);
+    const resRoom = await room.roomDetailApi(params.room_id);
+    console.log(resRoom);
 
-    setRoomDetail(Object.assign({}, { ...result.data.data }))
+    setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
     
+    const resDog = await mypage.dogListApi();
+    console.log(resDog)
+
+    setMyDogs([ ...resDog.data.dogs ])
+    setSelectedDogs(new Array(resDog.data.dogs.length).fill(false))
+
     // 들어오는 데이터
 
     // address: "address"
@@ -265,25 +450,74 @@ const Oneroom = () => {
           </RoominfoBox>
         </RoomBox>
         </OneroomBox>
-        
+      
         {roomDetail.isJoined ?
-            <></>
+            roomDetail.isLeader ? 
+              <PermissionBox>
+                {roomDetail.reqUsers.map(el => {
+                  return (
+                    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: '0px'}}>
+                      <PermissionList key={el.id} onClick={handleToggleOn}> {/*신청인 리스트*/}
+                        <UserImg src={el.image} />
+                        <span style={{pointerEvents: 'none'}}>{el.username}</span>
+                        <BtnContainer>
+                          <AcceptBtn onClick={(e) => handleClickPermissionBtn(e, el.id, 1)}>
+                            <span className="material-icons">
+                              done
+                            </span>
+                          </AcceptBtn>
+                          <DenyBtn onClick={(e) => handleClickPermissionBtn(e, el.id, 2)}>
+                            <span className="material-icons">
+                              close
+                            </span>
+                          </DenyBtn>
+                        </BtnContainer>
+                      </PermissionList>
+                      <ToggleDogListContainer toggled={toggle}>
+                        {el.dogs.map((dog) => 
+                          <ToggleDogList key={dog.id}>
+                            <DogImg src={dog.image}/>
+                            {dog.name}
+                          </ToggleDogList>
+                        )}
+                      </ToggleDogListContainer>
+                    </div>
+                  )
+                })}
+              </PermissionBox>
+            :
+              <></>
         :
             roomDetail.isJoinRequested ?
-                <RoomBtnBox>
-                    <JoinBtn disabled={true}>신청완료</JoinBtn>
-                    <CancelBtn>신청취소</CancelBtn>
-                </RoomBtnBox>
+              <RoomBtnBox>
+                  <JoinBtn disabled={true}>신청완료</JoinBtn>
+                  <CancelBtn onClick={handleClickReqCancel}>신청취소</CancelBtn>
+              </RoomBtnBox>
             :
               <>
                 <RoomBtnBox>
                     <JoinBtn onClick={handleButtonClickJoin}>참여하기</JoinBtn>
                 </RoomBtnBox>
-                <DogSelectBox>
-                    <DogList>
-                      1
+                <MyDogsContainer>
+                  {myDogs.map((el, idx) =>  
+                    <DogList key={el.id}>
+                      <DogImg src={el.image}/>
+                      {el.name}
+                      <BtnContainer>
+                        <AcceptBtn selected={selectedDogs[idx]} onClick={(e) => handleClickPermissionBtn(e, el.id, 3)}>
+                          <span className="material-icons">
+                            done
+                          </span>
+                        </AcceptBtn>
+                        <DenyBtn selected={!selectedDogs[idx]} onClick={(e) => handleClickPermissionBtn(e, el.id, 4)}>
+                          <span className="material-icons">
+                            close
+                          </span>
+                        </DenyBtn>
+                    </BtnContainer>
                     </DogList>
-                </DogSelectBox>
+                  )}
+                </MyDogsContainer>
               </>
         }
       </OneroomContainer>

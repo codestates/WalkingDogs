@@ -12,6 +12,16 @@ module.exports = async (req, res) => {
   try {
     const decoded = await isAuthorized(req);
 
+    const userInfo = await user.findOne({
+      where: {
+        id: decoded.id,
+      },
+    });
+
+    if(!userInfo) {
+      return res.status(401).json({ message: 'unauthorized' })
+    }
+
     // console.log(decoded);
     if (decoded === null) {
       // 3. 그냥 다 이상이 있을 때,
@@ -25,7 +35,7 @@ module.exports = async (req, res) => {
       });
       res.status(400).json({ message: 'Bad Request' });
     } else if (decoded.accessToken) {
-      // 2. 이상이 있는데 refresh 해서 보내줬을 때,
+      // 2. 이상이 있는데 refresh 해서 보내줬을 때,      
 
       sendAccessToken(res, decoded.accessToken);
       sendRefreshToken(res, decoded.refreshToken);
