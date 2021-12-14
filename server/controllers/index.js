@@ -24,6 +24,7 @@ module.exports = {
     roomInfo: require('./room/roomInfo'),
     reqPermission: require('./room/reqPermission'),
     request: require('./room/request'),
+    cancelReq: require('./room/cancelReq'),
   },
   map: {
     location: require('./map/location'),

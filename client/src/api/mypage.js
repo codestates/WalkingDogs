@@ -21,8 +21,8 @@ const passwordApi = async userInfo => {
     url: `/password`,
     data: {
       old_password: userInfo.old_password,
-      new_paassword: userInfo.new_paassword,
-      new_paassword_check: userInfo.new_paassword_check,
+      new_password: userInfo.new_password,
+      new_password_check: userInfo.new_password_check,
     },
   });
   return result;

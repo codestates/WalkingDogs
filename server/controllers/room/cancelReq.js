@@ -1,15 +1,10 @@
-const { room_join_req, room_join_req_dog } = require('../../models');
+const { room_join_req, room_join_req_dog, dog } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
-// 1. 현재는 신청버튼을 누르자마자 바로 수락된다.
-// 2. 권한설정은 반드시 해줘야한다.
-// 3. 그럼 누르자마자 바로 수락되면 안된다...?
-// 4. 그럼 DB 스키마에 모임방 Req Table이 있어야 함.
 module.exports = async (req, res) => {
-  console.log('joinRoomAPI')
+  console.log('cancelReqAPI')
   try {
     const roomId = Number(req.params.room_id);
-    const { dogs } = req.body;
     const userInfo = await isAuthorized(req);
 
     if (userInfo.accessToken) {
@@ -31,26 +26,35 @@ module.exports = async (req, res) => {
       return res.status(500).json({ message: 'server error' });
     });
 
-    if (!reqInfo) {
-      await room_join_req.create({
+    if (reqInfo) {
+      await room_join_req.destroy({
+        where: {
         user_id: userInfo.id,
         room_id: roomId,
+        }
       })
 
-      dogs.forEach(async (el) => {
-        await room_join_req_dog.create({
-          dog_id: el.id,
-          room_id: roomId
-        })
+      const myDogs = await dog.findAll({
+          where: {
+              user_id: userInfo.id,
+          },
       })
       
+      myDogs.forEach(async (el) => {
+        await room_join_req_dog.destroy({
+            where: {
+            room_id: roomId,
+            dog_id: el.dataValues.id
+            }
+        })
+      })
+
       return res.status(200).json({ message: 'ok' })
     }
 
-    return res.status(400).json({ message: 'you already sended join request' });
+    return res.status(400).json({ message: 'you did not sended join request' });
   }
   catch (err) {
     console.log(err);
-    return res.status(500).json({ message: 'server error' });
   }
 };

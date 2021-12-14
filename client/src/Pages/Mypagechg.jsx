@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import mypage from '../api/mypage';
-import './PageStyle/Mypagechg.css';
 import {
   passwordChgModalOnAction,
   modalOffAction,
@@ -36,7 +35,6 @@ const Container = styled.div`
     border: 1px solid red;
   }
 `
-
 
 const PasswordChgBtn = styled.button`
   border: 0.5px solid white;
@@ -293,8 +291,9 @@ const Mypagechg = () => {
     const result = await mypage.profileApi({
       username: infos.userName,
       dogs: [...infos.dogs],
-      image: infos.image,
+      image: files,
     });
+
     setInfos(
       Object.assign(
         { ...infos },
@@ -307,12 +306,12 @@ const Mypagechg = () => {
     );
 
     dispatch(updateInfoAction({
-         username: result.data.data.username,
-         image: result.data.data.image,
-        }),
-        );
+        username: result.data.data.username,
+        image: result.data.data.image,
+      }),
+    );
 
-        localStorage.setItem('userData', JSON.stringify({username, image}));
+    localStorage.setItem('userData', JSON.stringify({ username: result.data.data.username, image: result.data.data.image }));
   };
 
 
@@ -341,16 +340,13 @@ const Mypagechg = () => {
 
   const handleImage = async event => {
     let formData = new FormData();
-    console.log('formData: ',formData);
     console.log('event.target.files: ', event.target.files);
     formData.append('image', event.target.files[0]);
-    console.log('formData2: ', formData);
     try {
       await userApi.userImageApi(formData)
       .then((result) => {
         console.log('result: ', result);
         const file = result.data.data.image;
-        console.log(file);
         setFiles(file);
         // const newObj = Object.assign({}, {image: file})
         // setInfos(newObj);
@@ -375,7 +371,8 @@ const Mypagechg = () => {
 
   useEffect(async () => {
     const result = await mypage.dogListApi();
-
+    
+    setFiles(image);
     setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
   }, []);
   
@@ -383,13 +380,14 @@ const Mypagechg = () => {
     <>
       <Container className="container">
         <div className="myinfo_chg_img">
-          <ProfileImage className="myinfo_img" src={image}/>
-          <button className="myinfo_chg_img_btn"
+          <ProfileImage className="myinfo_img" src={files}/>
+          <input className="myinfo_chg_img_btn"
+            type='file'
+            accept='image/*'
             onMouseOver={(e) => handleMouseOverOnImg(e)}
             onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
-            onClick={handleImage}
-          >
-            </button>
+            onChange={handleImage}
+          />
         </div>
 
         <div className="myinfo_chg_input_container">

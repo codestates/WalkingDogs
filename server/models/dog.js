@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
       });
 
+      models.dog.hasMany(models.room_join_req_dog, {
+        foreignKey: 'dog_id',
+        targetKey: 'id',
+      });
+
       models.dog.belongsTo(models.user, {
         foreignKey: { name: 'user_id', allowNull: false },
         targetKey: 'id',

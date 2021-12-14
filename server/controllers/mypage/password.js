@@ -23,13 +23,8 @@ module.exports = async (req, res) => {
       res.status(400).json({ message: 'no such user in the database' });
     } else {
       // console.log('userData: ', userData);
-
-      if (
-        !bcrypt.compareSync(
-          passwords.old_password,
-          userData.dataValues.password,
-        )
-      ) {
+      const check = await bcrypt.compareSync(passwords.old_password, userData.dataValues.password);
+      if (!check) {
         res.status(400).json({ message: 'old password does not match' });
       } else {
         if (passwords.new_password === passwords.new_password_check) {
@@ -56,7 +51,7 @@ module.exports = async (req, res) => {
       }
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };

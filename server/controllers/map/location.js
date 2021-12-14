@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
 
   //------------------------------------------
   // 수정한 코드
-  //-------------------------------------------
+  //------------------------------------------
 
   // room하고 user가 leader_id를 통해서 연결되어 있다.
   // room과 user를 join하면 해당 room에 leader에 대한 정보만 들어온다. (나머지 유저에 대한 정보도 들어와야 함)
@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
     //   return res.status(200).json({ rooms: result, message: 'ok' });
     // }
   } catch (err) {
-    console.error;
+    console.log(err);
     return res.status(500).json({ message: 'server error' });
   }
 };
