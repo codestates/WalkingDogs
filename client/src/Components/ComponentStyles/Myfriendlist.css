@@ -1,0 +1,42 @@
+.myfriend_list_container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid #000;
+    height: 80px;
+    margin: 10px 10px;
+    border-radius: 10px;
+    list-style: none;
+}
+
+.myfriend_img_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0px;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+/* 가능하면 사진들 정사각형인 것으로 하는게 보기에 좋음. 100% 기준 */
+.myfriend_img{
+    position: absolute;
+    max-width: 250%;
+    height: auto;
+    display: block;
+}
+
+.myfriend_info{
+    border: 1px solid #000000;
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.myfriend_info li{
+    padding: 3.5px 3.5px;
+}

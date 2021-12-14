@@ -149,35 +149,31 @@ const PwChange = () => {
                 setErrMsg("비밀번호가 일치하지 않습니다.");
             }
         }
-    },200)
-
-
+    }, 200)
 
     return(
         <>
         <Form>
             <Logo src="img/WalkingDogsTitleLogo.png" />
                 <InputContainer>
-                      <Input 
+                    <Input 
                       name='oldpassword'
                       type="password"
                       placeholder='현재 비밀번호'
                       onChange={handleInputChange}
-                      ></Input>
-                    <ErrorMessage>{errMsg}</ErrorMessage>
-                      <Input
+                    ></Input>
+                    <Input
                       name='newpassword'
                       type='password'
                       placeholder='새로운 비밀번호'
                       onChange={handleInputChange}
-                      ></Input>
-                    <ErrorMessage>{errMsg}</ErrorMessage>
-                      <Input
+                    ></Input>
+                    <Input
                       name='newpasswordConfirm'
                       type='password'
                       placeholder='새로운 비밀번호 확인'
                       onChange={handleInputChange}
-                      ></Input>
+                    ></Input>
                     <ErrorMessage>{errMsg}</ErrorMessage>
                 </InputContainer>
               <Button>확인</Button>

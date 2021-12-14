@@ -7,7 +7,6 @@ import room from '../api/room';
 import {useDispatch, useSelector} from 'react-redux'
 import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
 
-
 export const OneroomContainer = styled.div`
   width: auto;
   height: 50rem;
@@ -122,6 +121,33 @@ const JoinBtn = styled.button`
 
 `;
 
+const CancelBtn = styled.button`
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
+  width: 20rem;
+  height: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
+`;
+
+const DogSelectBox = styled.div`
+
+`
+
+const DogList = styled.li`
+
+
+`
+
 const GathCrewBox = styled.div`
   width: 50%;
   height: 55px;
@@ -206,7 +232,7 @@ const Oneroom = () => {
       <OneroomContainer>
         <OneroomBox>
         <RoomBox>
-          <ImageBox src="../puppy-test.jpeg" />
+          <ImageBox src={roomDetail.image} />
           <RoominfoBox>
             <UsernameBox className="username">
               {roomDetail.username}
@@ -246,18 +272,25 @@ const Oneroom = () => {
             roomDetail.isJoinRequested ?
                 <RoomBtnBox>
                     <JoinBtn disabled={true}>신청완료</JoinBtn>
+                    <CancelBtn>신청취소</CancelBtn>
                 </RoomBtnBox>
             :
+              <>
                 <RoomBtnBox>
                     <JoinBtn onClick={handleButtonClickJoin}>참여하기</JoinBtn>
                 </RoomBtnBox>
+                <DogSelectBox>
+                    <DogList>
+                      1
+                    </DogList>
+                </DogSelectBox>
+              </>
         }
       </OneroomContainer>
       <Comments roomId={params.room_id} />
       <MapBox>
         <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
         <Roommap 
-          address={roomDetail.address} 
           latitude={roomDetail.latitude} 
           longitude={roomDetail.longitude} 
           draggable={false}/>

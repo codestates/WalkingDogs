@@ -47,12 +47,9 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    const token = document.cookie.split('; ')
-    .find(row => row.startsWith('accessToken'))
-    .split('=')[1]
-
-    localStorage.setItem(token, JSON.stringify({ ...result.data.data }))
-    dispatch(signinAction(JSON.parse(localStorage.getItem(token))))
+    console.log(result)
+    localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
+    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
   }
 
   useEffect(async () => {
@@ -61,20 +58,18 @@ function App() {
     if(authorizationCode) {
       await getAccessToken(url)
     }
-    else {
-    }
 
     if(cookies.accessToken){
       await users.checkApi()
       .then(res => {
         if(res.data.data) {
           // 로그인 작업을 실시
-          localStorage.setItem(cookies.accessToken, JSON.stringify({ ...res.data.data }))
-          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))));
+          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
         }
         else {
           // 원래 쓰던거 사용
-          dispatch(signinAction(JSON.parse(localStorage.getItem(cookies.accessToken))))
+          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
         }
       })
       .catch(err => {

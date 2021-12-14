@@ -8,6 +8,7 @@ const {
 require('dotenv').config();
 
 module.exports = async (req, res) => {
+  console.log('checkAPI')
   try {
     const decoded = await isAuthorized(req);
 
@@ -42,13 +43,20 @@ module.exports = async (req, res) => {
         where: {
           id: decoded.id,
         },
-      });
-
-      if (!result) {
-        res.status(400).json({ message: 'Bad Request' });
-      } else {
+      })
+      .then((result) => {
+        // console.log(result);
         res.status(200).json({ message: 'ok' });
-      }
+      })
+      .catch((err) => {
+        // console.log(err);
+        res.status(400).json({ message: 'Bad Request' });
+      })
+      // if (!result) {
+      //   res.status(400).json({ message: 'Bad Request' });
+      // } else {
+      //   res.status(200).json({ message: 'ok' });
+      // }
     }
   } catch (err) {
     console.error;

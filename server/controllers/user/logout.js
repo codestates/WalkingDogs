@@ -4,6 +4,7 @@ require('dotenv').config();
 
 // 2021.12.1 완료
 module.exports = async (req, res) => {
+  console.log('logoutAPI')
   try {
     // const token = req.cookies['accessToken'];
     const decoded = await isAuthorized(req);
@@ -23,7 +24,7 @@ module.exports = async (req, res) => {
         secure: true,
         sameSite: 'none',
       });
-      res.status(200).json({ message: 'ok' });
+      return res.status(200).json({ message: 'ok' });
 
       // const isLogout = await logout.findOne({
       //   where: { token: token },
@@ -42,7 +43,7 @@ module.exports = async (req, res) => {
       // }
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };

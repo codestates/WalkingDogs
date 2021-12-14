@@ -210,7 +210,7 @@ const Maps = () => {
             
             searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })
 
-        }, 500))
+        }, 200))
     }, []);
 
     return(

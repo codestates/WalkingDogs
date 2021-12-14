@@ -6,10 +6,7 @@ const initialState = {
     email: '',
     username: '',
     image:'',
-    breed:'',
-    gender:'',
 }
-
 
 const authReducer = (prevState = initialState, action) => {
     let state;

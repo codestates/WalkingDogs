@@ -321,14 +321,12 @@ const Text = styled.span`
   `}
 `;
 
-
 const UserImg = styled.img`
-  border: 1px solid gray;
   width: 3rem;
   height: 3rem;
-  border-radius: 100%;
+  max-width: 100%;
+  border-radius: 50%;
   object-fit: fill;
-
 `
 const UserName = styled.span`
   font-size: 20px;
@@ -384,7 +382,7 @@ function Nav() {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const {id, username, user_image, isLogin} = useSelector(({authReducer})=> authReducer);
+  const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
   
 
   const handleUserInfoClick = () => {
@@ -410,6 +408,10 @@ function Nav() {
     }
   };
 
+  useEffect(() => {
+    console.log(image)
+  }, [])
+
   return (
       <HeaderStyle>
             <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
@@ -427,7 +429,7 @@ function Nav() {
         {isLogin && (
               <Navs isNav={isHambugBtnClicked}>
                 <MobileUserContainer>
-                  <UserIcon size={1.2} user={{id, username, image: user_image}} isDisabled/>
+                  <UserIcon size={1.2} user={{id, username, image}} isDisabled/>
                 </MobileUserContainer>  
                 <MobileStyledH4> Page</MobileStyledH4>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
@@ -459,7 +461,7 @@ function Nav() {
         {isLogin && (
           <UserBox>
             <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
-              <UserImg src={user_image} onClick={() => history.push('/mypage')}/>
+              <UserImg src={image} onClick={() => history.push('/mypage')}/>
             <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>
           </UserBox>
         )}

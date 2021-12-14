@@ -7,6 +7,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 module.exports = async (req, res) => {
+  console.log('kakaoAPI')
   try {
     const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
     const KAKAO_REDIRECT_URI = process.env.KAKAO_REDIRECT_URI;
@@ -70,10 +71,11 @@ module.exports = async (req, res) => {
           kakao_id: id,
           image: image,
           is_member: true,
+        })
+        .catch(err => {
+          console.log(err);
+          return res.status(500).json({ message: 'Server Error' });
         });
-        if (!createUser) {
-          res.status(400).json({ message: 'user not created' });
-        }
 
         accessToken = generateAccessToken(createUser.dataValues);
         refreshToken = generateRefreshToken(createUser.dataValues);
@@ -93,12 +95,12 @@ module.exports = async (req, res) => {
         expiresIn: '7d',
       });
       return res.status(200).json({
-        data: { user_image: image, username },
+        data: { image, username },
         message: 'successfully logined',
       });
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };
