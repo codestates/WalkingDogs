@@ -404,7 +404,7 @@ const Mypagechg = () => {
   };
 
   const handleImage = async event => {
-    let formData = new FormData(););
+    let formData = new FormData();
     formData.append('image', event.target.files[0]);
     try {
       await userApi.userImageApi(formData)
