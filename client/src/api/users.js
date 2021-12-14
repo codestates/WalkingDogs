@@ -45,8 +45,9 @@ const checkApi = async () => {
 
 const userImageApi = async (data) => {
     const result = await api({
+        headers: { 'Content-Type': 'multipart/form-data' },
         method: 'POST',
-        url: 'user-image',
+        url: '/user-image',
         data: data
     })
     return result;
@@ -55,7 +56,7 @@ const userImageApi = async (data) => {
 const dogImageApi = async (data) => {
     const result = await api({
         method: 'POST',
-        url: 'dog-image',
+        url: '/dog-image',
         data: data
     })
     return result;

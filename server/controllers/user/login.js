@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     });
 
     if (!userInfo) {
-      return res.status(401).json({ message: 'unauthorized' });
+      return res.status(401).json({ message: 'unauthorized1' });
     } else {
       const dbPass = userInfo.dataValues.password; //암호화 된 Pass (db에서 가져온 값)
       const userValidate = await bcrypt.compareSync(password, dbPass);
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
       if (!userValidate) {
         // db에서 가져온 암호와 내가 입력한 암호가 동일하지 않다면 (dbPass를 decode 한 값이 내가 입력한 암호와 동일하지 않다면)
         // 인증 실패, 메세지 전달
-        return res.status(401).json({ message: 'unauthorized' });
+        return res.status(401).json({ message: 'unauthorized2' });
       } else {
         // db에서 가져온 암호와 내가 입력한 암호가 동일하다면 (dbPass를 decode 한 값이 내가 입력한 암호와 동일하다면)
         // 인증 성공 후, 토큰을 전달
