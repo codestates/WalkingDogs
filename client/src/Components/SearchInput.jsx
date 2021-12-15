@@ -75,16 +75,6 @@ const SearchInput = ({name, children, hideDivider}) => {
 
     return (
         <InputWrapper
-            onFocus={()=> {
-                box.current.style.cssText = css`
-                    border: 1px solid black;
-                `;
-            }}
-            onBlur={()=> {
-                box.current.style.cssText = css`
-                    border: 1px solid var(--color-lightgray);
-                `;
-            }}
             sort={name}
             >
             <div className="thing" ref={box}/>

@@ -255,7 +255,7 @@ const RoomSearchBar = () => {
         <InputContainer className='input-container'onSubmit={handleSubmit}>
             <Inputlist>
                 <SearchInput name='지역'>
-                  <InputCheckbox/>
+                  <InputCheckbox />
                 </SearchInput>
 
                 <SearchInput name='날짜'>

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import './ComponentStyles/Myfriendlist.css'
 import styled, {css} from 'styled-components';
 
 
