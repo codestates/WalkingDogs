@@ -94,7 +94,7 @@ export const VerifiedMessage = styled.div`
   }
 `;
 
-export const Button = styled(AllButtons)`
+const Button = styled(AllButtons)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,31 +118,67 @@ export const OAuthContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-export const KakaoBtn = styled.button`
-  margin: 0px;
+
+const FlexGuideContainer = styled.div`
   display: flex;
-  padding: 0px;
-  border-radius: 1rem;
-  width: 11rem;
-  height: 50px;
-  justify-content: center;
   align-items: center;
-  background-color: yellow;
-  font-size: 20px;
+  justify-content: space-between;
+  color: darkgray;
+
+  *{
+    display: flex;
+    align-items: center;
+    :first-child {
+      flex: 1.75 0 0;
+      justify-content: end;
+      padding-right: 1rem;
+    }
+    :last-child {
+      flex: 1 0 0;
+      justify-content: start;
+      padding-right: 1rem;
+    }
+  }
 `;
 
-export const GoogleBtn = styled.button`
-  margin: 0px;
+const FlexContainer = styled.div`
   display: flex;
-  padding: 0px;
-  border-radius: 1rem;
-  width: 11rem;
-  height: 50px;
-  justify-content: center;
   align-items: center;
-  background-color: white;
-  font-size: 20px;
-`;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  div{
+    width: 20rem;
+  }
+  .kakao{
+    width: 10rem;
+    height: 3rem;
+    color: black;
+    background-color: #f4da48;
+    margin-right: 1rem;
+    *{
+      width: 2.5rem;
+      height: auto;
+      :first-child{
+        margin-right: 0.2rem;
+      }
+    }
+  }
+
+  .google {
+    width: 10rem;
+    height: 3rem;
+    color: black;
+    background-color: #ffffff;
+    *{
+      width: 1rem;
+      height: auto;
+      :first-child{
+        margin-right: 0.2rem;
+      }
+    }
+  }
+`
+
 
 //styled-component Boundary
 
@@ -279,27 +315,46 @@ const handleSign = async (e) => {
     }
   };
 
-  const handleClickOAuth = (e) => {
-    e.preventDefault();
-    const name = e.target.name
-    const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+  // const handleClickOAuth = (e) => {
+  //   e.preventDefault();
+  //   const name = e.target.name
+  //   const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
     
-    if(name === 'google') {
-      const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
+  //   if(name === 'google') {
+  //     const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
+  //     const REACT_APP_GOOGLE_REDIRECT_URL = process.env.REACT_APP_GOOGLE_REDIRECT_URL
+  //     const scope = googleScope.join('+')
+  //     const path = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REACT_APP_GOOGLE_REDIRECT_URL}&scope=${scope}&access_type=offline`
+
+  //     window.location.assign(path)
+  //   }
+  //   else {
+  //     const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY
+  //     const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
+  //     const path = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
+
+  //     window.location.assign(path)
+  //   }
+  // }
+
+  const handleSignGoogle = (e) => {
+    e.preventDefault();
+    const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+    const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
       const REACT_APP_GOOGLE_REDIRECT_URL = process.env.REACT_APP_GOOGLE_REDIRECT_URL
       const scope = googleScope.join('+')
       const path = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REACT_APP_GOOGLE_REDIRECT_URL}&scope=${scope}&access_type=offline`
 
       window.location.assign(path)
-    }
-    else {
-      const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY
-      const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
+  }
 
-      const path = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
+  const handleSignKakao = (e) => {
+     e.preventDefault();
+    const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY
+    const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
+    const path = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
 
       window.location.assign(path)
-    }
   }
 
   return isOnVerification ? (
@@ -338,23 +393,23 @@ const handleSign = async (e) => {
             </>
           )}
         </InputContainer>
-        <OAuthContainer>
-          <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>
-            <FcGoogle style={{width:"2rem", height:"2rem", marginRight:"1rem"}} />
-            구글
-          </GoogleBtn>
-          <KakaoBtn type="button" name='kakao' onClick={(e) => handleClickOAuth(e)}>
-            <SiKakaotalk style={{width:"2rem", height:"2rem", marginRight:"1rem"}} />
+          <Button
+            type="button"
+            style={{ backgroundColor: '' }}
+            onClick={e => handleSign(e)}
+          >
+            {type === '로그인' ? '로그인' : '회원가입'}
+          </Button>
+        <FlexContainer>
+          <Button className='google'  onClick={(e) => handleSignGoogle(e)}>
+            <FcGoogle/>
+              구글
+            </Button>
+          <Button className='kakao'  onClick={(e) => handleSignKakao(e)}>
+            <SiKakaotalk/>
             카카오
-          </KakaoBtn>
-        </OAuthContainer>
-        <Button
-          type="button"
-          style={{ backgroundColor: '' }}
-          onClick={e => handleSign(e)}
-        >
-          {type === '로그인' ? '로그인' : '회원가입'}
-        </Button>
+          </Button>
+        </FlexContainer>
       </Form>
     </>
   );
