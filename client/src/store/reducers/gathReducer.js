@@ -8,6 +8,7 @@ const initialState = {
         date:'',
         time:'',
         content:'',
+        breed:'',
         totalNum:null,
     },
     gatherings: [],
@@ -30,8 +31,10 @@ const gathReducer = (prevState = initialState, action) => {
                     
                     content:action.payload.content?.content ||"",
                     
+                    breed: action.payload.breed?.breed || "",
+                    
                     totalNum:Number(action.payload.conditions?.totalNum || null),
-                
+                    
                     // formatUsername: 
                     // `${action.payload.conditions?.formatUsername}` || "",
                 
