@@ -164,6 +164,8 @@ const { isLogin } = useSelector(({ authReducer }) => authReducer);
 const dispatch = useDispatch();
 
 useEffect(async () => {
+    window.scrollTo(0,0);
+    // window.location.assign('/roomlist');
     let latitude = 37.564213, longitude = 127.001698; // 서울 중앙
     
     const geoLocation = () => {

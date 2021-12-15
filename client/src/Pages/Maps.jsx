@@ -168,6 +168,7 @@ const Maps = () => {
     }
 
     useEffect(async () => {
+        window.scrollTo(0,0);
         const container = document.querySelector('#map')
         const options = {
             center: new kakao.maps.LatLng(position.latitude, position.longitude),
