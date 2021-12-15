@@ -68,7 +68,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterLogo>
-        <Image src='img/mainlogo.png'/>
+        <Image src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/mainlogo.png'/>
       </FooterLogo>
 
       <FooterIntro>
@@ -86,19 +86,19 @@ const Footer = () => {
       <MemberBox>
         <MemberTitle className="footer_member_title">Members</MemberTitle>
         <Li>
-          <MemberA href=""
+          <MemberA href="https://github.com/jhpark9007"
               style={{color:'white',textDecoration:'none'}}> 박종환 </MemberA>
         </Li>
         <Li>
-          <MemberA href=""
+          <MemberA href="https://github.com/yy1234928"
               style={{color:'white',textDecoration:'none'}}> 양예솔 </MemberA>
         </Li>
         <Li>
-          <MemberA href=""
+          <MemberA href="https://github.com/JinHeeZeeniiLee"
               style={{color:'white',textDecoration:'none'}}> 이진희 </MemberA>
         </Li>
         <Li>
-          <MemberA href=""
+          <MemberA href="https://github.com/ZerniaMarle"
               style={{color:'white',textDecoration:'none'}}> 홍순상 </MemberA>
         </Li>
       </MemberBox>

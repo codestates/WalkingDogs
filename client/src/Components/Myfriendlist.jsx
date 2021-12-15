@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import './ComponentStyles/Myfriendlist.css'
+// import './ComponentStyles/Myfriendlist.css'
 import styled, {css} from 'styled-components';
 
 
@@ -42,7 +42,9 @@ const Myfriendlist = ({ listKey, dog }) => {
         <>
             <Container key={listKey} className="myfriend_list_container">
                 <ImageBox className="myfriend_img_container">
-                    <img className='myfriend_img' src={'http://image.dongascience.com/Photo/2017/03/14900752352661.jpg'}/>
+                    {/* <img className='myfriend_img' src={'http://image.dongascience.com/Photo/2017/03/14900752352661.jpg'}/> */}
+                    <img className='myfriend_img' src={dog.image}/>
+
                 </ImageBox>
                 <FriendInfo className="myfriend_info">
                     <li>이름 : {dog.name} / 중성화 : {dog.neutering ? 'O' : 'X'}</li>

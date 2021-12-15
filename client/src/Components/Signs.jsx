@@ -118,6 +118,18 @@ export const OAuthContainer = styled.div`
   justify-content: space-evenly;
 `;
 
+export const OauthBtnWrap = styled.span`
+  margin: 0px;
+  display: flex;
+  padding: 0px;
+  border-radius: 1rem;
+  width: 11rem;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  font-size: 20px;
+`
 export const KakaoBtn = styled.button`
   margin: 0px;
   display: flex;
@@ -338,7 +350,7 @@ const handleSign = async (e) => {
             </>
           )}
         </InputContainer>
-        <OAuthContainer>
+        <OAuthContainer>          
           <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>
             <FcGoogle style={{width:"2rem", height:"2rem", marginRight:"1rem"}} />
             구글
