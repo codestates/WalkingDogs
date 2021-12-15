@@ -140,6 +140,7 @@ module.exports = async (req, res) => {
       isJoined,
       isJoinRequested: isJoinRequested ? true : false,
       isLeader: leaderInfo.dataValues.id === userInfo.id ? true : false,
+      meeting_time: selRoom.dataValues.meeting_time
     };
     
     return res.status(200).json({ data: result, message: 'ok' });
