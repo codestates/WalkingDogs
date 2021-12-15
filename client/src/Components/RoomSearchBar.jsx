@@ -2,16 +2,16 @@ import React, {useEffect, useState} from "react";
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
-import InputAddress from './InputAddress'
 import InputDatepicker from "./InputDatepicker";
 import InputDataList from "./InputDataList";
 import InputTotalNum from './InputTotalNum'
+import InputCheckbox from "./InputCheckbox";
 import {useDispatch} from 'react-redux'
 import { searchGatherAction } from "../store/actions";
 import roomApi from '../api/room';
 import AllButtons from './AllButtons'
-import Roommap from './Roommap'
-import InputCheckbox from "./InputCheckbox";
+
+
 
 import {FcSearch} from 'react-icons/fc'
 
@@ -108,16 +108,34 @@ const SearchIcon = styled(FcSearch)`
 
 `
 
+const BreedBox = (props) => {
+  return(
+    <select>
+      {props.breedList.map((breed)=> {
+        <option
+          value={breed.id} value={breed.id}>
+            {breed.breed}
+        </option>
+      })}
+    </select>
+  )
+}
+
 // styled-component Boundary
 
 const RoomSearchBar = () => {
-
+  
+  const dispatch = useDispatch();
   const [addressInput, setAddressInput] = useState("");
   const [timeInput, setTimeInput] = useState("")
   const [dateInput, setDateInput] = useState("")
   const [totalNumInput, setTotalNumInput] = useState(null);
   const [searchable, setSearchable] = useState(false); //검색할 수 있는  state
-  const [breed, setBreed] = useState([]);
+  const [breedList, setBreedList] = useState([
+    { id: 1, breed: "소형"},
+    { id: 2, breed: "중형"},
+    { id: 3, breed: "대형"},
+  ]);
   
   const [list, setList] = useState({
     address: [],
@@ -138,14 +156,59 @@ const RoomSearchBar = () => {
       { id: 14, times: `21시` },
       { id: 15, times: `22시` },
     ],
-    breed: [
-      { id: 1, breed: "소형"},
-      { id: 2, breed: "중형"},
-      { id: 3, breed: "대형"},
-    ],
   })
   // 
-    const dispatch = useDispatch();
+  
+  useEffect (() => {
+
+      const values = Object.keys(breedList);
+
+      const arr = [];
+
+      for (let i = 0; i < values.length; i++) {
+        const key = values[i];
+        const value = breedList[key];
+        console.log(value);
+      }
+
+
+        // for( let i = 0; i < values.length; i){
+        //   if(values[i].keys === breed ){
+
+        //   }
+        // }
+
+      // for (let i = 0; i < keys.length; i++) {
+      //   const key = keys[i];
+      //   value[i] = list[key];
+      // }
+        
+      // const breeds = Object.values(value);
+
+      // const filtered = value[2].filter((idx)=>)
+
+      // console.log(keys);
+      // console.log(value);
+      // console.log(value[2]);
+      // console.log(breeds);
+
+      console.log(values);
+      
+
+
+
+
+      // const thing = breed.filter(function(list) {return list.breed === 'breed'})
+      
+    })
+
+  
+    
+
+    const handleBreedClick = () => {
+      setBreedList(!breedList);
+    }
+
 
     const handleSubmit = (e) => {
       try {
@@ -223,9 +286,10 @@ const RoomSearchBar = () => {
                 <SearchInput name='견종'
                   id='breed'
                   placeholder='견종 선택'
-                  breed={breed}
-                  setBreed={setBreed}>
+                  breedList={breedList}
+                  onClick={handleBreedClick}>
                 </SearchInput>
+                <BreedBox breedList={breedList}></BreedBox>
             </Inputlist>
         </InputContainer>
     );

@@ -6,7 +6,7 @@ import Comments from '../Components/Comments';
 import room from '../api/room';
 import mypage from '../api/mypage';
 import {useDispatch, useSelector} from 'react-redux'
-import {gatherCrewModalOnAction, modalOffAction} from '../store/actions';
+import {modalOffAction} from '../store/actions';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 export const OneroomContainer = styled.div`
@@ -322,9 +322,6 @@ const Oneroom = () => {
 
   const dispatch = useDispatch();
 
-  const handleCrewModalOpen = () => {
-    dispatch(gatherCrewModalOnAction())
-  }
 
   const handleButtonClickJoin = async () => {
     const result = await room.joinRoomApi(params.room_id, [ ...myDogs.filter((_, idx) => selectedDogs[idx]) ])
@@ -462,7 +459,7 @@ const Oneroom = () => {
               >
                 같이 가는 친구들은 누굴까요?
               </span>
-              <GathCrewBox onClick={handleCrewModalOpen}>
+              <GathCrewBox>
                 {roomDetail.dogs !== undefined && (
                   roomDetail.dogs.map((el)=> {
                     return <OtherUserImg key={el.id} src={el.image}/>

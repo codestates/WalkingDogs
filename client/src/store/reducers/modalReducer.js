@@ -1,7 +1,6 @@
 import {
     CREATE_GATHER_ROOM_MODAL_ON,
     CREATE_GATHER_ROOM_DETAIL_MODAL_ON,
-    GATHER_CREW_MODAL_ON,
     SIGNUP_MODAL_ON, 
     SIGNIN_MODAL_ON,
     PASSWORDCHG_MODAL_ON, 
@@ -14,7 +13,6 @@ const initialState = {
     isSigninModal: false,
     isSignupModal: false,
     isPasswordChgModal: false,
-    isGatherCrewModal:false,
     currentGatherInfo:{},
 }
 
@@ -39,9 +37,6 @@ const modalReducer = (prevState = initialState, action) => {
             break;
         case MODAL_OFF:
             state = {...initialState};
-            break;
-        case GATHER_CREW_MODAL_ON:
-            state={...prevState, isGatherCrewModal:true};
             break;
         default:
             state={...initialState};
