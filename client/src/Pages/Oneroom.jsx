@@ -310,6 +310,9 @@ const MapBoxAddres = styled.div`
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `
 
+const ErrMsg = styled.div`
+  color: red;
+`
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
@@ -319,15 +322,22 @@ const Oneroom = () => {
   const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
   const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
   const [toggle, setToggle] = useState(false)
+  const [errMsg, setErrMsg] = useState(false);
 
   const dispatch = useDispatch();
 
 
   const handleButtonClickJoin = async () => {
-    const result = await room.joinRoomApi(params.room_id, [ ...myDogs.filter((_, idx) => selectedDogs[idx]) ])
-    
+    const request_time = new Date();
+    const result = await room.joinRoomApi(params.room_id, [ ...myDogs.filter((_, idx) => selectedDogs[idx]) ], request_time)
+    console.log('result: ', result);
     if(result.status === 200) {
+      if (result.data.data === null) {
         setRoomDetail(Object.assign({}, { ...roomDetail }, { isJoinRequested: true }))
+      } else {
+        setErrMsg(true);
+      }
+        
     }
   }
 
@@ -520,6 +530,7 @@ const Oneroom = () => {
                 <RoomBtnBox>
                     <JoinBtn onClick={handleButtonClickJoin}>참여하기</JoinBtn>
                 </RoomBtnBox>
+                {errMsg ? <ErrMsg>"모임 시간이 지났습니다."</ErrMsg> : null}
                 <MyDogsContainer>
                   {myDogs.map((el, idx) =>  
                     <DogList key={el.id}>

@@ -119,7 +119,22 @@ export const OAuthContainer = styled.div`
 `;
 
 
+// export const OauthBtnWrap = styled.span`
+//   margin: 0px;
+//   display: flex;
+//   padding: 0px;
+//   border-radius: 1rem;
+//   width: 11rem;
+//   height: 50px;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: white;
+//   font-size: 20px;
+// `
+
+
 const FlexGuideContainer = styled.div`
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -393,6 +408,7 @@ const handleSign = async (e) => {
             </>
           )}
         </InputContainer>
+
           <Button
             type="button"
             style={{ backgroundColor: '' }}
@@ -407,6 +423,7 @@ const handleSign = async (e) => {
             </Button>
           <Button className='kakao'  onClick={(e) => handleSignKakao(e)}>
             <SiKakaotalk/>
+
             카카오
           </Button>
         </FlexContainer>

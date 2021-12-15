@@ -416,7 +416,7 @@ function Nav() {
       <HeaderStyle>
             <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
               <NavTitleImg 
-                src='img/WalkingDogsTitleLogo.jpeg'
+                src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/WalkingDogsTitleLogo.png'
                 alt='WalkingDogsTitleLogo'
                 isLogin={isLogin}/>
               <NavShortImg 

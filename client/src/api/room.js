@@ -25,12 +25,13 @@ const roomDetailApi = async (roomId) => {
   return result;
 };
 
-const joinRoomApi = async (roomId, dogs) => {
+const joinRoomApi = async (roomId, dogs, request_time) => {
   const result = await api({
     method: 'PUT',
     url: `/room/${roomId}/join`,
     data: {
       dogs,
+      request_time
     },
   });
   return result;
