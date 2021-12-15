@@ -10,7 +10,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ### 👉 WalkingDogs 사용해보기 👈 (배포링크)
 
 ## Tech Stack
-![image](https://cdn.discordapp.com/attachments/912245935197802554/912986676865949696/2021-11-24_5.42.06_1.png)
+![image](https://cdn.discordapp.com/attachments/912245935197802554/914735636496408577/2021-11-29_1.32.05.png)
 
 ## [DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
 ![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-12-15-11_51_00 (1)](https://user-images.githubusercontent.com/71960647/146114395-37617db9-cfbc-45d7-887d-d0bcc6ee9ae9.png)
