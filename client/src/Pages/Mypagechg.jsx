@@ -202,7 +202,6 @@ const ChangeImage = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid red;
   margin: 10px 10px;
   width: 50%;
   height: 50%;
@@ -227,6 +226,21 @@ const ImageAddFile= styled.input`
   height: 25rem;
   border-radius: 50%;
   z-index: 10;
+`
+
+const ProfileContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid red;
+  margin: 10px 10px;
+  width: 50%;
+  height: 50%;
+  padding: 0px;
+  width: 25rem;
+  height: 25rem;
+  border-radius: 50%;
+  overflow: hidden;
 `
 
 const ImageEditBox = () => {
@@ -441,7 +455,7 @@ const Mypagechg = () => {
   return (
     <>
       <Container className="container">
-        <div className="myinfo_chg_img">
+        <ProfileContainer className="myinfo_chg_img">
           <ProfileImage className="myinfo_img" src={files}/>
           <input className="myinfo_chg_img_btn"
             type='file'
@@ -450,7 +464,7 @@ const Mypagechg = () => {
             onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
             onChange={handleImage}
           />
-        </div>
+        </ProfileContainer>
 
         <div className="myinfo_chg_input_container">
           <div className="myinfo_chg_box">

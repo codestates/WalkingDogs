@@ -280,6 +280,7 @@ const handleSign = async (e) => {
   };
 
   const handleClickOAuth = (e) => {
+    e.preventDefault();
     const name = e.target.name
     const googleScope = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
     
@@ -339,12 +340,13 @@ const handleSign = async (e) => {
         </InputContainer>
         <OAuthContainer>
           <GoogleBtn type="button" name='google' onClick={(e) => handleClickOAuth(e)}>
-            <FcGoogle style={{width:"2rem", height:"2rem", marginRight:"1rem"}}/>
+            <FcGoogle style={{width:"2rem", height:"2rem", marginRight:"1rem"}} />
             구글
-            </GoogleBtn>
+          </GoogleBtn>
           <KakaoBtn type="button" name='kakao' onClick={(e) => handleClickOAuth(e)}>
-            <SiKakaotalk style={{width:"2rem", height:"2rem", marginRight:"1rem"}}/>
-            카카오</KakaoBtn>
+            <SiKakaotalk style={{width:"2rem", height:"2rem", marginRight:"1rem"}} />
+            카카오
+          </KakaoBtn>
         </OAuthContainer>
         <Button
           type="button"

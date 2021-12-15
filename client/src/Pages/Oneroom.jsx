@@ -72,6 +72,9 @@ export const UsernameBox = styled.div`
 `;
 
 export const ContentsBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 96%;
   height: 30rem;
   margin: 5px;
@@ -90,15 +93,12 @@ export const AllianceBox = styled.div`
   align-items: center;
   text-align: center;
   margin: 10px;
-  :hover{
-    box-shadow: 1px 1px var(--color-darkgray);
-  }
 `;
 
 export const OtherUserImg = styled.img`
   border: 1px solid #000000;
-  min-width: 50px;
-  min-height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin: auto 5px;
 `;
@@ -119,7 +119,6 @@ const JoinBtn = styled.button`
     background-color: var(--color-mainviolet--25);
     color: var(--color-darkwhite);
   }
-
 `;
 
 const CancelBtn = styled.button`
@@ -139,6 +138,24 @@ const CancelBtn = styled.button`
     color: var(--color-darkwhite);
   }
 `;
+
+const LeaveButton = styled.button`
+  border: 1px solid var(--color-mainviolet--50);
+  border-radius: 1rem;
+  width: 20rem;
+  height: 2rem;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 2px;
+  :hover{
+    background-color: ${props => props.disabled ? '' : 'var(--color-mainviolet--25)'};
+    color: ${props => props.disabled ? '' : 'var(--color-darkwhite)'};
+  }
+  &.active{
+    background-color: var(--color-mainviolet--25);
+    color: var(--color-darkwhite);
+  }
+`
 
 const PermissionBox = styled.ul`
   width: 300px;
@@ -262,13 +279,15 @@ const MyDogsContainer = styled.ul`
 `
 
 const GathCrewBox = styled.div`
+  display: flex;
+  align-items: center;
   width: 50%;
   height: 55px;
   margin: 5px 10px;
   cursor: pointer;
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
-  justify-content: space-between;
+  justify-content: space-around;
 `
 
 const MapBox = styled.div`
@@ -299,15 +318,12 @@ const Oneroom = () => {
   const [roomDetail, setRoomDetail] = useState({}); // 방 정보
   const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
   const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
-  const [gathCrew, setGathCrew] = useState([]);
   const [toggle, setToggle] = useState(false)
 
   const dispatch = useDispatch();
-  const {isGatherCrewModal} = useSelector(({modalReducer}) => modalReducer);
-
 
   const handleCrewModalOpen = () => {
-    dispatch(isGatherCrewModal())
+    dispatch(gatherCrewModalOnAction())
   }
 
   const handleButtonClickJoin = async () => {
@@ -381,6 +397,13 @@ const Oneroom = () => {
     setToggle(!toggle)
   }
 
+  const handleClickLeave = async () => {
+    const result = await room.deleteRoomApi(params.room_id)
+    if(result.status === 200) {
+      setRoomDetail(Object.assign({}, { ...roomDetail }, { isJoinRequested: false, isJoined: false }))
+    }
+  }
+
   const handleOpenComment = () => {
     setIsOpenCom(!isOpenCom);
   };
@@ -428,9 +451,11 @@ const Oneroom = () => {
             <AllianceBox>
               <span
                 className="alliance_ment"
-                style={{            
+                style={{     
+                  display: 'flex',
                   height: '40px',
                   justifyContent: 'center',
+                  alignItems: 'center',
                   fontSize: '25px',
                   margin: '0 5px',
                 }}
@@ -438,13 +463,11 @@ const Oneroom = () => {
                 같이 가는 친구들은 누굴까요?
               </span>
               <GathCrewBox onClick={handleCrewModalOpen}>
-                {gathCrew.map((el)=> {
-                  return <OtherUserImg key={el.id}/>
-                })}
-                
-                {/* <OtherUserImg />
-                <OtherUserImg />
-                <OtherUserImg /> */}
+                {roomDetail.dogs !== undefined && (
+                  roomDetail.dogs.map((el)=> {
+                    return <OtherUserImg key={el.id} src={el.image}/>
+                  })
+                )}
               </GathCrewBox>
             </AllianceBox>
           </RoominfoBox>
@@ -486,7 +509,9 @@ const Oneroom = () => {
                 })}
               </PermissionBox>
             :
-              <></>
+              <LeaveButton onClick={handleClickLeave}>
+                모임 나가기
+              </LeaveButton>
         :
             roomDetail.isJoinRequested ?
               <RoomBtnBox>

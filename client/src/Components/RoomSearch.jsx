@@ -74,7 +74,7 @@ const SearchResult = styled.ul`
 const SearchList = styled.li`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   height: 3rem;
@@ -269,17 +269,27 @@ const AlertMessage = styled.div`
   color: red;
 `;
 const DogInfo = styled.div`
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
   color: black;
 `;
 
 const DogCheckBox = styled.div`
   display: flex;
+  visibility: ${props => props.hide ? 'hidden' : ''};
   align-items: center;
   width: 30px;
   height: 30px;
   border-radius: 50%;
 `;
+
+const DogImg = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+`
 
 //styled-component Boundary
 const RoomSearch = ({
@@ -509,13 +519,11 @@ const RoomSearch = ({
                   key={el.id}
                   onClick={() => handleSelectDog(idx)}
                 >
-                  <DogInfo>
-                    <span>사진: {el.image} </span>
-                    <span>이름: {el.name} </span>
-                    <span>중성화: {el.neutering ? 'O' : 'X'} </span>
-                    <span>사이즈: {el.size}</span>
-                  </DogInfo>
-                  {selectedDogs[idx] && <DogCheckBox>c</DogCheckBox>}
+                  <DogImg src={el.image}/>
+                  <span style={{display: 'flex', justifyContent: 'center'}}>이름: {el.name} </span>
+                  <span style={{display: 'flex', justifyContent: 'center'}}>중성화: {el.neutering ? 'O' : 'X'} </span>
+                  <span style={{display: 'flex', justifyContent: 'center'}}>사이즈: {el.size}</span>
+                  <DogCheckBox hide={!selectedDogs[idx]}>c</DogCheckBox>
                 </SearchList>
               ))
             }

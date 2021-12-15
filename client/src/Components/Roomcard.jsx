@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import room from '../api/room';
 import PropTypes from 'prop-types';
 import UserIcon from './UserIcon';
+import { signinModalOnAction } from '../store/actions';
 
 
 const CardContainer = styled.div`
@@ -42,13 +43,13 @@ const ContentContainer = styled.div`
 
 const ImageBox = styled.div`
     display: flex;
-    border: 1px solid #000000;
-    margin-left: 3px;
-    width: 9rem;
-    height: 8rem;
     justify-content: center;
     align-items: center;
-    border-radius: 100%;
+    position: relative;
+    padding: 0px;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
     overflow: hidden;
 `
 const Roominfo = styled.div`
@@ -70,6 +71,13 @@ const AddressesBox = styled.div`
     background-color: var(--color-darkwhite);
 `
 
+const LeaderImage = styled.img`
+    position: absolute;
+    max-width: 100%;
+    height: auto;
+    display: block;
+`
+
 const RoomTitleBox = styled.div`
     width: 13rem;
     height: 8rem;
@@ -87,6 +95,7 @@ const RoomTitleBox = styled.div`
 const Roomcard = ({ listKey, room }) => {
 
 const [leaderInfo, setLeaderInfo] = useState({})
+const { isLogin } = useSelector(({authReducer}) => authReducer)
 const {isCreateGatherModal} = useSelector(({modalReducer})=>modalReducer);
 const dispatch = useDispatch();
 const handleGathDetailRoomModalOn = () =>{
@@ -102,18 +111,22 @@ const handleGathDetailRoomModalOn = () =>{
     }, [room])
 
     return(
-        <Link to={`/room/${listKey}`} style={{textDecoration:'none', color:'black'}}>
-            <CardContainer key={listKey}>
-                <ImageBox>
-                    <img src={leaderInfo.image}
-                        style={{maxWidth: '100%', height: 'auto', display: 'block'}}/>
-                </ImageBox>
-                <Roominfo>
+        <CardContainer key={listKey}
+            onClick={() => {
+                if(isLogin)
+                    window.location.assign(`/room/${listKey}`)
+                else
+                    dispatch(signinModalOnAction())
+                }}>
+            <ImageBox>
+                <LeaderImage src={leaderInfo.image}
+                    style={{maxWidth: '100%', height: 'auto', display: 'block'}} />
+            </ImageBox>
+            <Roominfo>
                 <AddressesBox> {room.address} </AddressesBox>
                 <RoomTitleBox>{room.title}</RoomTitleBox>
-                </Roominfo>
-            </CardContainer>
-        </Link>
+            </Roominfo>
+        </CardContainer>
     );
 };
 

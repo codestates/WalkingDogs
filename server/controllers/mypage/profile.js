@@ -80,7 +80,7 @@ module.exports = async (req, res) => {
                   name: dogs[i].name,
                   breed: dogs[i].breed,
                   size: dogs[i].size,
-                  image: dogs[i].image,
+                  image: dogs[i].image ? dogs[i].image : 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201901/20/28017477-0365-4a43-b546-008b603da621.jpg',
                   neutering: dogs[i].neutering,
                 },
                 {
@@ -101,7 +101,7 @@ module.exports = async (req, res) => {
                 name: dogs[i].name,
                 size: dogs[i].size,
                 breed: dogs[i].breed,
-                image: dogs[i].image,
+                image: dogs[i].image ? dogs[i].image : 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201901/20/28017477-0365-4a43-b546-008b603da621.jpg',
                 neutering: dogs[i].neutering,
               })
               .then(result => {

@@ -66,4 +66,4 @@ const deleteRoomApi = async (roomId) => {
   return result;
 }
 
-export default { newRoomApi, roomDetailApi, joinRoomApi, roomInfoApi, cancelRoomApi, reqPermissionApi, deleteRoomApi };
+export default { newRoomApi, roomDetailApi, joinRoomApi, cancelRoomApi, reqPermissionApi, deleteRoomApi };
