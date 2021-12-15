@@ -8,6 +8,7 @@ import mypage from '../api/mypage';
 import {useDispatch, useSelector} from 'react-redux'
 import {modalOffAction} from '../store/actions';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import media from 'styled-media-query'
 
 export const OneroomContainer = styled.div`
   width: auto;
@@ -279,15 +280,18 @@ const MyDogsContainer = styled.ul`
 `
 
 const GathCrewBox = styled.div`
-  display: flex;
+  display: block;
   align-items: center;
-  width: 50%;
+  width: 20rem;
   height: 55px;
   margin: 5px 10px;
   cursor: pointer;
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
+  ${media.lessThan("medium")`
+    width: 738px
+  `}
 `
 
 const MapBox = styled.div`
