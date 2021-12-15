@@ -13,6 +13,7 @@ const InputWrapper = styled.label`
             if(props.sort === '지역') return '20rem';
             if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '5rem';
+            if(props.sort === '견종') return '7rem';
                 return '6.5rem';
         }};
 
@@ -20,6 +21,7 @@ const InputWrapper = styled.label`
             if(props.sort === '지역') return '32rem';
             if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '8rem';
+            if(props.sort === '견종') return '10rem';
                 return '10rem';
         }};
     `}
