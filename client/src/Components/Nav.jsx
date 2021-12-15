@@ -14,9 +14,8 @@ import { signinAction,
 import { useDispatch, useSelector } from "react-redux";
 import userApi from '../api/users'
 
-export const HeaderStyle = styled.header`
+const HeaderStyle = styled.header`
   background-color: var(--color-mainviolet--100);
-  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,20 +50,6 @@ const Navs = styled.nav`
     border-top: 1px solid var(--color-mainviolet--50);
   `}
 `
-
-
-export const NavContainer = styled.nav`
-    width: 100%;
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #646fcb;
-    padding: 1rem 0.5rem;
-    ${media.lessThan("medium")`
-      padding: 1rem;
-    `}
-` 
 
 const NavbarTitle = styled.div`
     color: white; 
@@ -182,7 +167,7 @@ const MobileNavBtn = styled.button`
   margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   color: var(--color-red);
-  border: 1px solid var(--color-red);
+  border: 1px solid var(--color-darkwhite);
 
   ${media.greaterThan("medium")`
     display:none;
@@ -200,23 +185,62 @@ const MobileHambergerBtn = styled.button`
   `}
 `
 
-const LoginBtn = styled.button`
+const NonUserBtn = styled.button`
   border: 0.5px solid white;
-  background-color: #646fcb;
+  background-color: var(--color-mainviolet--100);
   color: white;
   border-radius: 10px;
   cursor: pointer;
-  font-size:1.8rem;
-`
-
-const SignupBtn = styled.button`
-    border: 0.1rem solid white;
+  font-size:1.2rem;
+  line-height: 1;
+  ${({main}) => 
+    main && css`
+    color: black;
     background-color: white;
-    color: #646fcb;
+    `}
+    :hover{
+      background-color: var(--color-mainviolet--50);
+      ${({ main }) => 
+      main && css`
+        background-color: var(--color-mainviolet--50);
+        opacity:1;
+      `}
+    }
+    ${media.lessThan("medium")`
+      padding:0.5rem 0.75rem;
+      margin-left: 0.25rem;
+    `}
+`;
+
+const NonUserBtns = styled.button`
+  .nav-btn-signin{
+    border: 0.5px solid white;
+    background-color: #646fcb;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size:1.8rem;
+  }
+  .nav-btn-signup{
+    border: 0.1rem solid white;
+    background-color: var(--color-mainviolet--100);
+    color: var(--color-darkwhite);
     border-radius: 10px;
     cursor: pointer;
     font-size:1.8rem;
     margin: 0 1.1rem;
+  }
+`
+
+const SignupBtn = styled.button`
+    border: 0.1rem solid white;
+    background-color: var(--color-mainviolet--100);
+    color: var(--color-darkwhite);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size:1.8rem;
+    margin: 0 1.1rem;
+    gap: 2px;
 `
 
 const LogoutBtn = styled.button`
@@ -228,15 +252,9 @@ const LogoutBtn = styled.button`
   font-size:1.8rem;
 `
 
-const ModalContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  flex: 2;
-`
-
 const UserBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  position: relative;
   align-items: center;
   flex: 2;
 `
@@ -259,60 +277,8 @@ const CommunityBtn = styled.button`
   height: 3rem;
 `
 
-const RoomBtn = styled.button`
-  border: 0.5px solid white;
-  background-color: #646fcb;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size:30px;
-  margin: 0 1rem;
-  width: 8rem;
-  height: 3rem;
-`;
-
-const LoginModalBackdrop = styled.div`
-  position:  fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0,0,0,0.9);
-  display: grid;
-  place-items: center;
-`;
-
-const SignUpModalBackdrop = styled.div`
-  position:  fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0,0,0,0.9);
-  display: grid;
-  place-items: center;
-`;
-
-
-const CloseBtn = styled.span`
-  background-color: #000000;
-  width:35px;
-  border-radius: 50px;
-  border: none;
-  font-size: 30px;
-  margin: 1px 20px 8px 440px;
-  cursor: pointer;
-  color: white;
-
-&:hover {
-  box-shadow: gray 2px 2px 2px;
-}
-`;
-
 const Text = styled.span`
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1;
   color: var(--color-darkwhite);
   ${media.lessThan("medium")`
@@ -344,6 +310,7 @@ const PcUserInfo = styled.div`
   right: 0;
   border-radius: 0.5rem;
   border: 1px solid var(--color-lightgray);
+
   ${media.lessThan("medium")`
     display: none;
   `};
@@ -362,7 +329,6 @@ const PcUserInfoMyPageBtn = styled(Link)`
 `;
 
 const PcUserInfoLogoutBtn = styled.button`
-  color: var(--color-red);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   border-radius: 0 0 0.5rem 0.5rem;
@@ -384,6 +350,11 @@ function Nav() {
   const history = useHistory();
   const {id, username, image, isLogin} = useSelector(({authReducer})=> authReducer);
   
+
+  const handleHamburgerClick = () =>{
+    setIsHambugBtnClicked((prev) => !prev);
+    setIsUserBtnClicked(false);
+  }
 
   const handleUserInfoClick = () => {
     setIsUserBtnClicked((prev) => !prev);
@@ -431,11 +402,17 @@ function Nav() {
                 <MobileUserContainer>
                   <UserIcon size={1.2} user={{id, username, image}} isDisabled/>
                 </MobileUserContainer>  
-                <MobileStyledH4> Page</MobileStyledH4>
+                <MobileStyledH4> Page </MobileStyledH4>
+                <StyleNavLink to='/' onClick={closeAll}>
+                  <Text>홈</Text>
+                </StyleNavLink>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
                   <Text> 모임 </Text>
                 </StyleNavLink>
                 <MobileStyledH4> Account </MobileStyledH4>
+                <StyleNavLink to='/mypage' onClick={closeAll}>
+                  <Text>마이 페이지</Text>
+                </StyleNavLink>
                   <MobileNavBtn onClick={handleSignOut}>
                     <Text>로그아웃</Text>
                   </MobileNavBtn>
@@ -443,19 +420,18 @@ function Nav() {
           )}
 
         {!isLogin && (
-          <ModalContainer>
-            <LoginBtn 
-            className='nav-btn' 
+          <NonUserBtns>
+            <NonUserBtn 
+            className='nav-btn-signin' 
             onClick={()=>dispatch(signinModalOnAction())}> 
               로그인
-            </LoginBtn>
-
-            <SignupBtn 
-            className='nav-btn' 
+            </NonUserBtn>
+            <NonUserBtn 
+            className='nav-btn-signup' 
             onClick={()=>dispatch(signupModalOnAction())}>
               회원가입
-            </SignupBtn>
-          </ModalContainer>
+            </NonUserBtn>
+          </NonUserBtns>
         )}
 
         {isLogin && (
@@ -468,11 +444,12 @@ function Nav() {
 
         {isUserBtnClicked && (
           <PcUserInfo>
-             <PcUserInfoMyPageBtn to='/mypage' onClick={handleUserInfoClick}> 마이 페이지 </PcUserInfoMyPageBtn>
+             <PcUserInfoMyPageBtn to='/mypage' onClick={handleUserInfoClick}> 
+             마이 페이지 
+             </PcUserInfoMyPageBtn>
              <PcUserInfoLogoutBtn onClick={handleSignOut}> 로그아웃 </PcUserInfoLogoutBtn>
            </PcUserInfo>
          )}
-
       </HeaderStyle>
 
 

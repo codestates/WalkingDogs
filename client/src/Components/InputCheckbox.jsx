@@ -1,10 +1,12 @@
-import React ,{useEffect, useState, useCallback, useMemo }from 'react';
+import React ,{useEffect, useState, useCallback }from 'react';
 import styled, {css} from 'styled-components';
 import DataListInput from "react-plain-datalist-input"
 import media from 'styled-media-query';
 import axios from 'axios';
 import PropTypes from 'prop-types'
 import { IoCloseCircle } from "react-icons/io5";
+import { forEach, set } from 'lodash';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
 
 const boxShadow = '0 4px 6px rgb(32 33 36 / 28%)';
@@ -103,6 +105,7 @@ const InputContainer = styled.div`
 const DropDownContainer = styled.ul`
   background-color: #ffffff;
   display: block;
+  width: 10rem;
   margin-left: auto;
   margin-right: auto;
   list-style-type: none;
@@ -113,7 +116,7 @@ const DropDownContainer = styled.ul`
   padding-inline-start: 0px;
   margin-top: -1px;
   padding: 0.5rem 0;
-  border: 1px solid rgb(223, 225, 229);
+  border: 1px solid rgb(255, 255, 255);
   border-radius: 0 0 1rem 1rem;
   box-shadow: ${boxShadow};
   z-index: 3;
@@ -187,15 +190,15 @@ const InputCheckbox = () => {
      "충청북도",
      "대전광역시",
      "세종특별자치시",
-    "전라북도",
-    "전라남도",
-    "광주광역시",
-    "경상북도",
-    "경상남도",
-    "대구광역시",
-    "울산광역시",
-    "부산광역시",
-    "제주특별자치도"
+     "전라북도",
+     "전라남도",
+     "광주광역시",
+     "경상북도",
+     "경상남도",
+     "대구광역시",
+     "울산광역시",
+     "부산광역시",
+     "제주특별자치도"
     ];
 
     const [area, setArea] = useState({
@@ -226,9 +229,10 @@ const InputCheckbox = () => {
     const [item, setItem] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [hasText, setHasText] = useState(false);
-    const [options, setOptions] = useState(city);
+    const [options, setOptions] = useState("");
     const [selected, setSelected] = useState(-1);
-    
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
 
     useEffect(()=>{
         if(inputValue === "") {
@@ -238,25 +242,22 @@ const InputCheckbox = () => {
 
    const handleInputChange = (e) => {
        const {value} = e.target;
-       if(value.includes("\\")) return;
+      //  if(value.includes("\\")) return;
 
        value ? setHasText(true) : setHasText(false);
        setInputValue(value);
 
-       const filterRegex = new RegExp(value, 'i');
-
        const resultOptions = city.filter((option)=>
-        option.match(filterRegex)  
+        option.includes(value)  
     );
     setOptions(resultOptions);
-   };
+    console.log(resultOptions);
+  };
+
+   
 
    const handleDropDownClick = (clickedOption) => {
-    setInputValue(clickedOption);
-    const resultOptions = city.filter(
-      (option) => option === clickedOption
-    );
-    setOptions(resultOptions);
+    setSelectedOptions([...selectedOptions, clickedOption]);
   };
 
   const handleKeyUp = (event) => {
@@ -277,39 +278,60 @@ const InputCheckbox = () => {
     }
   };
 
-    // useEffect(async () => {
-    //     const areaUrl = 'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
+    useDeepCompareEffect(async () => {
+        const addressUrl = 'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
         
-    //     const res = await axios.get(`${areaUrl}*00000000`)
-    //     const res2 = await axios.get(`${areaUrl}*000000`);
-    //     const res3 = await axios.get(`${areaUrl}1111*&is_ignore_zero=true`);
+        let res;
+        
+        
+        switch(selectedOptions.length){
+          case 0: 
+             res = await axios.get(`${addressUrl}*00000000`)
+              console.log(res.data.regcodes.name);
+            //  setOptions([...res.data.regcodes]) 
+            break;
+            case 1:
+              res = await axios.get(`${addressUrl}${selectedOptions[selectedOptions.length - 1].code.slice(0,2)}*000000`)
+              // setOptions(res.data.regcodes) 
+              break;
+              case 2:
+                res = await axios.get(`${addressUrl}${selectedOptions[selectedOptions.length - 1].code.slice(0,4)}*&is_ignore_zero=true`)
+                // setOptions(res.data.regcodes) 
+                break;
+                default:
+                  break; 
+            }
+
+        // const res = await axios.get(`${addressUrl}*00000000`)
+        // const res2 = await axios.get(`${addressUrl}*000000`);
+        // const res3 = await axios.get(`${addressUrl}1111*&is_ignore_zero=true`);
         
 
 
 
-    //     console.log(res.data.regcodes);
-    //     console.log(res2.data.regcodes);
+        // console.log(res.data.regcodes);
+        // console.log(res2.data.regcodes);
 
-    //     const city = res.data.regcodes;
-    //     const area = res2.data.regcodes;
+        // const city = res.data.regcodes;
+        // const area = res2.data.regcodes;
         
-    //     for(let i = 0; i < city.length; i++){
-    //         seletedCity.push(city[i].name);
-    //     }
+        // for(let i = 0; i < city.length; i++){
+        //     seletedCity.push(city[i].name);
+        // }
 
-    //     for(let j = 0; j < area.length; j++) {
-    //         if(area[j].name)
-    //         selectedArea.push(area[j].name);
-    //     }
+        // for(let j = 0; j < area.length; j++) {
+        //     if(area[j].name)
+        //     selectedArea.push(area[j].name);
+        // }
 
-    //     console.log(seletedCity);
-    //     console.log(selectedArea);
+        // console.log(seletedCity);
+        // console.log(selectedArea);
 
 
 
 
         
-    // },[seletedCity,setSeletecCity,])
+    },[selectedOptions])
 
 
     const handleClearClick = () => {
@@ -327,13 +349,14 @@ const InputCheckbox = () => {
                             <IoCloseCircle/>
                         </ClearBtn>
         </InputContainer>
-        {hasText ? (
+        
             <DropDown
                 options={options}
                 handleDropDownClick={handleDropDownClick}
                 selected={selected}
+                setOp
+                
                 />
-        ) : null}
 
     
 
@@ -361,10 +384,12 @@ const InputCheckbox = () => {
 
 };
 
-const DropDown = ({options,handleDropDownClick, selected}) => {
+const DropDown = ({options, handleDropDownClick, selected}) => {
  return (
      <DropDownContainer>
-         {options.map((option,idx) => {
+         {!options? null :(
+           options.map((option, idx) => {
+             return (
              <li 
                 key={idx}
                 onClick={()=>handleDropDownClick(option)}
@@ -372,7 +397,8 @@ const DropDown = ({options,handleDropDownClick, selected}) => {
                 >
                     {option}
              </li>
-         })}
+             )
+         }))}
      </DropDownContainer>
  )
 };
