@@ -11,8 +11,7 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import user from '../api/users'
-
+import user from '../api/users
 import {gsap} from "gsap";
 
 
@@ -354,10 +353,6 @@ function Nav() {
       history.push("/")
     }
   };
-
-  useEffect(() => {
-    console.log(image)
-  }, [])
 
   useEffect(() => {
     gsap.from('header', {duration: 1, y: "-100%"})

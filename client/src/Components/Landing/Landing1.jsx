@@ -44,6 +44,7 @@ const Landing1Image = styled.img`
 `
 
 
+
 // styled component boundary
 
 const Landing1 = () => {
