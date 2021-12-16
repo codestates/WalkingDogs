@@ -18,11 +18,8 @@ import { signinAction } from './store/actions';
 import Maps from './Pages/Maps'
 import RoomCreate from './Components/RoomCreate'
 import PwChange from './Components/PwChange'
-
 import auth from './api/auth';
 import users from './api/users';
-
-import {gsap} from 'gsap';
 
 function App() {
   const [cookies, , removeCookie] = useCookies([]);
@@ -84,10 +81,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    gsap.from('Nav', {duration: 1, y: "-100%"})
-  })
-
-  useEffect(() => {
     let timer;
     window.addEventListener("resize", (event) => {
       if (timer) {
@@ -114,7 +107,6 @@ function App() {
       document.documentElement.style.removeProperty("--vh", `${vh}px`);
     }
   }, [currentHeight]);
-
 
   return (
     <Brouter>
