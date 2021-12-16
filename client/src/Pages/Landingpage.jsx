@@ -1,18 +1,18 @@
-import React , {useEffect} from "react";
+import React from "react";
 import Landing1 from "../Components/Landing/Landing1";
 import Landing2 from "../Components/Landing/Landing2";
 import Landing3 from "../Components/Landing/Landing3";
-import {gsap} from 'gsap';
-import {ScrollTrigger} from 'gsap/ScrollTrigger';
-import styled, {css, keyframes} from  'styled-components';
-import media from 'styled-media-query'
+// import styled, {css, keyframes} from  'styled-components';
+// import {ScrollTrigger} from 'gsap/ScrollTrigger';
+// import {gsap} from 'gsap';
+// import media from 'styled-media-query'
 
-const LandingContainer = styled.div`
-  *{
-    margin: 0;
-    height: 100%;
-  }
-`
+// const LandingContainer = styled.div`
+//   *{
+//     margin: 0;
+//     height: 100%;
+//   }
+// `
 
 // const Landing = styled.div`
 //   display: flex;
@@ -53,12 +53,8 @@ const LandingContainer = styled.div`
 //   }
 // `
 
-
-
-
 // styled-component Boundary
 const Landingpage = () => {
-
 
   // useEffect(() => {
   //   gsap.registerPlugin(ScrollTrigger);

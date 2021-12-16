@@ -51,14 +51,14 @@ const ImgBox = styled.div`
     height: 10em;
     border: 1px solid lightgray;
     border-radius: 50%;
-    display: inline-block;
+    background-size: cover;
 `;
 
 const Img = styled.img`
-    width: auto;
+    width: 100%;
     height: 100%;
     border-radius: 100%;
-    object-fit: scale-down;
+    object-fit: cover;
 `
 
 const Profile = styled.div`
@@ -126,7 +126,6 @@ const Mypage = () => {
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
     const [username, setUserName] = useState('');
-    const [images, setImages] = useState([]);
 
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
@@ -172,7 +171,7 @@ const Mypage = () => {
                     참가한 모임 목록
                 </Span>
                 {rooms.map((el, idx) => 
-                    <Myroomlist listKey={el.id} room={el} image={images[idx]}/>
+                    <Myroomlist listKey={el.id} room={el} />
                 )}
             </ExRoomList>
 

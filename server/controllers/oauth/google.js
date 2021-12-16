@@ -94,7 +94,8 @@ module.exports = async (req, res) => {
           },
           message: 'ok',
         });
-      } else {
+      }
+      else {
         const userInfo = await user.create({
           username: username,
           email: email,
@@ -122,6 +123,7 @@ module.exports = async (req, res) => {
           sameSite: 'none',
           expiresIn: '7d',
         });
+
         return res.status(200).json({
           data: {
             username: userInfo.dataValues.username,
@@ -132,11 +134,7 @@ module.exports = async (req, res) => {
       }
     }
 
-    verify()
-    .catch(err => {
-      console.log(err)
-      return res.status(500).json({ message: 'Server Error' });
-    });
+    verify();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: 'Server Error' });

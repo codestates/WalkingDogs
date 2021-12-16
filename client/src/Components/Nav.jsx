@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 import { useHistory } from 'react-router';
-import styled, {css , keyframes} from 'styled-components';
+import styled, { css } from 'styled-components';
 import media from 'styled-media-query';
 import UserIcon from './UserIcon';
 import { signinModalOnAction,
@@ -11,7 +11,9 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import userApi from '../api/users'
+import user from '../api/users'
+
+import {gsap} from "gsap";
 
 
 
@@ -102,6 +104,7 @@ const StyleNavLink = styled(NavLink)`
     color: var(--color-darkwhite);
     box-shadow: 1px 1px lightgray;
     padding-top: 0.2rem;
+
   }
   ${media.lessThan("medium")`
     padding: 1rem;
@@ -183,6 +186,7 @@ const MobileHambergerBtn = styled.button`
 const NonUserBtn = styled.button`
   border: 0.5px solid white;
   background-color: var(--color-mainviolet--100);
+  padding: 0.5rem .8rem;
   color: white;
   border-radius: 10px;
   cursor: pointer;
@@ -207,7 +211,7 @@ const NonUserBtn = styled.button`
     `}
 `;
 
-const NonUserBtns = styled.button`
+const NonUserBtns = styled.div`
   .nav-btn-signin{
     border: 0.5px solid white;
     background-color: #646fcb;
@@ -343,7 +347,7 @@ function Nav() {
     const storageKey = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
-    const res = await userApi.logoutApi();
+    const res = await user.logoutApi();
     if(res.status === 200) {
       localStorage.removeItem(storageKey)
       dispatch(signoutAction());
@@ -354,6 +358,10 @@ function Nav() {
   useEffect(() => {
     console.log(image)
   }, [])
+
+  useEffect(() => {
+    gsap.from('header', {duration: 1, y: "-100%"})
+  })
 
   return (
       <HeaderStyle>

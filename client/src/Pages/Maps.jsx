@@ -1,22 +1,21 @@
-import React,{ useEffect, useState, useMemo } from 'react';
+import React,{ useEffect, useState } from 'react';
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import {useDispatch, useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
+import { useSelector} from 'react-redux';
 
-import {Map, MapMarker, CustomOverlayMap} from 'react-kakao-maps-sdk';
 import debounce from 'lodash/debounce';
 import media from 'styled-media-query'
 import Roomcard from '../Components/Roomcard'
-import AllButtons from '../Components/AllButtons';
-
-import { searchGatherAction, signinAction, signoutAction } from '../store/actions';
-import useDeepCompareEffect from 'use-deep-compare-effect';
-import { set } from 'lodash';
 import map from '../api/map';
 
+// import { useDispatch } from 'react-redux';
+// import {Link} from 'react-router-dom';
+// import { searchGatherAction, signinAction, signoutAction } from '../store/actions';
+// import useDeepCompareEffect from 'use-deep-compare-effect';
+// import { set } from 'lodash';
 
-
+// import {Map, MapMarker, CustomOverlayMap} from 'react-kakao-maps-sdk';
+// import PropTypes from 'prop-types'
+// import AllButtons from '../Components/AllButtons';
 
 const {kakao} = window;
 
@@ -32,7 +31,6 @@ const MapContainer = styled.div`
         height: calc (var(--vh, 1vh) * 200 - 57px);
     `}
 `
-
 
 const RoomList = styled.div`
     background-color: rgba(255, 255, 255, 0.6);
@@ -89,9 +87,9 @@ const KakaoMap = styled.div`
     height: 85vh;
 `
 
-const CardContainer = styled.div`
-    width: auto;
-`
+// const CardContainer = styled.div`
+//     width: auto;
+// `
 
 // const RadiusBtn = styled.button`
 //     position: absolute;
@@ -107,112 +105,119 @@ const CardContainer = styled.div`
 
 const StyledRoomcard = styled(Roomcard)`
     
-`
+    `
 
 // styled-component Boundary
 const Maps = () => {
 
-    const dispatch = useDispatch();
-    const [listView, setListView] = useState(true);
     const { position } = useSelector(({ posReducer }) => posReducer);
     const [rooms, setRooms] = useState([]);
-    const [address, setAddress] = useState();
-    let kakaoMap
     const markers = []
-
-    const handleDragStart = () => {
-        setListView(false);
-    }
-
-    const handleDragEnd = () => {
-        setListView(true);
-    }
-
-    const searchRooms = async (position) => {
-        const result = await map.locationApi({ latitude: position.latitude, longitude: position.longitude })
-        
-        setRooms([ ...result.data.rooms ]);
-
-        result.data.rooms.forEach(el => {
-            const marker = new kakao.maps.Marker({
-                map: kakaoMap,
-                position: new kakao.maps.LatLng(el.latitude, el.longitude),
-                title: el.title,
-            })
-            markers.push(marker)
-
-            const infoWindow = new kakao.maps.InfoWindow({
-                content: el.title // 인포윈도우에 표시할 내용
-            });
-
-            const mouseOver = (map, marker, infoWindow) => {
-                return () => { infoWindow.open(map, marker) }
-            }
-
-            const mouseOut = (infoWindow) => {
-                return () => { infoWindow.close() }
-            }
-
-            kakao.maps.event.addListener(marker, 'mouseover', mouseOver(kakaoMap, marker, infoWindow));
-            kakao.maps.event.addListener(marker, 'mouseout', mouseOut(infoWindow));
-        })
-
-        markers.forEach(el => {
-            const path = [kakaoMap.getCenter(), el.getPosition()];
-            const line = new kakao.maps.Polyline({ path });
-            const dist = line.getLength();
-
-            if(dist > 1500)
-                el.setMap(null)
-        })
-    }
-
-    useEffect(async () => {
-        window.scrollTo(0,0);
-        const container = document.querySelector('#map')
-        const options = {
-            center: new kakao.maps.LatLng(position.latitude, position.longitude),
-            level: 4,
-        };
-        
-        kakaoMap = new kakao.maps.Map(container, options);
+    let kakaoMap
     
-        const markerPosition = new kakao.maps.LatLng(position.latitude, position.longitude);
+    // const dispatch = useDispatch();
+    // const [listView, setListView] = useState(true);
+    // const [address, setAddress] = useState();
+
+    // const handleDragStart = () => {
+    //     setListView(false);
+    // }
     
-        const marker = new kakao.maps.Marker({
-            position: markerPosition,
-        })
-
-        // const circle = new kakao.maps.Circle({
-        //     center : new kakao.maps.LatLng(position.latitude, position.longitude),  // 원의 중심좌표 입니다 
-        //     radius: 1000, // 미터 단위의 원의 반지름입니다 
-        //     strokeWeight: 5, // 선의 두께입니다 
-        //     strokeColor: '#75B8FA', // 선의 색깔입니다
-        //     strokeOpacity: 0.4, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        //     strokeStyle: 'solid', // 선의 스타일 입니다
-        //     fillColor: '#CFE7FF', // 채우기 색깔입니다
-        //     fillOpacity: 0.2  // 채우기 불투명도 입니다   
-        // });
-
-        marker.setMap(kakaoMap);
-        // circle.setMap(kakaoMap);
-
-        const zoomControl = new kakao.maps.ZoomControl();
-        kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
-
-        kakao.maps.event.addListener(kakaoMap, 'center_changed', () => {
-            const latlng = kakaoMap.getCenter(); // .Ma : 위도, .La: 경도
-
-            // circle.setPosition(latlng)
-            marker.setPosition(latlng)
-        })
-
-        kakao.maps.event.addListener(kakaoMap, 'dragend', debounce(() => {
+    // const handleDragEnd = () => {
+        //     setListView(true);
+        // }
+        
+        
+    useEffect(() => {
+        const searchRooms = async (position) => {
+            const result = await map.locationApi({ latitude: position.latitude, longitude: position.longitude })
             
-            searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })
+            setRooms([ ...result.data.rooms ]);
+    
+            result.data.rooms.forEach(el => {
+                const marker = new kakao.maps.Marker({
+                    map: kakaoMap,
+                    position: new kakao.maps.LatLng(el.latitude, el.longitude),
+                    title: el.title,
+                })
+                markers.push(marker)
+    
+                const infoWindow = new kakao.maps.InfoWindow({
+                    content: el.title // 인포윈도우에 표시할 내용
+                });
+    
+                const mouseOver = (map, marker, infoWindow) => {
+                    return () => { infoWindow.open(map, marker) }
+                }
+    
+                const mouseOut = (infoWindow) => {
+                    return () => { infoWindow.close() }
+                }
+    
+                kakao.maps.event.addListener(marker, 'mouseover', mouseOver(kakaoMap, marker, infoWindow));
+                kakao.maps.event.addListener(marker, 'mouseout', mouseOut(infoWindow));
+            })
+    
+            markers.forEach(el => {
+                const path = [kakaoMap.getCenter(), el.getPosition()];
+                const line = new kakao.maps.Polyline({ path });
+                const dist = line.getLength();
+    
+                if(dist > 1500)
+                    el.setMap(null)
+            })
+        }
 
-        }, 200))
-    }, []);
+        const initFunction = async () => {
+            window.scrollTo(0,0);
+            const container = document.querySelector('#map')
+            const options = {
+                center: new kakao.maps.LatLng(position.latitude, position.longitude),
+                level: 4,
+            };
+
+            kakaoMap = new kakao.maps.Map(container, options);
+            
+            const markerPosition = new kakao.maps.LatLng(position.latitude, position.longitude);
+            
+            const marker = new kakao.maps.Marker({
+                position: markerPosition,
+            })
+    
+            // const circle = new kakao.maps.Circle({
+                //     center : new kakao.maps.LatLng(position.latitude, position.longitude),  // 원의 중심좌표 입니다 
+            //     radius: 1000, // 미터 단위의 원의 반지름입니다 
+            //     strokeWeight: 5, // 선의 두께입니다 
+            //     strokeColor: '#75B8FA', // 선의 색깔입니다
+            //     strokeOpacity: 0.4, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            //     strokeStyle: 'solid', // 선의 스타일 입니다
+            //     fillColor: '#CFE7FF', // 채우기 색깔입니다
+            //     fillOpacity: 0.2  // 채우기 불투명도 입니다   
+            // });
+            
+            marker.setMap(kakaoMap);
+            // circle.setMap(kakaoMap);
+    
+            const zoomControl = new kakao.maps.ZoomControl();
+            kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
+    
+            kakao.maps.event.addListener(kakaoMap, 'center_changed', () => {
+                const latlng = kakaoMap.getCenter(); // .Ma : 위도, .La: 경도
+    
+                // circle.setPosition(latlng)
+                marker.setPosition(latlng)
+            })
+    
+            kakao.maps.event.addListener(kakaoMap, 'dragend', debounce(() => {
+                
+                searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })
+                
+            }, 200))
+        }
+        
+        initFunction();
+        
+    });
 
     return(
         <>

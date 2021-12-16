@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import styled, {css} from 'styled-components';
+import React from 'react'
+import styled from 'styled-components';
 
 const Container = styled.div`
     border: none;
@@ -29,8 +29,9 @@ const ImageBox = styled.div`
 const DogImage = styled.img`
     position: absolute;
     max-width: 150%;
-    height: auto;
+    height: 100%;
     display: block;
+    object-fit: cover;
 `
 
 const FriendInfo = styled.div`
@@ -44,10 +45,6 @@ const FriendInfo = styled.div`
 
 //styled-component Boundary
 const Myfriendlist = ({ listKey, dog }) => {
-
-    useEffect(() => {
-        console.log(dog.image)
-    }, [])
 
     return(
         <>

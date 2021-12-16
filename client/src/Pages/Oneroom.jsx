@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
-import room from '../api/room';
+import roomApi from '../api/room';
 import mypage from '../api/mypage';
-import { useDispatch, useSelector } from 'react-redux';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 import media from 'styled-media-query';
+// import { useDispatch } from 'react-redux';
+// import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const OneroomContainer = styled.div`
   width: auto;
@@ -18,7 +18,6 @@ const OneroomContainer = styled.div`
   justify-content: center;
   border: 1rem solid var(--color-mainviolet--100);
   background-color: var(--color-mainviolet--100);
-  
 `;
 
 const OneroomBox = styled.div`
@@ -345,13 +344,12 @@ const ComMapBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
 
-  const [isOpenCom, setIsOpenCom] = useState(false);
   const [roomDetail, setRoomDetail] = useState({}); // 방 정보
   const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
   const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
@@ -359,12 +357,13 @@ const Oneroom = () => {
   const [errMsg, setErrMsg] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-
-  const dispatch = useDispatch();
+  // const [isOpenCom, setIsOpenCom] = useState(false);
+  // const [noDog, setNoDog] = useState(true);
+  // const dispatch = useDispatch();
 
   const handleButtonClickJoin = async () => {
     const request_time = new Date();
-    const result = await room.joinRoomApi(
+    const result = await roomApi.joinRoomApi(
       params.room_id,
       [...myDogs.filter((_, idx) => selectedDogs[idx])],
       request_time
@@ -372,23 +371,20 @@ const Oneroom = () => {
     console.log('result.status: ', result.status);
     if (result.status === 200) {
       console.log('result.data.data: ', result.data.data);
-      if (result.data.data) {
+      if (result.data.data === 'meeting time is over') {
         console.log('result.data.data: ', result.data.data);
         setErrMsg('1');
         console.log('errMsg: ', errMsg);
+      } else if (result.data.data === 'you sent no dog') {
+        setErrMsg('2');
+        console.log('errMsg2: ', errMsg);
       } else {
-        if (myDogs.length === 0) {
-          console.log(myDogs);
-          setErrMsg('2');
-          console.log('errMsg2: ', errMsg);
-        } else {
-          console.log('myDogs: ', myDogs);
-          setRoomDetail(
-            Object.assign({}, { ...roomDetail }, { isJoinRequested: true })
-          );
-          setErrMsg('0');
-          console.log('errMsg3: ', errMsg);
-        }
+        console.log('selectedDogs: ', selectedDogs);
+        setRoomDetail(
+          Object.assign({}, { ...roomDetail }, { isJoinRequested: true })
+        );
+        setErrMsg('0');
+        console.log('errMsg3: ', errMsg);
       }
     } else {
       console.log('status code not 200');
@@ -396,7 +392,7 @@ const Oneroom = () => {
   };
 
   const handleClickReqCancel = async () => {
-    const result = await room.cancelRoomApi(params.room_id);
+    const result = await roomApi.cancelRoomApi(params.room_id);
 
     if (result.status === 200) {
       setRoomDetail(
@@ -413,11 +409,11 @@ const Oneroom = () => {
       // 서버에 permission true
       // 서버에서 200
       // roomDetail 새로 받아옴.
-      await room
+      await roomApi
         .reqPermissionApi(id, params.room_id, true)
         .then(async (result) => {
           if (result.status === 200) {
-            const resRoom = await room.roomDetailApi(params.room_id);
+            const resRoom = await roomApi.roomDetailApi(params.room_id);
             console.log(resRoom);
 
             setRoomDetail(Object.assign({}, { ...resRoom.data.data }));
@@ -431,11 +427,11 @@ const Oneroom = () => {
       // 서버에 permission false
       // 서버에서 200
       // roomDetail 새로 받아옴.
-      await room
+      await roomApi
         .reqPermissionApi(id, params.room_id, false)
         .then(async (result) => {
           if (result.status === 200) {
-            const resRoom = await room.roomDetailApi(params.room_id);
+            const resRoom = await roomApi.roomDetailApi(params.room_id);
             console.log(resRoom);
 
             setRoomDetail(Object.assign({}, { ...resRoom.data.data }));
@@ -451,6 +447,11 @@ const Oneroom = () => {
           return myDogs[idx].id === id ? true : el;
         })
       ]);
+      // for (let i = 0; i < selectedDogs.length; i++) {
+      //   if (selectedDogs[i]) {
+      //     setNoDog(false);
+      //   }
+      // }
     } else {
       // (강아지) 제거
       setSelectedDogs([
@@ -458,6 +459,11 @@ const Oneroom = () => {
           return myDogs[idx].id === id ? false : el;
         })
       ]);
+      // for (let i = 0; i < selectedDogs.length; i++) {
+      //   if (selectedDogs[i]) {
+      //     setNoDog(false);
+      //   }
+      // }
     }
   };
 
@@ -466,7 +472,7 @@ const Oneroom = () => {
   };
 
   const handleClickLeave = async () => {
-    const result = await room.deleteRoomApi(params.room_id);
+    const result = await roomApi.deleteRoomApi(params.room_id);
     if (result.status === 200) {
       setRoomDetail(
         Object.assign(
@@ -478,9 +484,9 @@ const Oneroom = () => {
     }
   };
 
-  const handleOpenComment = () => {
-    setIsOpenCom(!isOpenCom);
-  };
+  // const handleOpenComment = () => {
+  //   setIsOpenCom(!isOpenCom);
+  // };
 
   const handleSetRoomDetail = (info) => {
     setRoomDetail(info);
@@ -491,32 +497,25 @@ const Oneroom = () => {
     const time_array = meeting_time.split('T')[1].split('.')[0].split(':');
     setTime(time_array[0] + ':' + time_array[1]);
   };
-  useEffect(async () => {
-    window.scrollTo(0, 0);
-    const resRoom = await room.roomDetailApi(params.room_id);
-    console.log(resRoom);
+  useEffect(() => {
 
-    // setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
-    handleSetRoomDetail(Object.assign({}, { ...resRoom.data.data }));
-    const resDog = await mypage.dogListApi();
-    console.log(resDog);
+    const initFunction = async () => {
+      window.scrollTo(0, 0);
+      const resRoom = await roomApi.roomDetailApi(params.room_id);
+      // console.log(resRoom);
+  
+      // setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
+      handleSetRoomDetail(Object.assign({}, { ...resRoom.data.data }));
+      const resDog = await mypage.dogListApi();
+      // console.log(resDog);
+  
+      setMyDogs([...resDog.data.dogs]);
+      setSelectedDogs(new Array(resDog.data.dogs.length).fill(false));
+    }
 
-    setMyDogs([...resDog.data.dogs]);
-    setSelectedDogs(new Array(resDog.data.dogs.length).fill(false));
+    initFunction();
 
-    // 들어오는 데이터
-
-    // address: "address"
-    // dogs: (2) [{…}, {…}]
-    // image: "./test.img"
-    // latitude: "37.57335637182507"
-    // longitude: "-126.65122044622483"
-    // title: "room23"
-    // username: "name10"
-    // users: (3) [{…}, {…}, {…}]
-    // isJoined: false,
-    // isJoinRequested: true,
-  }, []);
+  });
 
   return (
     <>
@@ -645,17 +644,17 @@ const Oneroom = () => {
           </>
         )}
       </OneroomContainer>
-        <ComMapBox>
-          <Comments roomId={params.room_id} />
-          <MapBox>
-            <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
-            <Roommap
-              latitude={roomDetail.latitude}
-              longitude={roomDetail.longitude}
-              draggable={false}
-            />
-          </MapBox>
-        </ComMapBox>     
+      <ComMapBox>
+        <Comments roomId={params.room_id} />
+        <MapBox>
+          <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
+          <Roommap
+            latitude={roomDetail.latitude}
+            longitude={roomDetail.longitude}
+            draggable={false}
+          />
+        </MapBox>
+      </ComMapBox>
     </>
   );
 };

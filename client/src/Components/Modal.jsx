@@ -4,7 +4,6 @@ import {useDispatch} from 'react-redux'
 import { modalOffAction } from '../store/actions'
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 
 import PropTypes from "prop-types";
 

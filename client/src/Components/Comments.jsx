@@ -1,9 +1,6 @@
-import { faCommentSlash } from '@fortawesome/free-solid-svg-icons';
-import { set } from 'lodash';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import comment from '../api/comment';
-
 
 const Container = styled.div`
     border: 1rem solid var(--color-mainviolet--100);
@@ -31,10 +28,8 @@ const CommentContainer = styled.div`
     width: 65rem;
     height: 10rem;
     overflow-y: auto;
-    display: flex;
     flex-direction: column;
     align-items: center;
-
 `
 
 const Comment = styled.div`
@@ -182,19 +177,26 @@ const handleButtonClickDelete = async (idx) => {
   setComments( [ ...comments.filter((_, elIdx) => elIdx !== idx) ])
 }
 
-useEffect(async () => {
-  const getComments = await comment.getCommentApi(roomId)
-  console.log(getComments);
-  const commentArray = getComments.data.data;
-  console.log(commentArray)
-  for (let i = 0; i < commentArray.length; i++) {
-    //   if (!commentArray[i].user.is_memeber){
-    //     commentArray[i].user.username = 'anonymous';
-    //   }
-    commentArray[i].user.username = commentArray[i].user.is_member ? commentArray[i].user.username : 'anonymous'
+useEffect(() => {
+
+  const initFunction = async () => {
+      const getComments = await comment.getCommentApi(roomId)
+      
+      const commentArray = getComments.data.data;
+      
+      for (let i = 0; i < commentArray.length; i++) {
+        //   if (!commentArray[i].user.is_memeber){
+        //     commentArray[i].user.username = 'anonymous';
+        //   }
+        commentArray[i].user.username = commentArray[i].user.is_member ? commentArray[i].user.username : 'anonymous'
+      }
+
+      setComments([ ...commentArray])
   }
-  setComments([ ...commentArray])
-}, [])
+
+  initFunction();
+
+})
 
     return(
     <>

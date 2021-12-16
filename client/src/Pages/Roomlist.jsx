@@ -1,18 +1,18 @@
-import React ,{useEffect, useRef, useState}from 'react';
+import React ,{useEffect, useState}from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Roomcard from '../Components/Roomcard'
 import RoomSearchBar from '../Components/RoomSearchBar'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import media from 'styled-media-query'
-import AllButtons from '../Components/AllButtons'
-import {createGatherRoomModalOnAction, initPosAction, signinAction,signinModalOnAction,singoutAction} from '../store/actions'
-import { useHistory } from 'react-router';
+import { createGatherRoomModalOnAction, initPosAction, signinModalOnAction } from '../store/actions'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
-import useDeepCompareEffect from 'use-deep-compare-effect'
-import room from '../api/room';
 import map from '../api/map';
+// import AllButtons from '../Components/AllButtons'
+// import { useHistory } from 'react-router';
+// import useDeepCompareEffect from 'use-deep-compare-effect'
+// import room from '../api/room';
 
 const RoomlistContainer = styled.div`
     width: 100%;
@@ -96,17 +96,18 @@ const BtnContainer = styled.div`
 `
 
 const CreateRoomBtn = styled.button`
-    border: 1px solid #000000;
+    border: 0.2rem solid var(--color-darkwhite);
     border-radius: 30px;
     width: 11rem;
     height: 3rem;
     font-size: 20px;
-    color: black;
+    color:var(--color-darkwhite);
     cursor: pointer;
     text-align: center;
     :hover{
         background-color: var(--color-darkwhite);
-        border: 1px solid var(--color-mainviolet--50);
+        border: 0.2rem solid var(--color-mainviolet--25);
+        color: black;
     }
 `
 
@@ -160,58 +161,63 @@ const Roomlist = () => {
 
 const [isListLoading, setIsListLoading] = useState(true);
 const [rooms, setRooms] = useState([]);
-const conditionOptions = {
-    location: {
-        latitude: 0,
-        longitude: 0,
-    },
-    date: '',
-    time: '',
-    member_limit: 0,
-    breed: '',
-};
-const [conditions, setConditions] = useState({ ...conditionOptions });
 const { isLogin } = useSelector(({ authReducer }) => authReducer);
 const dispatch = useDispatch();
+// const conditionOptions = {
+//     location: {
+//         latitude: 0,
+//         longitude: 0,
+//     },
+//     date: '',
+//     time: '',
+//     member_limit: 0,
+//     breed: '',
+// };
+// const [conditions, setConditions] = useState({ ...conditionOptions });
 
-useEffect(async () => {
-    window.scrollTo(0,0);
-    // window.location.assign('/roomlist');
-    let latitude = 37.564213, longitude = 127.001698; // 서울 중앙
-    
-    const geoLocation = () => {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject)
-        })
-    }
-    
-    if(!navigator.geolocation) {
-        console.log('브라우저 GeoLocation 미지원')
-        dispatch(initPosAction({ latitude, longitude }))
-    }
-    else {
-        await geoLocation()
-        .then((pos) => {
-            latitude = Number(pos.coords.latitude.toFixed(6))
-            longitude = Number(pos.coords.longitude.toFixed(6))
+useEffect(() => {
+
+    const initFunction = async () => {
+        window.scrollTo(0,0);
+        // window.location.assign('/roomlist');
+        let latitude = 37.564213, longitude = 127.001698; // 서울 중앙
+        
+        const geoLocation = () => {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject)
+            })
+        }
+        
+        if(!navigator.geolocation) {
+            console.log('브라우저 GeoLocation 미지원')
             dispatch(initPosAction({ latitude, longitude }))
-            
-            // setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
-        })
-        .catch((err) => {
-            console.log(err)
-            console.log('위치를 찾을 수 없습니다')
-        })
-    }
+        }
+        else {
+            await geoLocation()
+            .then((pos) => {
+                latitude = Number(pos.coords.latitude.toFixed(6))
+                longitude = Number(pos.coords.longitude.toFixed(6))
+                dispatch(initPosAction({ latitude, longitude }))
+                
+                // setConditions(Object.assign({}, { ...conditions }, { location: { latitude: latitude, longitude: longitude }}));
+            })
+            .catch((err) => {
+                console.log(err)
+                console.log('위치를 찾을 수 없습니다')
+            })
+        }
+        
+        const result = await map.locationApi({ latitude, longitude })
+        setRooms([ ...result.data.rooms ]);
     
-    const result = await map.locationApi({ latitude, longitude })
-    setRooms([ ...result.data.rooms ]);
+        setTimeout(() => {
+            setIsListLoading(false)
+        }, 1000)
+    }
 
-    setTimeout(() => {
-        setIsListLoading(false)
-    }, 1000)
+    initFunction();
 
-}, [])
+})
 
 const handleSubmit = async (data) => {
     setIsListLoading(true)

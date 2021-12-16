@@ -1,72 +1,68 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import styled, { css } from 'styled-components';
-import DataListInput from 'react-plain-datalist-input';
-import media from 'styled-media-query';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { IoCloseCircle } from 'react-icons/io5';
-import { forEach, set } from 'lodash';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
-const boxShadow = '0 4px 6px rgb(32 33 36 / 28%)';
-const activeBorderRadius = '1rem 1rem 0 0';
-const inactiveBorderRadius = '1rem 1rem 1rem 1rem';
+// const boxShadow = '0 4px 6px rgb(32 33 36 / 28%)';
+// const activeBorderRadius = '1rem 1rem 0 0';
+// const inactiveBorderRadius = '1rem 1rem 1rem 1rem';
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 0.5rem;
-  width: 100%;
-  .autocomplete-input {
-    padding: 0 1px;
-    text-align: center;
-    gap: 2px;
-    ::placeholder {
-      color: var(--color-gray);
-      font-family: Interop-Light;
-    }
-    outline: none;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .datalist-items {
-    min-width: calc(90%);
-    max-height: 18.5rem;
-    margin-top: 1.2rem;
-    font-size: 1.1rem;
-    background-color: var(--color-white);
-    border-radius: 1rem;
-    filter: drop-shadow(0px 6px 10px var(--color-shadow));
-    overflow: auto;
-    > * {
-      padding: 1rem;
-      :hover {
-        ${media.greaterThan('medium')`
-          background-color: black;
-          color: white;
-        `};
-      }
-    }
-    ${media.lessThan('medium')`
-      min-width: unset;
-      max-width: unset;
-      width: 100%;
-      margin-top: 1.25rem;
-      margin-bottom: -0.75rem;
-      max-height: 15rem;
-      filter: none;
-      border: 1px solid var(--color-maingreen--50);
-    `};
-  }
-  .datalist-active-item {
-    background-color: var(--color-maingreen--25);
-    :hover {
-      ${media.greaterThan('medium')`
-        background-color: var(--color-maingreen--25);
-      `};
-    }
-  }
-`;
+// const Container = styled.div`
+//   display: flex;
+//   justify-content: space-evenly;
+//   margin-top: 0.5rem;
+//   width: 100%;
+//   .autocomplete-input {
+//     padding: 0 1px;
+//     text-align: center;
+//     gap: 2px;
+//     ::placeholder {
+//       color: var(--color-gray);
+//       font-family: Interop-Light;
+//     }
+//     outline: none;
+//     font-size: 1rem;
+//     cursor: pointer;
+//   }
+//   .datalist-items {
+//     min-width: calc(90%);
+//     max-height: 18.5rem;
+//     margin-top: 1.2rem;
+//     font-size: 1.1rem;
+//     background-color: var(--color-white);
+//     border-radius: 1rem;
+//     filter: drop-shadow(0px 6px 10px var(--color-shadow));
+//     overflow: auto;
+//     > * {
+//       padding: 1rem;
+//       :hover {
+//         ${media.greaterThan('medium')`
+//           background-color: black;
+//           color: white;
+//         `};
+//       }
+//     }
+//     ${media.lessThan('medium')`
+//       min-width: unset;
+//       max-width: unset;
+//       width: 100%;
+//       margin-top: 1.25rem;
+//       margin-bottom: -0.75rem;
+//       max-height: 15rem;
+//       filter: none;
+//       border: 1px solid var(--color-maingreen--50);
+//     `};
+//   }
+//   .datalist-active-item {
+//     background-color: var(--color-maingreen--25);
+//     :hover {
+//       ${media.greaterThan('medium')`
+//         background-color: var(--color-maingreen--25);
+//       `};
+//     }
+//   }
+// `;
 
 const InputContainer = styled.div`
   background-color: transparent;
@@ -146,7 +142,6 @@ const AutoCompleteWrapper = styled.div`
 const InputCheckbox = ({ setAddressInput }) => {
 
   const [options, setOptions] = useState([]);
-  const [selected, setSelected] = useState(-1);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [focus, setFocus] = useState(false);
   
@@ -176,7 +171,7 @@ const InputCheckbox = ({ setAddressInput }) => {
         res = await axios.get(`${addressUrl}${selectedOptions[selectedOptions.length - 1].code.slice(0, 4)}*&is_ignore_zero=true`);
         setOptions(res.data.regcodes)
         break;
-      case 3:
+      default:
         setOptions([])
         break;
     } 
@@ -212,7 +207,6 @@ const InputCheckbox = ({ setAddressInput }) => {
           <DropDown
             options={options}
             handleDropDownClick={handleDropDownClick}
-            selected={selected}
           />
         :
           <></>
@@ -235,7 +229,6 @@ const DropDown = ({options, handleDropDownClick, selected}) => {
               onClick={() => {
                 handleDropDownClick(option);
               }}
-              className={selected === idx ? 'selected' : ''}
             >
               {option.name.split(' ')[option.name.split(' ').length - 1]}
             </li>
@@ -246,6 +239,3 @@ const DropDown = ({options, handleDropDownClick, selected}) => {
 }
 
 export default InputCheckbox;
-// InputCheckbox.PropTypes={
-//     values: PropTypes.arrayOf(PropTypes.any).isRequired,
-// };
