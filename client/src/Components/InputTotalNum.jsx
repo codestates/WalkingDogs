@@ -69,15 +69,15 @@ const PopperInput = styled.input`
     `};
 `;
 
-const PopperWaring = styled.input`
-  max-width: calc(100% - 4rem);
-  text-align: center;
-  ${(props) =>
-    props.disabled &&
-    css`
-      color: var(--color-gray);
-    `};
-`;
+// const PopperWaring = styled.input`
+//   max-width: calc(100% - 4rem);
+//   text-align: center;
+//   ${(props) =>
+//     props.disabled &&
+//     css`
+//       color: var(--color-gray);
+//     `};
+// `;
 
 const PlusBtn = styled(FiPlus)`
   flex: 0 0 auto;

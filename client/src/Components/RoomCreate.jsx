@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { createGatherRoomDetailModalOnAction, modalOffAction } from '../store/actions';
-import {useDispatch, useSelector} from 'react-redux';
+import { modalOffAction } from '../store/actions';
+import { useDispatch } from 'react-redux';
 import RoomSearch from './RoomSearch'
 import roomApi from '../api/room'
-import mypageApi from '../api/mypage'
+import mypage from '../api/mypage'
 import AllButtons from './AllButtons';
 import media from 'styled-media-query'
 import {BsArrowLeftCircleFill, BsArrowRightCircleFill} from 'react-icons/bs'
@@ -98,8 +98,6 @@ const RoomCreate = () => {
     const [clickedCalendar, setClickedCalendar] = useState(false);
     const [dogList, setDogList] = useState([]);
     const [selectedDogs, setSelectedDogs] = useState([]);
-
-    const user = useSelector(({authReducer}) => authReducer);
    
     const dispatch = useDispatch();
 
@@ -161,13 +159,17 @@ const RoomCreate = () => {
         }
     };
 
-    useEffect(async () => {
-        const res = await mypageApi.dogListApi();
-        
-        setDogList(res.data.dogs);
-        
-        setSelectedDogs(new Array(res.data.dogs.length).fill(false));
-    }, []);
+    useEffect(() => {
+        const initFunction = async () => {
+            const res = await mypage.dogListApi();
+            
+            setDogList(res.data.dogs);
+            
+            setSelectedDogs(new Array(res.data.dogs.length).fill(false));
+        }
+
+        initFunction()
+    });
 
     useEffect(()=>{
         switch(step){

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 import { useHistory } from 'react-router';
-import styled, {css , keyframes} from 'styled-components';
+import styled, { css } from 'styled-components';
 import media from 'styled-media-query';
 import UserIcon from './UserIcon';
 import { signinModalOnAction,
@@ -11,7 +11,7 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import userApi from '../api/users'
+import user from '../api/users'
 
 
 
@@ -207,7 +207,7 @@ const NonUserBtn = styled.button`
     `}
 `;
 
-const NonUserBtns = styled.button`
+const NonUserBtns = styled.div`
   .nav-btn-signin{
     border: 0.5px solid white;
     background-color: #646fcb;
@@ -343,17 +343,13 @@ function Nav() {
     const storageKey = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
-    const res = await userApi.logoutApi();
+    const res = await user.logoutApi();
     if(res.status === 200) {
       localStorage.removeItem(storageKey)
       dispatch(signoutAction());
       history.push("/")
     }
   };
-
-  useEffect(() => {
-    console.log(image)
-  }, [])
 
   return (
       <HeaderStyle>

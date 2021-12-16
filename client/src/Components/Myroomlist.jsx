@@ -56,7 +56,7 @@ const InfoContainer = styled.div`
 `
 
 // styled-component Boundary
-const Myroomlist = ({ listKey, room, image }) => {
+const Myroomlist = ({ listKey, room }) => {
     const history = useHistory();
 
     const handleDelete = async (e) => {

@@ -23,18 +23,19 @@ import auth from './api/auth';
 import users from './api/users';
 
 function App() {
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-  const { isLogin } = useSelector(({authReducer})=> authReducer);
+  const [cookies, , removeCookie] = useCookies([]);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
-          isCreateDetailModal, 
-          isSigninModal, 
-          isSignupModal,
-          isPasswordChgModal,
-          currentGatherInfo} = useSelector(({modalReducer}) => modalReducer);
-  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
-  const dispatch = useDispatch();
-
+    isCreateDetailModal, 
+    isSigninModal, 
+    isSignupModal,
+    isPasswordChgModal,
+    // currentGatherInfo,
+  } = useSelector(({modalReducer}) => modalReducer);
+    const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
+    const dispatch = useDispatch();
+    
+    // const { isLogin } = useSelector(({authReducer})=> authReducer);
   const getAccessToken = async (url) => {
     const where = url.searchParams.get('where')
     const authorizationCode = url.searchParams.get('code')
@@ -44,7 +45,7 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    console.log(result)
+    // console.log(result)
     localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
     dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
   }

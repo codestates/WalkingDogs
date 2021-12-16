@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import room from '../api/room';
 import PropTypes from 'prop-types';
-import UserIcon from './UserIcon';
 import { signinModalOnAction } from '../store/actions';
+// import { Link } from 'react-router-dom';
+// import room from '../api/room';
+// import UserIcon from './UserIcon';
 
 const CardContainer = styled.div`
 
@@ -38,12 +38,12 @@ const CardContainer = styled.div`
     }
 `;
 
-const ContentContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: auto;
-`;
+// const ContentContainer = styled.div`
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: center;
+//   height: auto;
+// `;
 
 const ImageBox = styled.div`
   display: flex;
@@ -129,13 +129,13 @@ const Roomcard = ({ listKey, room }) => {
   const [time, setTime] = useState('');
 
   const { isLogin } = useSelector(({ authReducer }) => authReducer);
-  const { isCreateGatherModal } = useSelector(
-    ({ modalReducer }) => modalReducer
-  );
+  // const { isCreateGatherModal } = useSelector(
+  //   ({ modalReducer }) => modalReducer
+  // );
   const dispatch = useDispatch();
-  const handleGathDetailRoomModalOn = () => {
+  // const handleGathDetailRoomModalOn = () => {
     // if(!isCreateGatherModal) dispatch(createGatherRoomDetailModalOnAction(gathering));
-  };
+  // };
 
   const handleRoomInfo = (meeting_time) => {
     setDate(meeting_time.split('T')[0]);

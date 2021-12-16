@@ -1,5 +1,5 @@
 import React ,{useRef}from 'react';
-import styled,{css} from 'styled-components'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import media from 'styled-media-query'
 
@@ -64,13 +64,13 @@ const Name = styled.div`
     flex: 0 0 1;
 `
 
-const Divider = styled.div`
-  min-width: 1px;
-  background-color: var(--color-lightgray);
-  width: 1px;
-  border-radius: 1px;
-  margin: 0.75rem 0;
-`;
+// const Divider = styled.div`
+//   min-width: 1px;
+//   background-color: var(--color-lightgray);
+//   width: 1px;
+//   border-radius: 1px;
+//   margin: 0.75rem 0;
+// `;
 
 const SearchInput = ({name, children, hideDivider}) => {
     const box = useRef(null)

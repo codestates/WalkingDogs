@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components'
 import DataListInput from 'react-plain-datalist-input';
 import PropTypes from 'prop-types';
@@ -86,9 +86,9 @@ const InputDataList = ({ values, placeholder, item, setItem }) => {
 
     const items = useMemo(() => values.map(value => ({ label: value.times, key: value.id })), [values])
 
-    const onSelect = useCallback((selectedItem) => {
-        setItem(selectedItem.label);
-    }, []);
+    const onSelect = (selectedItem) => {
+      setItem(selectedItem.label);
+    };
 
     const onInput = (newVal) => {
         setItem(newVal);

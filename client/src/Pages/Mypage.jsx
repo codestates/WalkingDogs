@@ -126,7 +126,6 @@ const Mypage = () => {
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
     const [username, setUserName] = useState('');
-    const [images, setImages] = useState([]);
 
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
@@ -172,7 +171,7 @@ const Mypage = () => {
                     참가한 모임 목록
                 </Span>
                 {rooms.map((el, idx) => 
-                    <Myroomlist listKey={el.id} room={el} image={images[idx]}/>
+                    <Myroomlist listKey={el.id} room={el} />
                 )}
             </ExRoomList>
 
