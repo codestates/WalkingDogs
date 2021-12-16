@@ -229,6 +229,7 @@ const Signs = ({ type }) => {
 
   const handleInputChange = debounce(async e => {
     const { name, value } = e.target;
+    console.log(name);
     setInputValue({ ...inputValue, [name]: value });
     if (type === '로그인') {
       if (name === 'email') {
