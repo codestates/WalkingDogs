@@ -169,7 +169,7 @@ const RoomCreate = () => {
         }
 
         initFunction()
-    });
+    }, []);
 
     useEffect(()=>{
         switch(step){

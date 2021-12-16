@@ -217,7 +217,7 @@ useEffect(() => {
 
     initFunction();
 
-})
+}, []);
 
 const handleSubmit = async (data) => {
     setIsListLoading(true)

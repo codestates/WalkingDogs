@@ -512,11 +512,10 @@ const Mypagechg = () => {
   };
 
   useEffect(() => {
-
     const initFunction = async () => {
       window.scrollTo(0,0);
       const result = await mypage.dogListApi();
-  
+      
       setFiles(image);
   
       setInfos(Object.assign({ ...infos }, { dogs: [...result.data.dogs] }));
@@ -525,7 +524,7 @@ const Mypagechg = () => {
 
     initFunction();
 
-  });
+  }, []);
 
   return (
     <>

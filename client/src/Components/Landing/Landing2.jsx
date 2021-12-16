@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect }from "react";
 import styled, {keyframes} from 'styled-components'
 import {gsap} from 'gsap';
 import media from 'styled-media-query'
@@ -58,7 +58,7 @@ const Landing2 = () => {
     timeline
       .from('.script-box', {x:'-20%', ease: 'linear'})
       .from('.script-1', {x:'-80%', stragger:.5})
-  })
+  }, [])
 
   return (
     <>

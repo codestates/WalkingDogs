@@ -53,7 +53,7 @@ const Landing1 = () => {
     const timeline = gsap.timeline({default: { duration: 1}})
     timeline
       .from('.script-box', {x:'100%', ease: 'linear', opacity: 0.01})   
-  })
+  }, [])
 
   return (
     <>

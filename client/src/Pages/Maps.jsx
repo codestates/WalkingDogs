@@ -217,7 +217,7 @@ const Maps = () => {
         
         initFunction();
         
-    });
+    }, []);
 
     return(
         <>

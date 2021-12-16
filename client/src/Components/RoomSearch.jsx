@@ -351,7 +351,7 @@ const RoomSearch = ({
       setInputValue(2);
       setSelectedOptions([...selectedOptions, inputValue]);
     }
-  });
+  }, []);
 
   const handleSelect = el => {
     setIsSelected(true);

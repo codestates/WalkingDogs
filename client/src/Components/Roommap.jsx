@@ -133,7 +133,7 @@ const Roommap = ({ latitude, longitude, setSelectedOptions, draggable = true }) 
     }
 
     effectFunction();
-  }, [latitude, longitude, draggable, setSelectedOptions]);
+  }, [latitude, longitude]);
 
   return (
     <>

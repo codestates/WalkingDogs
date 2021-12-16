@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
@@ -11,7 +11,7 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import user from '../api/users
+import user from '../api/users';
 import {gsap} from "gsap";
 
 
@@ -356,7 +356,7 @@ function Nav() {
 
   useEffect(() => {
     gsap.from('header', {duration: 1, y: "-100%"})
-  })
+  }, [])
 
   return (
       <HeaderStyle>

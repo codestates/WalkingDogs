@@ -196,7 +196,7 @@ useEffect(() => {
 
   initFunction();
 
-})
+}, [])
 
     return(
     <>

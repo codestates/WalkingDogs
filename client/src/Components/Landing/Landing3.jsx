@@ -53,7 +53,7 @@ const Landing3 = () => {
 
   useEffect(() =>{
     gsap.from('.into_button',{ duration: 1, y: "100%", ease:'bounce'})
-  })
+  }, [])
 
   return (
     <>

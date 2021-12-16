@@ -515,7 +515,7 @@ const Oneroom = () => {
 
     initFunction();
 
-  });
+  }, []);
 
   return (
     <>
