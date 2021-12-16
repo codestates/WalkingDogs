@@ -39,6 +39,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      region_1depth_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      region_2depth_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      region_3depth_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       meeting_time: {
         allowNull: false,
         type: Sequelize.DATE,

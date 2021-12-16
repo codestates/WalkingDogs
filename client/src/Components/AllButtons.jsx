@@ -33,9 +33,10 @@ const ButtonContainer = styled.button`
 
 // styled-component Boundary
 
-const AllButtons = ({className, color, bgColor ,onClick, disabled, children, ...rest}) => {
+const AllButtons = ({ type, className, color, bgColor ,onClick, disabled, children, ...rest}) => {
     return (
         <ButtonContainer
+            type={type}
             className={className}
             color={color}
             bgColor={bgColor}

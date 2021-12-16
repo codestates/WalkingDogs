@@ -7,14 +7,20 @@ import {IoCloseCircle} from  "react-icons/io5";
 
 
 const Container = styled.div`
-  margin-top: 0.5rem;
-
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Input = styled.input`
     padding: 0 1rem;
     width: 100%;
     color: var(--color-black);
+    text-align-last: center;
+    text-align: center;
+    -ms-text-align-last: center;
+    -moz-text-align-last: center;
     ::placeholder {
     color: var(--color-gray);
     font-family: Interop-Light;
@@ -25,7 +31,7 @@ const Input = styled.input`
 
 const Popper = styled.div`
   position: absolute;
-  margin-top: 1.75rem;
+  margin-top: 7rem;
   width: calc(100% + 4rem);
   padding: 1rem;
   background-color: var(--color-white);
@@ -33,8 +39,8 @@ const Popper = styled.div`
   background-color: var(--color-white);
   border-radius: 1rem;
   overflow: auto;
-  filter: drop-shadow(0px 6px 10px var(--color-shadow));
   display: none;
+  filter: drop-shadow(0px 6px 10px var(--color-shadow));
   ${media.lessThan("medium")`
     width: calc(100vw - 2rem);
     margin-top: 1.25rem;
@@ -52,7 +58,10 @@ const PopperInner = styled.div`
 
 const PopperInput = styled.input`
   max-width: calc(100% - 4rem);
+  text-align-last: center;
   text-align: center;
+  -ms-text-align-last: center;
+  -moz-text-align-last: center;
   ${(props) =>
     props.disabled &&
     css`
@@ -176,13 +185,13 @@ const InputTotalNum =({inputId, placeholder, total, setTotal}) => {
             <Input value={total ? `전체 ${total} 명` : ""} placeholder={placeholder} readOnly/>
                 <Popper ref={popper}>
                     <PopperInner>
-                        {total >= 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
+                        {total > 2 ? <MinusBtn onClick={handleMinusClick}/> : <DisabledMinus/>}
                         <PopperInput id={inputId} value={total || 1} disabled={!total} readOnly/>
-                        {total <= 5 ? <PlusBtn onClick={handlePlusClick}/> : <DisabledPlus/>}
+                        {total < 6 ? <PlusBtn onClick={handlePlusClick}/> : <DisabledPlus/>}
                     </PopperInner>
                 </Popper>
                 {total && (
-                    <ClearBtn onClick={handleClearClick}>
+                    <ClearBtn type='button' onClick={handleClearClick}>
                         <IoCloseCircle/>
                     </ClearBtn>
                 )}

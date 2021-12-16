@@ -6,7 +6,6 @@ import Comments from '../Components/Comments';
 import room from '../api/room';
 import mypage from '../api/mypage';
 import {useDispatch, useSelector} from 'react-redux'
-import {modalOffAction} from '../store/actions';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import media from 'styled-media-query'
 
@@ -321,6 +320,7 @@ const MapBoxAddres = styled.div`
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `;
 
+
 const ErrMsg = styled.div`
   color: red;
 `;
@@ -337,6 +337,7 @@ const MeetingTimeBox = styled.div`
   text-align: center;
   font-size: 1rem;
 `;
+
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
@@ -351,7 +352,6 @@ const Oneroom = () => {
   const [time, setTime] = useState('');
 
   const dispatch = useDispatch();
-
 
   const handleButtonClickJoin = async () => {
     const request_time = new Date();

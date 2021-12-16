@@ -4,11 +4,12 @@ import styled from 'styled-components'
 import roomApi from '../api/room';
 
 const Container = styled.div`
+    border: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    height: 2.9rem;
-    margin: 0px 10px;
+    height: 80px;
+    margin: 10px 0px;
     padding: 10px;
     border-radius: 10px;
     list-style: none;
@@ -16,6 +17,25 @@ const Container = styled.div`
     li {
         font-size: 1.1rem;
     }
+`
+
+const ImageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0px;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+`
+
+const LeaderImage = styled.img`
+    position: absolute;
+    max-width: 150%;
+    height: auto;
+    display: block;
 `
 
 const LeaveButton = styled.button`
@@ -27,12 +47,14 @@ const LeaveButton = styled.button`
 `
 
 const InfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     width: auto;
     height: auto;
 `
 
 // styled-component Boundary
-const Myroomlist = ({ listKey, room }) => {
+const Myroomlist = ({ listKey, room, image }) => {
     const history = useHistory();
 
     const handleDelete = async (e) => {
@@ -45,6 +67,9 @@ const Myroomlist = ({ listKey, room }) => {
     return (
         <>
             <Container key={listKey} className="roomlist_container" onClick={() => {history.push(`/room/${listKey}`)}}>
+                <ImageContainer>
+                    <LeaderImage src={room.user.image}/>
+                </ImageContainer>
                 <InfoContainer>
                     <span>모임 이름:{room.title}</span>
                     <span>위치: {room.address}</span>

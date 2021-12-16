@@ -12,12 +12,11 @@ module.exports = async (req, res) => {
     const { dogs, request_time } = req.body;
     const userInfo = await isAuthorized(req);
 
-
+    console.log(request_time)
     const date_array = request_time.split('T');
     const time_array = date_array[1].split(':');
     time_array[0] = String(Number(time_array[0]) + 9);
     const modified_time = date_array[0]+ 'T' + time_array.join(':');
-
 
     if (userInfo.accessToken) {
       return res.status(401).json({ message: 'you should renew your access token' });

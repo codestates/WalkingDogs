@@ -239,7 +239,8 @@ const ImageAddFile = styled.input`
   width: 25rem;
   height: 25rem;
   border-radius: 50%;
-  z-index: 10;
+  z-index: 0;
+  display: none;
 `;
 
 const DogProfileContainer = styled.div`
@@ -270,6 +271,7 @@ const DogImageAddFile = styled.input`
   height: 5rem;
   border-radius: 50%;
   z-index: 10;
+  visibility: hidden;
 `;
 
 const DogList = styled.div`
@@ -520,8 +522,9 @@ const Mypagechg = () => {
     <>
       <Container className="container">
         <ProfileContainer className="myinfo_chg_img">
-          <ProfileImage className="myinfo_img" src={files ? files : image} />
+          <ProfileImage className="myinfo_img" src={files ? files : image} onClick={() => { document.body.querySelector('\#add_img').click(); }} />
           <ImageAddFile
+            id="add_img"
             className="myinfo_chg_img_btn"
             type="file"
             accept="image/*"
@@ -586,8 +589,10 @@ const Mypagechg = () => {
                       <DogProfileImage
                         className="myinfo_img"
                         src={infos.dogs[idx].image}
+                        onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}
                       />
                       <DogImageAddFile
+                        id={`add_dog_img_${idx}`}
                         className="myinfo_chg_img_btn"
                         type="file"
                         accept="image/*"

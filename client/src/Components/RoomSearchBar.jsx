@@ -14,6 +14,7 @@ import AllButtons from './AllButtons'
 
 
 import {FcSearch} from 'react-icons/fc'
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 const InputContainer = styled.form`
   margin-bottom: 2rem;
@@ -106,14 +107,17 @@ const SearchBtnContainer = styled.div`
 const Select = styled.select`
 margin: 0;
 min-width: 0;
-display: block;
+text-align-last: center;
+text-align: center;
+-ms-text-align-last: center;
+-moz-text-align-last: center;
 width: 100%;
 padding: 7px 7px;
 font-size: inherit;
-line-height: inherit;
-border: 1px solid black;
+border: none;
 border-radius: 4px;
 color: inherit;
+outline: 0;
 background-color: transparent;
   -webkit-appearance: none;
 	-moz-appearance: none;
@@ -136,15 +140,12 @@ const SearchIcon = styled(FcSearch)`
   width: ${(prop) => prop.size}rem;
 `
 
-const breedList=[
-  // {id: 1, breed:"소형"},
-  // {id: 2, breed:"중형"},
-  // {id: 3, breed:"대형"},
-  '소형','중형','대형'
+const sizeList = [
+  '--선택--', '소형', '중형', '대형'
 ];
 
-const breeds = breedList.map((breed)=>{
-  return <option value={breed}>{breed}</option>
+const sizes = sizeList.map((size)=>{
+  return <option key={size} disabled={size === '--선택--' ? true : false} value={size}>{size}</option>
 })
 
 // const BreedBox = (props) => {
@@ -169,18 +170,17 @@ const breeds = breedList.map((breed)=>{
 
 // styled-component Boundary
 
-const RoomSearchBar = () => {
+const RoomSearchBar = ({ handleSubmit }) => {
   
   const dispatch = useDispatch();
-  const [addressInput, setAddressInput] = useState("");
-  const [timeInput, setTimeInput] = useState("")
-  const [dateInput, setDateInput] = useState("")
+  const [addressInput, setAddressInput] = useState([]);
+  const [timeInput, setTimeInput] = useState("");
+  const [dateInput, setDateInput] = useState("");
   const [totalNumInput, setTotalNumInput] = useState(null);
+  const [sizeInput, setSizeInput] = useState("");
   const [searchable, setSearchable] = useState(false); //검색할 수 있는  state
   
-
-  
-  const [list, setList] = useState({
+  const list = {
     address: [],
     time: [
       { id: 1, times: `8시` },
@@ -199,71 +199,26 @@ const RoomSearchBar = () => {
       { id: 14, times: `21시` },
       { id: 15, times: `22시` },
     ],
-  })
-  // 
+  } 
 
-  const getTimes =(input, field)=> {
-    let output = [];
-    for (let i = 0; i < input.length; ++i) {
-      output.push(input[i][field]);
-    }
-    return output;
+  const handleBreedClick = (e) => {
+    setSizeInput(e.target.value)
   }
-    
-  const timesList = getTimes(list.time, 'times')
-  console.log(timesList);
-
-    const handleBreedClick = (e) => {
-      console.log(e.target.value);
-    }
-
-
-    const handleSubmit = (e) => {
-      try {
-        e.preventDefault();
-        const months = {
-          Jan:"01",
-          Feb:"02",
-          Mar:"03",
-          Apr:"04",
-          May:"05",
-          Jun:"06",
-          Jul:"07",
-          Aug:"08",
-          Sep:"09",
-          Oct:"10",
-          Nov:"11",
-          Dec:"12",
-        };
-
-        const refinedAddressInput = addressInput.match(/[A-Za-z가-힣]*/).join("");
-        const refinedDateArr = `${dateInput}`?.split(" ").slice(1, 4);
-        const refinedDateInput = refinedDateArr.length
-        ? `${refinedDateArr[2]}-${months[refinedDateArr[0]]}-${refinedDateArr[1]}`
-        : "";
-
-        const res = roomApi.roomDetailApi({
-          address: refinedAddressInput,
-          date:refinedDateInput,
-          time: timeInput,
-          totalNum:totalNumInput,
-        });
-        dispatch(searchGatherAction(res.data));
-      } catch (error) {
-        console.error(error);
-      }
-    }
 
     useEffect(()=>{
+      console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
       setSearchable(addressInput);
-    },[addressInput])
+    }, [timeInput, dateInput, totalNumInput, sizeInput])
 
-    
+    useDeepCompareEffect(() => {
+      console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
+    }, [addressInput])
+
     return(
         <InputContainer className='input-container'onSubmit={handleSubmit}>
             <Inputlist>
                 <SearchInput name='지역'>
-                  <InputCheckbox/>
+                  <InputCheckbox setAddressInput={setAddressInput}/>
                 </SearchInput>
 
                 <SearchInput name='날짜'>
@@ -275,11 +230,10 @@ const RoomSearchBar = () => {
                 </SearchInput>
 
                 <SearchInput name='시간'>
-                  {list.time.times}
                   <InputDataList
                   id='time'
                   placeholder='시간은?'
-                  values={list.times}
+                  values={list.time}
                   item={timeInput}
                   setItem={setTimeInput}/>
                 </SearchInput>
@@ -292,20 +246,20 @@ const RoomSearchBar = () => {
                     setTotal={setTotalNumInput}/>
                 </SearchInput>
 
-                <SearchInput name='견종'
-                  id='breed'
-                  placeholder='견종 선택'
+                <SearchInput name='크기'
+                  id='size'
+                  placeholder='크기 선택'
                   onClick={handleBreedClick}>
-                <Select onChange={handleBreedClick}>
-                  {breeds}
-                </Select>
+                    <Select defaultValue='--선택--' onChange={handleBreedClick}>
+                      {sizes}
+                    </Select>
                 </SearchInput>
             </Inputlist>
         <SearchBtnContainer className="pc">
             <AllButtons 
-              type="submit"
+              type="button"
               className="gath-search-btn pc"
-              onClick={handleSubmit}
+              onClick={() => { handleSubmit({ addressInput, dateInput, timeInput, totalNumInput, sizeInput }) }}
               disabled={!searchable}
               >
               검색

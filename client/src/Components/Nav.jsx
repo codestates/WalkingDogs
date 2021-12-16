@@ -244,6 +244,7 @@ const SignupBtn = styled.button`
 `
 
 const LogoutBtn = styled.button`
+  margin: 0 10px;
   border: 0.5px solid white;
   background-color: #646fcb;
   color: white;

@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
     // if (!userInfo) {
     //   return res.status(401).json({ message: 'unauthorized' });
     // }
-
+    console.log(userInfo)
     const image = req.file;
     console.log('image: ', image);
     const imageLocation = image.location;
@@ -62,11 +62,11 @@ module.exports = async (req, res) => {
         .status(400)
         .json(util.fail(400, '이미지가 존재하지 않습니다.'));
     }
-    console.log('imagePath2: ');
+    console.log('userInfo.id : ', userInfo.id);
     const updatedUser = await user
       .update(
         {
-          image: imagePath,
+          image: imageLocation,
         },
         {
           where: {
