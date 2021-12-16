@@ -63,21 +63,27 @@ const GlobalStyles = createGlobalStyle`
     @font-face{
         font-family: "BlackHanSans";
         src: url('../fonts/BlackHanSans-Regular.woff') format('woff'),
+        font-weight: normal;
+        unicode-range: U+0000-U+FFFF;
     }
 
     @font-face{
         font-family: "Jua-Regular";
         src: url('../fonts/Jua-Regular.woff') format('woff'),
+        font-weight: normal;
+        unicode-range: U+0000-U+FFFF;
     }
 
     @font-face{
         font-family: "PoorStory-Regular";
         src: url('../fonts/PoorStory-Regular.woff') format('woff'),
+        font-weight: normal;
+        unicode-range: U+0000-U+FFFF;
     }
 
 
     :root {
-        --fontFamily: Jua, system-ui, 
+        --fontFamily: Jua-Regular, BlackHanSans, PoorStory-Regular, system-ui, -apple-system, BlinkMacSystemFont
         --fontSize-root-big: 16px;
         --fontSize-root-small: 14px;
         --lineHeight-normal: 1;

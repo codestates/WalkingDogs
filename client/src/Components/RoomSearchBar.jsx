@@ -78,7 +78,7 @@ const Inputlist = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    gap: 2px;
+    gap: 6px;
 `
 
 const SearchBox = styled.div`
@@ -141,32 +141,12 @@ const SearchIcon = styled(FcSearch)`
 `
 
 const sizeList = [
-  '--선택--', '소형', '중형', '대형'
+  '전체', '소형', '중형', '대형'
 ];
 
 const sizes = sizeList.map((size)=>{
-  return <option key={size} disabled={size === '--선택--' ? true : false} value={size}>{size}</option>
+  return <option key={size} value={size}>{size}</option>
 })
-
-// const BreedBox = (props) => {
-
-//   const handleChange = (e) => {
-//     console.log(e.target.value);
-//   }
-//   return(
-//     <Select onChange={(e)=>handleChange(e)}>
-//         {props.breedList.map((breed)=> {
-//           <option
-//             key={breed.id} 
-//             value={breed.id}
-//             defaultValue={props.defaultValue === breed.id}
-//             >
-//               {breed.breed}
-//           </option>
-//         })}
-//     </Select>
-//   )
-// }
 
 // styled-component Boundary
 
@@ -250,7 +230,7 @@ const RoomSearchBar = ({ handleSubmit }) => {
                   id='size'
                   placeholder='크기 선택'
                   onClick={handleBreedClick}>
-                    <Select defaultValue='--선택--' onChange={handleBreedClick}>
+                    <Select defaultValue='전체' onChange={handleBreedClick}>
                       {sizes}
                     </Select>
                 </SearchInput>

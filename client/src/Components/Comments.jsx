@@ -7,22 +7,28 @@ import comment from '../api/comment';
 
 const Container = styled.div`
     border: 1rem solid var(--color-mainviolet--100);
-    width: auto; 
+    width: 100%; 
     height: 30rem;
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: var(--color-darkwhite);
+    div{
+        justify-content: center;
+    }
 `
 
 const Title = styled.h2`
-    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+    text-align: center;
+    text-decoration: underline;
 `
 
 const CommentContainer = styled.div`
     border: 1px solid darkgray;
     border-radius: 10px;
-    width: 50%;
+    width: 65rem;
     height: 10rem;
     overflow-y: auto;
     display: flex;
@@ -42,11 +48,11 @@ const Comment = styled.div`
 const InputContainer = styled.div`
     display: flex;
     justify-content: center;
-    width: 80%;
+    width: 90%;
 `
 
 const CommentInput = styled.input`
-    width: 55%;
+    width: 90%;
     min-height: 2rem;
     max-height: 2rem;
     border: 1px solid blue;
@@ -191,7 +197,9 @@ useEffect(async () => {
 }, [])
 
     return(
+    <>
         <Container>
+            <div className="inline">
             <Title> 이 모임에서 자유롭게 얘기를 나눠봐요</Title>
             <CommentContainer>
                 {comments.map((el, idx) => 
@@ -220,7 +228,9 @@ useEffect(async () => {
                 }
             </InputContainer>
             <ErrMessage>{errMsg}</ErrMessage>
+            </div>
         </Container>
+        </>
     )
 }
 

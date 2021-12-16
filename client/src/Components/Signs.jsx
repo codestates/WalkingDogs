@@ -252,6 +252,7 @@ const Signs = ({ type }) => {
         setValidated({ ...validated, [name]: emailValue });
         if (value === '') setErrMsg('');
         else if (emailValue) {
+          setErrMsg('');
           // setErrMsg("");
           // try {
           //     const res = await userApi.loginApi(value);
@@ -259,10 +260,9 @@ const Signs = ({ type }) => {
           // } catch (error) {
           //     setErrMsg("가입된 이메일 입니다.");
           // }
+        } else {
+            setErrMsg("이메일 형식이 올바르지 않습니다.");
         }
-        // else {
-        //     setErrMsg("이메일 형식이 올바르지 않습니다.");
-        // }
       } else if (name === 'password') {
         const passwordValue = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/.test(
           value,
