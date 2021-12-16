@@ -18,7 +18,6 @@ const OneroomContainer = styled.div`
   justify-content: center;
   border: 1rem solid var(--color-mainviolet--100);
   background-color: var(--color-mainviolet--100);
-  
 `;
 
 const OneroomBox = styled.div`
@@ -345,7 +344,7 @@ const ComMapBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 // styled-component Boundary
 const Oneroom = () => {
@@ -359,7 +358,7 @@ const Oneroom = () => {
   const [errMsg, setErrMsg] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-
+  // const [noDog, setNoDog] = useState(true);
   const dispatch = useDispatch();
 
   const handleButtonClickJoin = async () => {
@@ -372,23 +371,20 @@ const Oneroom = () => {
     console.log('result.status: ', result.status);
     if (result.status === 200) {
       console.log('result.data.data: ', result.data.data);
-      if (result.data.data) {
+      if (result.data.data === 'meeting time is over') {
         console.log('result.data.data: ', result.data.data);
         setErrMsg('1');
         console.log('errMsg: ', errMsg);
+      } else if (result.data.data === 'you sent no dog') {
+        setErrMsg('2');
+        console.log('errMsg2: ', errMsg);
       } else {
-        if (myDogs.length === 0) {
-          console.log(myDogs);
-          setErrMsg('2');
-          console.log('errMsg2: ', errMsg);
-        } else {
-          console.log('myDogs: ', myDogs);
-          setRoomDetail(
-            Object.assign({}, { ...roomDetail }, { isJoinRequested: true })
-          );
-          setErrMsg('0');
-          console.log('errMsg3: ', errMsg);
-        }
+        console.log('selectedDogs: ', selectedDogs);
+        setRoomDetail(
+          Object.assign({}, { ...roomDetail }, { isJoinRequested: true })
+        );
+        setErrMsg('0');
+        console.log('errMsg3: ', errMsg);
       }
     } else {
       console.log('status code not 200');
@@ -451,6 +447,11 @@ const Oneroom = () => {
           return myDogs[idx].id === id ? true : el;
         })
       ]);
+      // for (let i = 0; i < selectedDogs.length; i++) {
+      //   if (selectedDogs[i]) {
+      //     setNoDog(false);
+      //   }
+      // }
     } else {
       // (강아지) 제거
       setSelectedDogs([
@@ -458,6 +459,11 @@ const Oneroom = () => {
           return myDogs[idx].id === id ? false : el;
         })
       ]);
+      // for (let i = 0; i < selectedDogs.length; i++) {
+      //   if (selectedDogs[i]) {
+      //     setNoDog(false);
+      //   }
+      // }
     }
   };
 
@@ -645,17 +651,17 @@ const Oneroom = () => {
           </>
         )}
       </OneroomContainer>
-        <ComMapBox>
-          <Comments roomId={params.room_id} />
-          <MapBox>
-            <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
-            <Roommap
-              latitude={roomDetail.latitude}
-              longitude={roomDetail.longitude}
-              draggable={false}
-            />
-          </MapBox>
-        </ComMapBox>     
+      <ComMapBox>
+        <Comments roomId={params.room_id} />
+        <MapBox>
+          <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
+          <Roommap
+            latitude={roomDetail.latitude}
+            longitude={roomDetail.longitude}
+            draggable={false}
+          />
+        </MapBox>
+      </ComMapBox>
     </>
   );
 };

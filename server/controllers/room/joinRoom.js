@@ -12,21 +12,23 @@ module.exports = async (req, res) => {
     const { dogs, request_time } = req.body;
     const userInfo = await isAuthorized(req);
 
-    console.log(request_time)
+    console.log(request_time);
     const date_array = request_time.split('T');
     const time_array = date_array[1].split(':');
     time_array[0] = String(Number(time_array[0]) + 9);
-    const modified_time = date_array[0]+ 'T' + time_array.join(':');
+    const modified_time = date_array[0] + 'T' + time_array.join(':');
 
     if (userInfo.accessToken) {
-      return res.status(401).json({ message: 'you should renew your access token' });
+      return res
+        .status(401)
+        .json({ message: 'you should renew your access token' });
     }
 
     if (!userInfo) {
       return res.status(401).json({ message: 'unauthorized' });
     }
 
-   const roomInfo = await room
+    const roomInfo = await room
       .findOne({
         where: {
           id: roomId
@@ -38,13 +40,19 @@ module.exports = async (req, res) => {
           .status(400)
           .json({ message: 'no such room in the database' });
       });
-     
-    if (Date.parse(modified_time) > Date.parse(roomInfo.dataValues.meeting_time)) {
-          return res
-            .status(200)
-            .json({ message: 'expired', data: 'meeting time is over' });
-    } 
-      
+
+    if (
+      Date.parse(modified_time) > Date.parse(roomInfo.dataValues.meeting_time)
+    ) {
+      return res
+        .status(200)
+        .json({ message: 'expired', data: 'meeting time is over' });
+    }
+
+    if (dogs.length === 0) {
+      return res.status(200)
+      .json({message: "no dog", data: 'you sent no dog' });
+    }
     const reqInfo = await room_join_req
       .findOne({
         where: {
@@ -58,16 +66,17 @@ module.exports = async (req, res) => {
       });
 
     if (!reqInfo) {
-      await room_join_req.create({
-        user_id: userInfo.id,
-        room_id: roomId
-      })
-      .then((result) => {
-        console.log('result2: ', result);
-      })
-      .catch((err) => {
-        console.log('err2: ', err);
-      })
+      await room_join_req
+        .create({
+          user_id: userInfo.id,
+          room_id: roomId
+        })
+        .then((result) => {
+          console.log('result2: ', result);
+        })
+        .catch((err) => {
+          console.log('err2: ', err);
+        });
 
       dogs.forEach(async (el) => {
         await room_join_req_dog.create({
