@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react'
 import styled, {css} from 'styled-components';
 
-
 const Container = styled.div`
     border: none;
     display: flex;
     justify-content: space-around;
     align-items: center;
     height: 80px;
-    margin: 10px 10px;
+    margin: 10px 0px;
     border: none;
     border-radius: 10px;
     list-style: none;
@@ -16,9 +15,22 @@ const Container = styled.div`
 `;
 
 const ImageBox = styled.div`
-    width: 15%;
-    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0px;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
+    overflow: hidden;
+`
+
+const DogImage = styled.img`
+    position: absolute;
+    max-width: 150%;
+    height: auto;
+    display: block;
 `
 
 const FriendInfo = styled.div`
@@ -41,7 +53,7 @@ const Myfriendlist = ({ listKey, dog }) => {
         <>
             <Container key={listKey} className="myfriend_list_container">
                 <ImageBox className="myfriend_img_container">
-                    <img className='myfriend_img' src={'http://image.dongascience.com/Photo/2017/03/14900752352661.jpg'}/>
+                    <DogImage className='myfriend_img' src={dog.image}/>
                 </ImageBox>
                 <FriendInfo className="myfriend_info">
                     <li>이름 : {dog.name} / 중성화 : {dog.neutering ? 'O' : 'X'}</li>

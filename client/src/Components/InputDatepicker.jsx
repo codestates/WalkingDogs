@@ -11,8 +11,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faCaretLeft, faCaretRight, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
-  margin-top: 0.5rem;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
   .react-datepicker__tab-loop {
     margin-top: 1.5rem;
     ${media.lessThan("medium")`
@@ -27,13 +30,16 @@ const Container = styled.div`
   }
   .react-datepicker__input-container {
     > input {
+      text-align-last: center;
+      text-align: center;
+      -ms-text-align-last: center;
+      -moz-text-align-last: center;
       padding: 0 1rem;
       width: 100%;
       height: 2rem;
       ::placeholder {
         color: black;
-        font-family: Interop-Light;
-        font-size: 20px
+        font-size: 14px;
       }
     }
     > button {
@@ -41,6 +47,8 @@ const Container = styled.div`
     }
   }
   .react-datepicker-popper {
+    display: flex;
+    justify-content: center;
     margin-top: 0.9rem;
     ${media.lessThan("medium")`
       filter: none;
@@ -199,6 +207,10 @@ const [date, setDate] = useState(new Date());
       setSelectedDate("");
     }
 
+    const handleClickDiscard = () => {
+      setSelectedDate('');
+    }
+
     return(
         <Container>
             <DatePicker 
@@ -244,9 +256,10 @@ const [date, setDate] = useState(new Date());
                     </button>
                 </CustomHeader>
             )}
-            ></DatePicker>
+            >
+            </DatePicker>
             {selectedDate && (
-                <ClearBtn type='button'>
+                <ClearBtn type='button' onClick={handleClickDiscard}>
                     <FontAwesomeIcon icon={faTimesCircle}/>
                 </ClearBtn>)}
         </Container>

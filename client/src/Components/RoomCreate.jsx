@@ -253,11 +253,10 @@ const RoomCreate = () => {
             const meetingTime = Date.parse(
                 `${selectedOptions[1]}T${selectedOptions[2].length < 3 ? `0${selectedOptions[2].slice(0, -1)}` : `${selectedOptions[2].slice(0, -1)}`}:00:00.000Z`
                 )
-            console.log(meetingTime)
             const payload = {
                 latitude: selectedOptions[0].latitude,
                 longitude: selectedOptions[0].longitude,
-                address: selectedOptions[0].address.address_name,
+                address: selectedOptions[0],
                 meeting_time: meetingTime,
                 member_limit: selectedOptions[3],
                 room_title: selectedOptions[4],

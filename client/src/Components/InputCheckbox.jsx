@@ -78,10 +78,6 @@ const InputContainer = styled.div`
   height: auto;
   padding: 3px 3px;
   z-index: 3;
-
-  > div.delete-button {
-    cursor: pointer;
-  }
 `;
 
 const DropDownContainer = styled.ul`
@@ -152,7 +148,7 @@ const AutoCompleteWrapper = styled.div`
 
 // styled-component Boundary
 
-const InputCheckbox = () => {
+const InputCheckbox = ({ setAddressInput }) => {
   const onSelect = useCallback((selectedItem) => {
     setItem(selectedItem.label);
   });
@@ -184,55 +180,11 @@ const InputCheckbox = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [focus, setFocus] = useState(false);
   const posInput = useRef();
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-    
-    value ? setHasText(true) : setHasText(false);
-    setInputValue(value);
-  };
   
   const handleDropDownClick = (clickedOption) => {
+    setAddressInput([...selectedOptions, clickedOption])
     setSelectedOptions([...selectedOptions, clickedOption]);
   };
-  
-  // const handleKeyUp = (event) => {
-  //   // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/getModifierState#example
-  //   // eslint-disable-next-line
-  //   if (
-  //     event.getModifierState('Fn') ||
-  //     event.getModifierState('Hyper') ||
-  //     event.getModifierState('OS') ||
-  //     event.getModifierState('Super') ||
-  //     event.getModifierState('Win')
-  //     )
-  //     return;
-  //     if (
-  //       event.getModifierState('Control') +
-  //       event.getModifierState('Alt') +
-  //       event.getModifierState('Meta') >
-  //       1
-  //       )
-  //       return;
-  //       if (hasText) {
-  //         if (event.code === 'ArrowDown' && options.length - 1 > selected) {
-  //           setSelected(selected + 1);
-  //         }
-  //         if (event.code === 'ArrowUp' && selected >= 0) {
-  //           setSelected(selected - 1);
-  //         }
-  //         if (event.code === 'Enter' && selected >= 0) {
-  //           handleDropDownClick(options[selected]);
-  //           setSelected(-1);
-  //         }
-  //       }
-  //     };
-    
-      // useEffect(() => {
-      //   if (inputValue === '') {
-      //     setHasText(false);
-      //   }
-      // });
 
   const handleFocusOn = () => {
     setFocus(!focus);
@@ -241,9 +193,6 @@ const InputCheckbox = () => {
   useDeepCompareEffect(async () => {
     const addressUrl = 'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
 
-    console.log(options)
-    console.log(selectedOptions)
-            
     let res
     switch (selectedOptions.length) {
       case 0:
@@ -267,6 +216,7 @@ const InputCheckbox = () => {
   const handleClearClick = (idx) => {
     const slicedArr = selectedOptions.slice(0, idx)
     
+    setAddressInput([ ...slicedArr ])
     setSelectedOptions([ ...slicedArr ])
   };
 
@@ -274,11 +224,10 @@ const InputCheckbox = () => {
     <AutoCompleteWrapper className="autocomplete-wrapper" onClick={handleFocusOn}>
       <InputContainer
         hasText={hasText}
-        onChange={handleInputChange}
       >
         {selectedOptions.map((option, idx) => {
           return (
-            <ClearBtn>
+            <ClearBtn key={idx} type='button'>
               <span style={{fontSize: '10px'}}>{option.name.split(' ')[option.name.split(' ').length - 1]}</span>
               <IoCloseCircle onClick={() => handleClearClick(idx)}/>
             </ClearBtn>

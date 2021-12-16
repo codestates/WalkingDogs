@@ -7,9 +7,16 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: 0.5rem;
   width: 100%;
   .autocomplete-input {
+    text-align-last: center;
+    text-align: center;
+    -ms-text-align-last: center;
+    -moz-text-align-last: center;
+    margin-bottom: 0.6rem;
     padding: 0 1rem;
     width: 100%;
     ::placeholder {
@@ -17,15 +24,15 @@ const Container = styled.div`
       font-family: Interop-Light;
     }
     outline: none;
-    font-size: 1rem;
+    font-size: 14px;
   }
   .datalist-items {
     min-width: calc(100% + 4rem);
     max-height: 15rem;
-    margin-top: 1.75rem;
-    font-size: 1.125rem;
+    margin-left: -1.8rem;
     background-color: var(--color-white);
     border-radius: 1rem;
+    border: none;
     filter: drop-shadow(0px 6px 10px var(--color-shadow));
     overflow: auto;
     > * {
@@ -77,6 +84,8 @@ const ClearBtn = styled.button`
 
 const InputDataList = ({ values, placeholder, item, setItem }) => {
 
+    const items = useMemo(() => values.map(value => ({ label: value.times, key: value.id })), [values])
+
     const onSelect = useCallback((selectedItem) => {
         setItem(selectedItem.label);
     }, []);
@@ -84,10 +93,6 @@ const InputDataList = ({ values, placeholder, item, setItem }) => {
     const onInput = (newVal) => {
         setItem(newVal);
     };
-
-    const match = (currentInput, item) => {
-        return item.label.toLowerCase().includes(currentInput.toLowerCase());
-    }
 
     const handleClearClick = () => {
         setItem("");
@@ -98,10 +103,9 @@ const InputDataList = ({ values, placeholder, item, setItem }) => {
             <DataListInput
                 placeholder={placeholder}
                 value={item}
-                // items={items}
+                items={items}
                 onSelect={onSelect}
                 onInput={onInput}
-                match={match}
                 suppressReselect={false}
             />
             {item && ( //리스트에서 아이템을 선택하면 해당 아이템으로 설정되어 x버튼으로 없앨 수 있다. 
