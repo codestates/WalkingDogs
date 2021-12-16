@@ -49,13 +49,11 @@ const Landing1Image = styled.img`
   /* animation: ${imageFade} 3s ease-in-out; */
 `
 
-const Image = styled.img`
-width: fit-content;
-height: fit-content;
-object-fit: scale-down;
-
-
-`
+// const Image = styled.img`
+// width: fit-content;
+// height: fit-content;
+// object-fit: scale-down;
+// `
 
 
 // styled component boundary
