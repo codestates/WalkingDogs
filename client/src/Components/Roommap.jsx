@@ -83,7 +83,7 @@ const Roommap = ({ latitude, longitude, selectedOptions, setSelectedOptions, dra
       setSelectedOptions(
         [
           {
-            address: address[0].road_address === null ? address[0].address : address[0].road_address,
+            address: address[0],
             latitude: Number(latlng.getLat().toFixed(6)),
             longitude: Number(latlng.getLng().toFixed(6)),
           }
