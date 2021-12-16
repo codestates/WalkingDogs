@@ -7,7 +7,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 
 워킹독스와 함께 강아지의 사회화 훈련과 즐거운 산책을 즐겨보세요!
 
-### 👉 WalkingDogs 사용해보기 👈 (배포링크)
+### 👉 [WalkingDogs 사용해보기](https://walkingdogs.link/) 👈 (배포링크)
 
 ## Tech Stack
 ![image](https://cdn.discordapp.com/attachments/912245935197802554/914735636496408577/2021-11-29_1.32.05.png)
