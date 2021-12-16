@@ -521,7 +521,9 @@ const Mypagechg = () => {
   return (
     <>
       <Container className="container">
+
         <ProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector('\#add_img').click(); }} >
+
           <ProfileImage className="myinfo_img" src={files ? files : image} />
           <ImageAddFile
             id="add_img"
@@ -589,7 +591,6 @@ const Mypagechg = () => {
                       <DogProfileImage
                         className="myinfo_img"
                         src={infos.dogs[idx].image}
-                        
                       />
                       <DogImageAddFile
                         id={`add_dog_img_${idx}`}

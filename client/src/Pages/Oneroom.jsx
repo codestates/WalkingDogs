@@ -5,9 +5,9 @@ import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
 import room from '../api/room';
 import mypage from '../api/mypage';
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import media from 'styled-media-query'
+import media from 'styled-media-query';
 
 export const OneroomContainer = styled.div`
   width: auto;
@@ -295,10 +295,10 @@ const GathCrewBox = styled.div`
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
-  ${media.lessThan("medium")`
+  ${media.lessThan('medium')`
     width: 738px
   `}
-`
+`;
 
 const MapBox = styled.div`
   width: auto;
@@ -319,7 +319,6 @@ const MapBoxAddres = styled.div`
   padding: 1rem;
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `;
-
 
 const ErrMsg = styled.div`
   color: red;
@@ -483,7 +482,7 @@ const Oneroom = () => {
     setTime(time_array[0] + ':' + time_array[1]);
   };
   useEffect(async () => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     const resRoom = await room.roomDetailApi(params.room_id);
     console.log(resRoom);
 

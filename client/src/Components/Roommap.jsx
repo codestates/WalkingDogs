@@ -88,7 +88,7 @@ const Roommap = ({ latitude, longitude, selectedOptions, setSelectedOptions, dra
             longitude: Number(latlng.getLng().toFixed(6)),
           }
         ]
-        )
+      )
         
         // iwContent에 넣는 custom Element가 설명으로 표시 됩니다.
         
