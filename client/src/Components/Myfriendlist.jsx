@@ -29,8 +29,9 @@ const ImageBox = styled.div`
 const DogImage = styled.img`
     position: absolute;
     max-width: 150%;
-    height: auto;
+    height: 100%;
     display: block;
+    object-fit: cover;
 `
 
 const FriendInfo = styled.div`

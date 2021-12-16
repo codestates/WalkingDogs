@@ -33,9 +33,11 @@ const ImageContainer = styled.div`
 
 const LeaderImage = styled.img`
     position: absolute;
-    max-width: 150%;
-    height: auto;
+    max-width: 100%;
+    height: 100%;
+    border-radius: 100%;
     display: block;
+    object-fit: cover;
 `
 
 const LeaveButton = styled.button`

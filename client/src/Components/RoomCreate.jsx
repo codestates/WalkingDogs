@@ -277,7 +277,7 @@ const RoomCreate = () => {
                 
                 if(res.status === 200){
                     dispatch(modalOffAction());
-                    dispatch(createGatherRoomDetailModalOnAction(res.data));
+                    // dispatch(createGatherRoomDetailModalOnAction(res.data));
                 }
             } else {
                 setShowMessage(true);

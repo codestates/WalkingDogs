@@ -51,13 +51,14 @@ const ImgBox = styled.div`
     height: 10em;
     border: 1px solid lightgray;
     border-radius: 50%;
+    background-size: cover;
 `;
 
 const Img = styled.img`
-    width: auto;
+    width: 100%;
     height: 100%;
     border-radius: 100%;
-    object-fit: fill;
+    object-fit: cover;
 `
 
 const Profile = styled.div`
