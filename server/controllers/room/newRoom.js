@@ -21,6 +21,7 @@ const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
   console.log('newRoomAPI');
+  
   try {
     const {
       latitude,
@@ -31,7 +32,8 @@ module.exports = async (req, res) => {
       member_limit,
       meeting_time
     } = req.body;
-
+    console.log('address: ', address);
+    console.log('address.road_address: ', address.road_address)
     const userInfo = await isAuthorized(req);
     if (userInfo.accessToken) {
       res.status(401).json({ message: 'you should renew your access token' });
