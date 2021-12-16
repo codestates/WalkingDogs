@@ -509,6 +509,7 @@ const Mypagechg = () => {
   };
 
   useEffect(async () => {
+    window.scrollTo(0,0);
     const result = await mypage.dogListApi();
 
     setFiles(image);

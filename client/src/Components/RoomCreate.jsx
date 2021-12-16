@@ -286,7 +286,7 @@ const RoomCreate = () => {
                 console.log(selectedOptions);
 
             }
-            
+            window.location.assign('/roomlist')
         } catch (error) {
             console.error(error);
         }
