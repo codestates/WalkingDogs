@@ -453,7 +453,7 @@ const Mypagechg = () => {
     setInfos(Object.assign({ ...infos }, { dogs: [...list] }));
   };
 
-  const handleImage = async (event) => {
+  const handleImage = async event => {
     let formData = new FormData();
     formData.append('image', event.target.files[0]);
     try {

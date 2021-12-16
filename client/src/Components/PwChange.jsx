@@ -160,10 +160,10 @@ const PwChange = () => {
         
     }, 200)
 
-    const handleConfirm = (e) => {
+    const handleConfirm = async (e) => {
       // e.preventDefault();
        try {
-          const res = mypageApi.passwordApi(inputValue);
+          const res = await mypageApi.passwordApi(inputValue);
           if(res.status === 200) {
             setErrMsg("");
             handleTypeChange();

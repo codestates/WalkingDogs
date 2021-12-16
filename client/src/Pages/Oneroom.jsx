@@ -537,7 +537,7 @@ const Oneroom = () => {
                 >
                   같이 가는 친구들은 누굴까요?
                 </span>
-                <GathCrewBox onClick={handleCrewModalOpen}>
+                <GathCrewBox>
                   {roomDetail.dogs !== undefined &&
                     roomDetail.dogs.map((el) => {
                       return <OtherUserImg key={el.id} src={el.image} />;
