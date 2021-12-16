@@ -96,17 +96,18 @@ const BtnContainer = styled.div`
 `
 
 const CreateRoomBtn = styled.button`
-    border: 1px solid #000000;
+    border: 0.2rem solid var(--color-darkwhite);
     border-radius: 30px;
     width: 11rem;
     height: 3rem;
     font-size: 20px;
-    color: black;
+    color:var(--color-darkwhite);
     cursor: pointer;
     text-align: center;
     :hover{
         background-color: var(--color-darkwhite);
-        border: 1px solid var(--color-mainviolet--50);
+        border: 0.2rem solid var(--color-mainviolet--25);
+        color: black;
     }
 `
 

@@ -11,7 +11,8 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import user from '../api/users'
+import user from '../api/users
+import {gsap} from "gsap";
 
 
 
@@ -102,6 +103,7 @@ const StyleNavLink = styled(NavLink)`
     color: var(--color-darkwhite);
     box-shadow: 1px 1px lightgray;
     padding-top: 0.2rem;
+
   }
   ${media.lessThan("medium")`
     padding: 1rem;
@@ -183,6 +185,7 @@ const MobileHambergerBtn = styled.button`
 const NonUserBtn = styled.button`
   border: 0.5px solid white;
   background-color: var(--color-mainviolet--100);
+  padding: 0.5rem .8rem;
   color: white;
   border-radius: 10px;
   cursor: pointer;
@@ -350,6 +353,10 @@ function Nav() {
       history.push("/")
     }
   };
+
+  useEffect(() => {
+    gsap.from('header', {duration: 1, y: "-100%"})
+  })
 
   return (
       <HeaderStyle>

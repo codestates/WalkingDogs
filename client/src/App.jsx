@@ -22,6 +22,8 @@ import PwChange from './Components/PwChange'
 import auth from './api/auth';
 import users from './api/users';
 
+import {gsap} from 'gsap';
+
 function App() {
   const [cookies, , removeCookie] = useCookies([]);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
@@ -80,6 +82,10 @@ function App() {
       })
     }
   }, [])
+
+  useEffect(() => {
+    gsap.from('Nav', {duration: 1, y: "-100%"})
+  })
 
   useEffect(() => {
     let timer;

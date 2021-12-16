@@ -239,6 +239,3 @@ const DropDown = ({options, handleDropDownClick, selected}) => {
 }
 
 export default InputCheckbox;
-// InputCheckbox.PropTypes={
-//     values: PropTypes.arrayOf(PropTypes.any).isRequired,
-// };

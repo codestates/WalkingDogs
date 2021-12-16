@@ -1,6 +1,8 @@
-import React from "react";
+import React , {useEffect} from "react";
 import {Link} from 'react-router-dom'
 import styled , {keyframes} from 'styled-components';
+import media from 'styled-media-query';
+import {gsap} from 'gsap';
 
 
 const ButtonUp = keyframes`
@@ -38,11 +40,20 @@ const GuestIntoBtn = styled.button`
     background-color: var(--color-mainviolet--25);
     color: var(--color-darkwhite);
   }
+  ${media.between("small","medium")`
+    width: 20vw;
+    font-size: 1.1rem;  
+  `}
 `
 
 
 
 const Landing3 = () => {
+
+
+  useEffect(() =>{
+    gsap.from('.into_button',{ duration: 1, y: "100%", ease:'bounce'})
+  })
 
   return (
     <>
