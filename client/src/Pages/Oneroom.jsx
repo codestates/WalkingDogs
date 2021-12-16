@@ -295,8 +295,9 @@ const GathCrewBox = styled.div`
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
-  ${media.lessThan("medium")`
-    width: 738px;
+
+  ${media.lessThan('medium')`
+    width: 738px
   `}
 `;
 
