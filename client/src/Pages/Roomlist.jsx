@@ -13,16 +13,13 @@ import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import room from '../api/room';
 import map from '../api/map';
-import Modal from '../Components/Modal';
-import RoomCreate from '../Components/RoomCreate';
 
-export const RoomlistContainer = styled.div`
+const RoomlistContainer = styled.div`
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-
     >*{
         padding: 2rem;
         width: 100%;
@@ -45,7 +42,8 @@ export const RoomlistContainer = styled.div`
 
 const LocationBox = styled.div`
   background-color: var(--color-mainviolet--100);
-  min-height: 20rem;
+  min-height: auto;
+  width: 100%;
   flex: 0 0 1;
   ${media.lessThan("medium")`
     padding : 4rem 2rem;
@@ -68,18 +66,16 @@ const LocationBox = styled.div`
   }
 `;
 
-export const CardList = styled.div`
-    border: 1px solid #000000;
+const CardList = styled.div`
     width: 100%;
     display: grid;
     flex-wrap: row;
-    gap: 0.8rem;
-    grid-template-columns: repeat(auto-fill,minmax(20rem, auto));
-`
-
-export const Button = styled.button`
-    
-    border-bottom: 1px solid #000000;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill,minmax(19rem, auto));
+    grid-gap: 1rem;
+    justify-content: space-evenly;
+    padding: 1rem 3rem;
+    background-image: url(${(props) => props.url});
 `
 
 const IsListLoadingBox = styled.div`
@@ -91,7 +87,7 @@ const EmptyBox = styled.div`
     height: 20rem;
     font-family: 'Jua';
 `
-export const BtnContainer = styled.div`
+const BtnContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction:row;

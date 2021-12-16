@@ -96,34 +96,28 @@ const DropDownContainer = styled.ul`
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 0px;
-  margin-top: -1px;
+  margin-top: 1rem;
   padding: 0.5rem 0;
   border: none;
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 1rem 1rem 1rem 1rem;
   z-index: 3;
   overflow-y: auto;
 
   > li {
-    padding: 0 1rem;
+    padding: 1px 1rem;
+    box-shadow: 1px 1px lightgray;
 
     &:hover {
-      background-color: #eee;
+      background-color: var(--color-mainviolet--25);
+      color: var(--color-darkwhite);
+
     }
 
     &.selected {
       background-color: #ebe5f9;
+      color: black;
     }
   }
-`;
-
-const AreaListBox = styled.div`
-  width: 10;
-  height: 20px;
-  border: 1px solid blue;
-`;
-
-const AreaList = styled.select`
-  border: 1px solid black;
 `;
 
 const ClearBtn = styled.button`
