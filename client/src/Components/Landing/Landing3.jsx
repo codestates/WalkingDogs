@@ -2,13 +2,22 @@ import React from "react";
 import {Link} from 'react-router-dom'
 import styled , {keyframes} from 'styled-components';
 
+
+const ButtonUp = keyframes`
+  from {
+    margin-top: 15rem ;
+  }
+  to{
+    align-items: center;
+  }
+`
+
 const Landing3Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--color-black);
   width: 100%;
-  height: 20rem;
+  height: 50vh;
   background-position: center;
   background-size: cover;
   background-image:  url('img/1638945650734.jpeg');
@@ -24,6 +33,7 @@ const GuestIntoBtn = styled.button`
   height: 4rem;
   border-radius: 4rem;
   font-size:2rem;
+  animation: ${ButtonUp} 1.5s ease-in-out;
   :hover{
     background-color: var(--color-mainviolet--25);
     color: var(--color-darkwhite);

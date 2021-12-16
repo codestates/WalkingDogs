@@ -38,7 +38,7 @@ const MypageInfo = styled.div`
     align-items: center;
     margin: 10px 10px;
     padding: 10px;
-    width: 50%;
+    width: 30rem;
     height: 20rem;
     border-radius: 10px;
     box-shadow: 1px 1px grey;
@@ -51,13 +51,14 @@ const ImgBox = styled.div`
     height: 10em;
     border: 1px solid lightgray;
     border-radius: 50%;
+    display: inline-block;
 `;
 
 const Img = styled.img`
     width: auto;
     height: 100%;
     border-radius: 100%;
-    object-fit: fill;
+    object-fit: scale-down;
 `
 
 const Profile = styled.div`
@@ -66,7 +67,7 @@ const Profile = styled.div`
     margin: 5px 10px;
     width: 15rem;
     list-style: none;
-    box-shadow: 1px 1px grey;
+    box-shadow: 1px 1px lightgray;
     background-color: var(--color-darkwhite);
 `
 
