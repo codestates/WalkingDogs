@@ -31,7 +31,7 @@ const joinRoomApi = async (roomId, dogs, request_time) => {
     url: `/room/${roomId}/join`,
     data: {
       dogs,
-      request_time
+      request_time,
     },
   });
   return result;

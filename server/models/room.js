@@ -69,6 +69,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      region_1depth_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      region_2depth_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      region_3depth_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       meeting_time: {
         type: DataTypes.DATE,
         allowNull: false,

@@ -20,7 +20,7 @@ const { isAuthorized } = require('../tokenFunctions');
 // 2 - 1. address 저장할 때, 도, 시, 동 등 행정구역별로 나누어서 저장할 지 결정하기 -> 통째로 저장하기
 
 module.exports = async (req, res) => {
-  console.log('newRoomAPI')
+  console.log('newRoomAPI');
   try {
     const {
       latitude,
@@ -29,10 +29,9 @@ module.exports = async (req, res) => {
       selected_dogs,
       room_title,
       member_limit,
-      meeting_time,
+      meeting_time
     } = req.body;
 
-    // let address= '';
     const userInfo = await isAuthorized(req);
     if (userInfo.accessToken) {
       res.status(401).json({ message: 'you should renew your access token' });
@@ -66,14 +65,14 @@ module.exports = async (req, res) => {
       res.status(401).json({ message: 'unauthorized' });
     }
 
-    console.log(meeting_time)
+    // console.log(meeting_time)
 
     const roomInfo = await room.findAll({
       where: {
-        title: room_title,
-      },
+        title: room_title
+      }
     });
-    console.log('roomInfo : \n', roomInfo);
+    // console.log('roomInfo : \n', roomInfo);
 
     // room_title이 데이터베이스에 이미 존재할 경우 조건문을 통해서 분기시켰습니다.
     // createRoom을 할 때, user_room에 leader_id에 해당하는 유저를 추가해야 하는지 test하기
@@ -87,28 +86,31 @@ module.exports = async (req, res) => {
         latitude: latitude,
         longitude: longitude,
         meeting_time: meeting_time,
-        address: address,
+        address: address.address.road_address !== null ? address.address.road_address.address_name : address.address.address.address_name,
+        region_1depth_name: address.address.address.region_1depth_name,
+        region_2depth_name: address.address.address.region_2depth_name,
+        region_3depth_name: address.address.address.region_3depth_name,
       });
-      
+
       if (!createdRoom) {
         res.status(400).json({ message: 'bad request' });
       }
 
       const createdUserRoom = await user_room.create({
         user_id: userInfo.id,
-        room_id: createdRoom.dataValues.id,
+        room_id: createdRoom.dataValues.id
       });
 
-      console.log(createdRoom)
-      console.log(createdUserRoom)
+      // console.log(createdRoom)
+      // console.log(createdUserRoom)
 
       for (let i = 0; i < selected_dogs.length; i++) {
         const dogInfo = await room_dog.create({
           dog_id: selected_dogs[i].id,
-          room_id: createdRoom.dataValues.id,
+          room_id: createdRoom.dataValues.id
         });
 
-        console.log(dogInfo)
+        // console.log(dogInfo)
 
         if (!dogInfo) {
           res.status(400).json({ message: 'bad request' });

@@ -1,8 +1,7 @@
-const { room, user_room } = require('../../models');
+const { room, user_room, user } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
-  console.log('myroomAPI')
   try {
     const userInfo = await isAuthorized(req);
 
@@ -20,12 +19,15 @@ module.exports = async (req, res) => {
         },
         include: {
           model: room,
+          include: {
+            model: user,
+          },
         },
       });
 
       if (!roomList) {
         res.status(400).json({ message: 'no such user in the database' });
-      } else {
+      } else {        
         const rooms = [];
         roomList.forEach(el => {
           rooms.push(el.room);
@@ -35,7 +37,7 @@ module.exports = async (req, res) => {
       }
     }
   } catch (err) {
-    console.error;
+    console.log(err);
     res.status(500).json({ message: 'server error' });
   }
 };

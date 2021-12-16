@@ -26,14 +26,15 @@ const MypageContainer = styled.div`
 const Span = styled.span`
     background-color: var(--color-darkwhite);
     text-align: center;
-    width: 8rem;
+    width: auto;
+    padding: 5px;
     border-radius: 10rem;
     line-height: 20px;
 `
 
 const MypageInfo = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin: 10px 10px;
     padding: 10px;
@@ -41,7 +42,7 @@ const MypageInfo = styled.div`
     height: 20rem;
     border-radius: 10px;
     box-shadow: 1px 1px grey;
-    background-color: var(--color-mainviolet--100);
+    background-color: var(--color-mainviolet--25);
 `;
 
 const ImgBox = styled.div`
@@ -79,14 +80,17 @@ const Li = styled.li`
 `
 
 const ExRoomList = styled.div`
+    justify-content: center;
+    align-items: center;
     margin: 10px;
-    width: 60%;
-    height: 20rem !important;
+    width: 40%;
+    height: 20rem;
+    padding: 10px;
     border-radius: 10px;
     background-color: var(--color-mainviolet--25);
-    display: flex;
     flex-direction: column;
     justify-content: space-around;
+    overflow-y: auto;
 `
 
 const FriendsList = styled.div`
@@ -95,10 +99,12 @@ const FriendsList = styled.div`
     margin: 10px;
     width: 40%;
     height: 20rem;
+    padding: 10px;
     border-radius: 10px;
     background-color: var(--color-mainviolet--25);
     flex-direction: column;
     justify-content: space-around;
+    overflow-y: auto;
 `
 
 const SettingButton = styled.button`
@@ -119,6 +125,7 @@ const Mypage = () => {
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
     const [username, setUserName] = useState('');
+    const [images, setImages] = useState([]);
 
     const getUserData = async () => {
         const resDogList = await mypage.dogListApi();
@@ -151,7 +158,6 @@ const Mypage = () => {
                         {username}
                     </Li>
                 </Profile>
-
                 
                 <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
                     <Link to="/mypagechange" style={{color:'black'}}>
@@ -164,8 +170,8 @@ const Mypage = () => {
                 <Span className="roomlist_title">
                     참가한 모임 목록
                 </Span>
-                {rooms.map((el) => 
-                    <Myroomlist listKey={el.id} room={el}/>
+                {rooms.map((el, idx) => 
+                    <Myroomlist listKey={el.id} room={el} image={images[idx]}/>
                 )}
             </ExRoomList>
 

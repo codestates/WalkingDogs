@@ -1,6 +1,5 @@
 import {SEARCH_GATHER, GATHER_INFO} from '../actions/actionTypes';
 
-
 const initialState = {
     conditions: {
         username: '',
@@ -13,7 +12,6 @@ const initialState = {
     },
     gatherings: [],
 }
-
 
 const gathReducer = (prevState = initialState, action) => {
     let state;
