@@ -86,7 +86,7 @@ module.exports = async (req, res) => {
         latitude: latitude,
         longitude: longitude,
         meeting_time: meeting_time,
-        address: address.address.road_address !== null ? address.address.road_address.address_name : address.address.address.address_name,
+        address: address.address.road_address !== null && !address.address.road_address ? address.address.road_address.address_name : address.address.address.address_name,
         region_1depth_name: address.address.address.region_1depth_name,
         region_2depth_name: address.address.address.region_2depth_name,
         region_3depth_name: address.address.address.region_3depth_name,

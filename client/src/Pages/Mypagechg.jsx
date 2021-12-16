@@ -521,8 +521,8 @@ const Mypagechg = () => {
   return (
     <>
       <Container className="container">
-        <ProfileContainer className="myinfo_chg_img">
-          <ProfileImage className="myinfo_img" src={files ? files : image} onClick={() => { document.body.querySelector('\#add_img').click(); }} />
+        <ProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector('\#add_img').click(); }}>
+          <ProfileImage className="myinfo_img" src={files ? files : image} />
           <ImageAddFile
             id="add_img"
             className="myinfo_chg_img_btn"
@@ -585,11 +585,10 @@ const Mypagechg = () => {
                     key={idx}
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
-                    <DogProfileContainer className="myinfo_chg_img">
+                    <DogProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}>
                       <DogProfileImage
                         className="myinfo_img"
                         src={infos.dogs[idx].image}
-                        onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}
                       />
                       <DogImageAddFile
                         id={`add_dog_img_${idx}`}

@@ -1,4 +1,4 @@
-const { room, user, user_room } = require('../../models');
+const { room, user, user_room, room_dog, dog } = require('../../models');
 const haversine = require('haversine');
 
 module.exports = async (req, res) => {
@@ -39,7 +39,10 @@ module.exports = async (req, res) => {
     else {
       await room
         .findAll({
-          include: { model: user_room, include: user },
+          include: [
+            { model: user_room, include: user },
+            { model: room_dog, include: dog },
+          ],
         })
         .then(rooms => {
           return res.status(200).json({ rooms, message: 'ok' })

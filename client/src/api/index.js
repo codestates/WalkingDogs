@@ -5,8 +5,4 @@ const api = axios.create({
     withCredentials: true,
 })
 
-// const api = axios.create({
-//     baseURL: `https://localhost:443`,
-//     withCredentials: true,
-// })
 export default api;

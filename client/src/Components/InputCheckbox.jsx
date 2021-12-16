@@ -86,7 +86,8 @@ const DropDownContainer = styled.ul`
   background-color: #f6f6fa;
   display: block;
   width: 100%;
-  height: 12rem;
+  height: auto;
+  max-height: 12rem;
   margin-left: auto;
   margin-right: auto;
   list-style-type: none;
@@ -149,45 +150,19 @@ const AutoCompleteWrapper = styled.div`
 // styled-component Boundary
 
 const InputCheckbox = ({ setAddressInput }) => {
-  const onSelect = useCallback((selectedItem) => {
-    setItem(selectedItem.label);
-  });
 
-  const onInput = (newValue) => {
-    setItem(newValue);
-  };
-
-  // const items = useMemo(()=> values.map((oneItem) => {
-  //     const valueList = {};
-  //     valueList.key = oneItem.id;
-  //     if(oneItem.city) valueList.city = oneItem.city;
-  //     if(oneItem.area) valueList.area = oneItem.area;
-  //     if(oneItem.place) valueList.place = oneItem.place;
-
-  //     return { ...valueList};
-  // }),[values]);
-
-  const [seletedCity, setSeletecCity] = useState([]);
-
-  const [selectedArea, setSelectedArea] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState([]);
-  const [backward, setBackward] = useState(false);
-  const [item, setItem] = useState('');
-  const [inputValue, setInputValue] = useState('');
-  const [hasText, setHasText] = useState(false);
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(-1);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [focus, setFocus] = useState(false);
-  const posInput = useRef();
   
   const handleDropDownClick = (clickedOption) => {
-    setAddressInput([...selectedOptions, clickedOption])
+    setAddressInput([...selectedOptions, clickedOption]);
     setSelectedOptions([...selectedOptions, clickedOption]);
   };
 
-  const handleFocusOn = () => {
-    setFocus(!focus);
+  const handleFocus = () => {
+    setFocus(true);
   }
       
   useDeepCompareEffect(async () => {
@@ -211,9 +186,12 @@ const InputCheckbox = ({ setAddressInput }) => {
         setOptions([])
         break;
     } 
+
+    setFocus(false)
   }, [selectedOptions]);
 
-  const handleClearClick = (idx) => {
+  const handleClearClick = (e, idx) => {
+    e.stopPropagation();
     const slicedArr = selectedOptions.slice(0, idx)
     
     setAddressInput([ ...slicedArr ])
@@ -221,22 +199,22 @@ const InputCheckbox = ({ setAddressInput }) => {
   };
 
   return (
-    <AutoCompleteWrapper className="autocomplete-wrapper" onClick={handleFocusOn}>
+    <AutoCompleteWrapper className="autocomplete-wrapper" onClick={handleFocus}>
       <InputContainer
-        hasText={hasText}
       >
         {selectedOptions.map((option, idx) => {
           return (
             <ClearBtn key={idx} type='button'>
               <span style={{fontSize: '10px'}}>{option.name.split(' ')[option.name.split(' ').length - 1]}</span>
-              <IoCloseCircle onClick={() => handleClearClick(idx)}/>
+              <IoCloseCircle onClick={(e) => handleClearClick(e, idx)}/>
             </ClearBtn>
           )
         })}
       </InputContainer>
 
       {focus ?
-        options.length !== 0 ?
+        (
+          options.length !== 0 ?
           <DropDown
             options={options}
             handleDropDownClick={handleDropDownClick}
@@ -244,29 +222,11 @@ const InputCheckbox = ({ setAddressInput }) => {
           />
         :
           <></>
+        )
       :
         <></>
       }
 
-      {/* <Container> */}
-      {/* <DataListInput
-                    name='city'
-                    placeholder="시,도"
-                    />
-                    <DataListInput
-                    name='area'
-                    placeholder="구, 군"
-                    />
-                    <DataListInput
-                    name='place'
-                    placeholder='동,읍,면'
-                    /> */}
-      {/* {item && (
-                        <ClearBtn onClick={handleClearClick}>
-                            <IoCloseCircle/>
-                        </ClearBtn>
-                    )}
-        </Container> */}
     </AutoCompleteWrapper>
   );
 };
@@ -278,7 +238,9 @@ const DropDown = ({options, handleDropDownClick, selected}) => {
           return (
             <li
               key={idx}
-              onClick={() => handleDropDownClick(option)}
+              onClick={() => {
+                handleDropDownClick(option);
+              }}
               className={selected === idx ? 'selected' : ''}
             >
               {option.name.split(' ')[option.name.split(' ').length - 1]}

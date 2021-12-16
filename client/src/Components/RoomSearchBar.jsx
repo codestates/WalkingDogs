@@ -141,11 +141,11 @@ const SearchIcon = styled(FcSearch)`
 `
 
 const sizeList = [
-  '--선택--', '소형', '중형', '대형'
+  '전체', '소형', '중형', '대형'
 ];
 
 const sizes = sizeList.map((size)=>{
-  return <option key={size} disabled={size === '--선택--' ? true : false} value={size}>{size}</option>
+  return <option key={size} value={size}>{size}</option>
 })
 
 // const BreedBox = (props) => {
@@ -250,7 +250,7 @@ const RoomSearchBar = ({ handleSubmit }) => {
                   id='size'
                   placeholder='크기 선택'
                   onClick={handleBreedClick}>
-                    <Select defaultValue='--선택--' onChange={handleBreedClick}>
+                    <Select defaultValue='전체' onChange={handleBreedClick}>
                       {sizes}
                     </Select>
                 </SearchInput>

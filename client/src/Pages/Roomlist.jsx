@@ -152,6 +152,7 @@ const convertedCityName = {
     '경기도': '경기',
     '강원도': '강원',
     '충청북도': '충북',
+    '충청남도': '충남',
     '전라북도': '전북',
     '전라남도': '전남',
     '경상북도': '경북',
@@ -209,15 +210,19 @@ useEffect(async () => {
     
     const result = await map.locationApi({ latitude, longitude })
     setRooms([ ...result.data.rooms ]);
-    setIsListLoading(false)
+
+    setTimeout(() => {
+        setIsListLoading(false)
+    }, 1000)
 
 }, [])
 
 const handleSubmit = async (data) => {
+    setIsListLoading(true)
     const allRooms = await map.locationApi({ isSearch: true }).then(res => res.data.rooms)
 
-    console.log(allRooms)
-    console.log(data)
+    // console.log(allRooms)
+    // console.log(data)
 
     const filteredRooms = allRooms.filter(el => {
         // flag 최초 선언
@@ -230,15 +235,20 @@ const handleSubmit = async (data) => {
         // addressInput이 존재할 때,
         if(flag && data.addressInput.length !== 0) {
             data.addressInput.forEach((input, idx) => {
-                const { name } = input
+                const name = input.name.split(' ')[input.name.split(' ').length - 1]
+                // console.log(name)
 
-                // 우리가 서울특별시로 저장되는데 서버가 '서울'로 준다면...?
-                // 우리가 전라북도로 읽는데 서버가 '전북'으로 준다면...?
-                // 딕셔너리 제작은 해봤음.
-                console.log(name)
-                console.log(el[`region_${idx + 1}depth_name`].includes(name))
-                console.log(el[`region_${idx + 1}depth_name`].includes(convertedCityName[name]))
-                flag = flag && (el[`region_${idx + 1}depth_name`].includes(name) || el[`region_${idx + 1}depth_name`].includes(convertedCityName[name]))
+                if(idx === 0){
+                    // console.log(`region_${idx + 1}depth_name : `, name)
+                    // console.log(`converted region_${idx + 1}depth_name : `, convertedCityName[name])
+                    flag = flag && (el[`region_${idx + 1}depth_name`].includes(name) || el[`region_${idx + 1}depth_name`].includes(convertedCityName[name]))
+                    // console.log(flag)
+                }
+                else {
+                    // console.log(`region_${idx + 1}depth_name : `, name)
+                    flag = flag && (el[`region_${idx + 1}depth_name`].includes(name))
+                    // console.log(flag)
+                }
             })
         }
 
@@ -262,27 +272,27 @@ const handleSubmit = async (data) => {
 
         // 내가 선택한 강아지의 사이즈를 제외한 애들이 있으면 검색 X
         if(flag && data.sizeInput) {
+            const size = data.sizeInput
             
+            el.room_dogs.forEach((joinTable) => {
+                flag = flag && (size === '전체' || joinTable.dog.size.includes(size))
+            })
         }
 
         return flag
     })
-    console.log(filteredRooms)
+    setRooms([ ...filteredRooms ])
 
-    // allRooms
-
-    // ! 여기서 모든 방에서 data라는 factor를 활용해서 리스트를 필터링.
-    // ! rooms를 수정
+    setTimeout(() => {
+        setIsListLoading(false)
+    }, 1000)
 }
 
 // useDeepCompareEffect(()=> {
-//     if(isMounted.current) {
-//         setIsListLoading(true);
-//         setTimeout(() => {
-//           setIsListLoading(false);
-//         }, 500)
-//     }
-// }, [conditions])
+//     setTimeout(() => {
+//         setIsListLoading(false)
+//     }, 200)
+// }, [rooms])
 
     return(
         <>
