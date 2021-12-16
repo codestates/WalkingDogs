@@ -9,19 +9,23 @@ import { signinModalOnAction } from '../store/actions';
 
 
 const CardContainer = styled.div`
-    border: 0.5rem solid var(--color-mainviolet--25);
+    border: 1.2rem solid var(--color-mainviolet--25);
     border-radius: 1rem;
-    background-color: var(--color-mainviolet--25);
+    background-color: var(--color-mainviolet--darkwhite);
     filter: drop-shadow(2px 2px 6px lightgray);
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    /* max-width: 25rem; */
-    min-width: 21rem;
+    text-align: center;
+    min-width: 18rem;
     > * {
         margin-bottom: 1.15rem;
+    }
+    .inline{
+        justify-content: center
+        border: 1px solid var(--color-darkwhite);
     }
     .divider {
         margin: 0 0.4em 0.1em;
@@ -66,6 +70,8 @@ const AddressesBox = styled.div`
     width: 12rem;
     height: 30px;
     margin: 5px;
+    display: inline-block;
+    align-items: center;
     text-align: center;
     border-radius: 10px;
     background-color: var(--color-darkwhite);
@@ -118,14 +124,16 @@ const handleGathDetailRoomModalOn = () =>{
                 else
                     dispatch(signinModalOnAction())
                 }}>
-            <ImageBox>
-                <LeaderImage src={leaderInfo.image}
-                    style={{maxWidth: '100%', height: 'auto', display: 'block'}} />
-            </ImageBox>
-            <Roominfo>
-                <AddressesBox> {room.address} </AddressesBox>
-                <RoomTitleBox>{room.title}</RoomTitleBox>
-            </Roominfo>
+
+                <ImageBox>
+                    <LeaderImage src={leaderInfo.image}
+                        style={{maxWidth: '100%', height: 'auto', display: 'block'}} />
+                </ImageBox>
+                <Roominfo>
+                    <AddressesBox> {room.address} </AddressesBox>
+                    <RoomTitleBox>{room.title}</RoomTitleBox>
+                </Roominfo>
+            
         </CardContainer>
     );
 };

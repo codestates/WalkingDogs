@@ -29,9 +29,10 @@ const Landing2Container = styled.div`
   align-items:center;
   width : auto;
   height: 50rem;
+  height: calc(var(--vh, 1vh) * 110);
   background-position: center;
   background-size: cover;
-  background-image: url('img/landingbackground2.jpeg');
+  background-image: url('img/1638980727301.jpeg');
   object-fit: scale-down;
   *{
     margin: 0;

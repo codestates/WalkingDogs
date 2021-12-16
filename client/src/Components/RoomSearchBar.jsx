@@ -21,7 +21,6 @@ const InputContainer = styled.form`
   height: auto;
   width: auto;
   background-color: var(--color-mainviolet-50);
-  border: 2px solid var(--color-darkwhite);
   border-radius: 0.5rem;
   display: flex;
   gap: 1px;

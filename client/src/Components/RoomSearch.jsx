@@ -26,11 +26,11 @@ const Wrapper = styled.div`
 const Search = styled.input`
   //create-modal창의 인풋
   background-color: white;
-  width: 25.5rem;
-  height: 5rem;
+  width: 23.5rem;
+  height: 3rem;
   border: 1px solid gray;
   border-radius: 1rem;
-  padding: 1.2rem;
+  padding: 1.1rem;
   margin-bottom: 1.25rem;
   ${media.lessThan('medium')`
         width: 20rem;
@@ -100,7 +100,8 @@ const MapContainer = styled.div`
 `;
 
 const StyledDate = styled.div`
-  width: 25.5rem;
+  width: 23.5rem;
+  align-items: center;
 
   ${media.lessThan('medium')`
     width: 20rem;

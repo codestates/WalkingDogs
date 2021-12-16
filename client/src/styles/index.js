@@ -6,12 +6,15 @@ const GlobalStyles = createGlobalStyle`
     ${normalize}
 
     /*HTML Elements*/
-    *,
+    *{
+        
+    },
         :after,
         :before {
             margin: 0;
             box-sizing: border-box;
             line-height: var(---lineHeight-normal);
+            height: 100%;
     }
 
     html{
