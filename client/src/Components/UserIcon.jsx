@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router';
 import {modalOffAction} from '../store/actions'
 import PropTypes from 'prop-types';
+import {ReactComponent as DefaultProfile} from '../assets/defaultProfilesvg.svg'
 
 const IconContainer = styled.div`
     width: fit-content;
@@ -78,7 +79,7 @@ const Image = styled.div`
   overflow: hidden;
 `;
 
-const DefaultImage = styled.img`
+const DefaultImage = styled(DefaultProfile)`
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -89,7 +90,6 @@ const DefaultImage = styled.img`
 const UserIcon = ({size, user, isDisabled, isCreator, hideName}) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
     const handleProfileClick = () => {
         dispatch(modalOffAction);
         history.push(`/user/${user.id}`);
@@ -102,13 +102,12 @@ const UserIcon = ({size, user, isDisabled, isCreator, hideName}) => {
             size={size}
             onClick={()=>{
                 if(!isDisabled) handleProfileClick()
-                }}
-                >
+              }}
+            >
                     <div id='image'>
-                    {user.image ? <Image url={user.image}/> : <DefaultImage src='img/defaultProfile.jpeg'/>}
+                    {user.image ? <Image url={user.image}/> : <DefaultImage/>}
                     {isCreator && (
-                        <div id='creatormark'>
-                            hi
+                        <div id='crownmark'>
                         </div>
                     )}
                     </div>

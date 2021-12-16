@@ -80,6 +80,25 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    let timer;
+    window.addEventListener("resize", (event) => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        setCurrentHeight(event.target.innerHeight);
+      }, 200);
+    });
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      window.removeEventListener("resize", (event) => {
+        setCurrentHeight(event.target.innerHeight);
+      });
+    };
+  }, []);
 
   useEffect (() => {
     const vh = currentHeight * 0.01;

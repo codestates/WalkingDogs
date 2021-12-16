@@ -297,7 +297,7 @@ const GathCrewBox = styled.div`
   border-radius: 1rem;
   justify-content: space-around;
   ${media.lessThan("medium")`
-    width: 738px
+    width: 738px;
   `}
 `
 
@@ -537,7 +537,7 @@ const Oneroom = () => {
                 >
                   같이 가는 친구들은 누굴까요?
                 </span>
-                <GathCrewBox onClick={handleCrewModalOpen}>
+                <GathCrewBox >
                   {roomDetail.dogs !== undefined &&
                     roomDetail.dogs.map((el) => {
                       return <OtherUserImg key={el.id} src={el.image} />;
