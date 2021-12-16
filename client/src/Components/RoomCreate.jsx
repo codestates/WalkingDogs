@@ -13,8 +13,8 @@ import {BsArrowLeftCircleFill, BsArrowRightCircleFill} from 'react-icons/bs'
 
 
 const CreateRoomContainer = styled.div`
-    width: fit-content;
-    height: fit-content;
+    width: 35rem;
+    height: 42rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +23,7 @@ const CreateRoomContainer = styled.div`
 `
 
 const Info = styled.div`
-    width: 44rem;
+    width: 42rem;
     padding: 2rem 2rem 1.5rem;
     text-align: center;
     * {
@@ -39,8 +39,8 @@ const MoveNextButton = styled.div`
     position: relative;
     display: flex;
     align-items: end;
-    justify-content: space-between;
-    width: 44rem;
+    justify-content: space-evenly;
+    width: 35rem;
     height: 12rem;
     padding: 2rem 2rem 2rem;
     ${media.lessThan("medium")`
@@ -277,7 +277,6 @@ const RoomCreate = () => {
                 
                 if(res.status === 200){
                     dispatch(modalOffAction());
-                    dispatch(createGatherRoomDetailModalOnAction(res.data));
                 }
             } else {
                 setShowMessage(true);
@@ -298,7 +297,8 @@ const RoomCreate = () => {
             <CreateRoomContainer>
                 <Info>
                     <div style={{color: 'black',fontSize: '20px'}}>질문 {step} 번</div>
-                    <h2 style={{color: 'black'}}>{ask}</h2>                
+                    <h2 style={{color: 'black'}}>{ask}</h2>
+                    {step === 1 && <div style={{color: 'black', fontSize: '20px'}}> 선택해주세요. </div>}              
                 </Info>
                 <Container>
                     <RoomSearch

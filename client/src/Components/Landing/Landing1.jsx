@@ -24,7 +24,8 @@ const imageFade = keyframes`
 const Landing1Container = styled.div`
   display: flex;
   width: auto;
-  height: 55rem;
+  height: 85vh;
+  height: calc(var(--vh, 1vh) * 110);
   background-position: center;
   background-size: cover;
   background-image: url("img/landingbackground1.jpeg");
@@ -44,13 +45,15 @@ const Landing1Image = styled.img`
   width: 45rem;
   height: 45rem;
   border-radius: 100%;
-  animation: ${imageFade} 3s ease-in-out;
+  display: inline-block;
+  /* animation: ${imageFade} 3s ease-in-out; */
 `
 
 const Image = styled.img`
 width: fit-content;
 height: fit-content;
 object-fit: scale-down;
+
 
 `
 

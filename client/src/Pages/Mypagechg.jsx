@@ -230,8 +230,9 @@ const ProfileContainer = styled.div`
 const ProfileImage = styled.img`
   position: absolute;
   max-width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
 `;
 
 const ImageAddFile = styled.input`
@@ -261,8 +262,9 @@ const DogProfileContainer = styled.div`
 const DogProfileImage = styled.img`
   position: absolute;
   max-width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
 `;
 
 const DogImageAddFile = styled.input`

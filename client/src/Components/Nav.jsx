@@ -3,7 +3,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 import { useHistory } from 'react-router';
-import styled, {css} from 'styled-components';
+import styled, {css , keyframes} from 'styled-components';
 import media from 'styled-media-query';
 import UserIcon from './UserIcon';
 import { signinModalOnAction,
@@ -12,6 +12,9 @@ import { signinModalOnAction,
 
 import { useDispatch, useSelector } from "react-redux";
 import userApi from '../api/users'
+
+
+
 
 const HeaderStyle = styled.header`
   background-color: var(--color-mainviolet--100);
