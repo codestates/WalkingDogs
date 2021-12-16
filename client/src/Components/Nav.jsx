@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react"
-import { faTimes, faUser, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 import { useHistory } from 'react-router';
 import styled, {css} from 'styled-components';
 import media from 'styled-media-query';
 import UserIcon from './UserIcon';
-import { signinAction,
-         signinModalOnAction,
+import { signinModalOnAction,
          signoutAction,
          signupModalOnAction } from "../store/actions";
 
@@ -24,7 +23,6 @@ const HeaderStyle = styled.header`
   top: 0;
   width: 100%;
   z-index: 10;
-
   ${media.lessThan("medium")`
     padding: 1rem;
   `}
@@ -34,6 +32,7 @@ const HeaderStyle = styled.header`
 const Navs = styled.nav`
   display: flex;
   flex: 1;
+  justify-content: space-evenly;
 
   ${media.lessThan("medium")`
     display: ${({isNav}) => (isNav ? 'flex' : 'none')}
@@ -49,18 +48,13 @@ const Navs = styled.nav`
     background-color: var(--color-mainviolet--50);
     border-top: 1px solid var(--color-mainviolet--50);
   `}
-`
+`;
 
 const NavbarTitle = styled.div`
     color: white; 
     text-decoration: none;
     margin-left: 1px;
 `
-
-const LogoLink = styled(Link)`
-  margin-right: 1rem;
-  height:auto;
-`;
 
 const NavTitleImg = styled.img`
   margin-right: 1rem;
@@ -77,7 +71,7 @@ const NavTitleImg = styled.img`
 `;
 
 const NavShortImg = styled.img`
-margin-right: 1rem;
+height: 2rem;
 display:none;
 object-fit: scale-down;
 
@@ -92,22 +86,20 @@ ${({isLogin}) =>
 
 
 const StyleNavLink = styled(NavLink)`
-  border: 2px solid var(--color-darkwhite);
   display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  font-size: 13rem;
-  margin: 0 1rem;
-  width: 8.1rem;
-  height: 3rem;
-  transition: background-color, color 100ms ease-out;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  padding:0.5rem;
+  transition: background-color, color 300ms ease-out;
   color: var(--color-darkwhite);
-
+  width: 5rem;
   :hover{
     color: var(--color-darkwhite);
+    box-shadow: 1px 1px lightgray;
+    padding-top: 0.2rem;
   }
-
   ${media.lessThan("medium")`
     padding: 1rem;
     font-size: 1.68rem;
@@ -121,10 +113,10 @@ const StyleNavLink = styled(NavLink)`
   }
 `
 
-const MobileStyleNavLink = styled(StyleNavLink)`
+const MobileStyledNavLink = styled(StyleNavLink)`
   display: flex;
 
-  ${media.lessThan("medium")`
+  ${media.greaterThan("medium")`
     display:none;
   `}
 `
@@ -232,17 +224,6 @@ const NonUserBtns = styled.button`
   }
 `
 
-const SignupBtn = styled.button`
-    border: 0.1rem solid white;
-    background-color: var(--color-mainviolet--100);
-    color: var(--color-darkwhite);
-    border-radius: 10px;
-    cursor: pointer;
-    font-size:1.8rem;
-    margin: 0 1.1rem;
-    gap: 2px;
-`
-
 const LogoutBtn = styled.button`
   margin: 0 10px;
   border: 0.5px solid white;
@@ -253,29 +234,14 @@ const LogoutBtn = styled.button`
   font-size:1.8rem;
 `
 
-const UserBox = styled.div`
+const UserBtns = styled.div`
   display: flex;
   position: relative;
   align-items: center;
-  flex: 2;
-`
-
-const BtnContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex: 2;
-`
-
-const CommunityBtn = styled.button`
-  border: 0.5px solid white;
-  background-color: #646fcb;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size:30px;
-  margin: 0 1rem;
-  width: 8rem;
-  height: 3rem;
+  flex: 1 0 1;
+  .nav-btn{
+    color: black;
+  }
 `
 
 const Text = styled.span`
@@ -307,6 +273,7 @@ const PcUserInfo = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
+  align-items: end;
   bottom: calc (-4.5rem - 3px);
   right: 0;
   border-radius: 0.5rem;
@@ -321,9 +288,10 @@ const PcUserInfoMyPageBtn = styled(Link)`
   background-color: var(--color-white);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 0 0 0.5rem 0.5rem ;
   border-bottom: 1px solid var(--color-lightgray);
   transition: background-color 100ms ease-out;
+
   :hover {
     background-color: var(--color-darkwhite);
   }
@@ -405,15 +373,15 @@ function Nav() {
                 </MobileUserContainer>  
                 <MobileStyledH4> Page </MobileStyledH4>
                 <StyleNavLink to='/' onClick={closeAll}>
-                  <Text>홈</Text>
+                  <Text> 홈 </Text>
                 </StyleNavLink>
                 <StyleNavLink to='/roomlist' onClick={closeAll}>
                   <Text> 모임 </Text>
                 </StyleNavLink>
                 <MobileStyledH4> Account </MobileStyledH4>
-                <StyleNavLink to='/mypage' onClick={closeAll}>
+                <MobileStyledNavLink to='/mypage' onClick={closeAll}>
                   <Text>마이 페이지</Text>
-                </StyleNavLink>
+                </MobileStyledNavLink>
                   <MobileNavBtn onClick={handleSignOut}>
                     <Text>로그아웃</Text>
                   </MobileNavBtn>
@@ -434,27 +402,26 @@ function Nav() {
             </NonUserBtn>
           </NonUserBtns>
         )}
-
         {isLogin && (
-          <UserBox>
+          <UserBtns>
             <UserName onClick={() => history.push('/mypage')}>{username}</UserName>
               <UserImg src={image} onClick={() => history.push('/mypage')}/>
             <LogoutBtn onClick={handleSignOut}>로그아웃</LogoutBtn>
-          </UserBox>
+          <MobileHambergerBtn className="nav-btn" onClick={handleHamburgerClick}>
+            <FontAwesomeIcon icon={faBars}/>
+          </MobileHambergerBtn>
+          {isUserBtnClicked && (
+            <PcUserInfo>
+               <PcUserInfoMyPageBtn to='/mypage' onClick={handleUserInfoClick}> 
+               마이 페이지 
+               </PcUserInfoMyPageBtn>
+               <PcUserInfoLogoutBtn onClick={handleSignOut}> 로그아웃 </PcUserInfoLogoutBtn>
+             </PcUserInfo>
+           )}
+          </UserBtns>
         )}
-
-        {isUserBtnClicked && (
-          <PcUserInfo>
-             <PcUserInfoMyPageBtn to='/mypage' onClick={handleUserInfoClick}> 
-             마이 페이지 
-             </PcUserInfoMyPageBtn>
-             <PcUserInfoLogoutBtn onClick={handleSignOut}> 로그아웃 </PcUserInfoLogoutBtn>
-           </PcUserInfo>
-         )}
       </HeaderStyle>
-
-
   );
 }
 
-export default Nav
+export default Nav;

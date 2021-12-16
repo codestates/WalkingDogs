@@ -9,16 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import media from 'styled-media-query';
 
-export const OneroomContainer = styled.div`
+const OneroomContainer = styled.div`
   width: auto;
-  height: 50rem;
-  margin: 0.1rem;
-  border-radius: 10rem;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border: 1rem solid var(--color-mainviolet--100);
+  background-color: var(--color-mainviolet--100);
+  
 `;
 
 const OneroomBox = styled.div`
@@ -295,6 +295,7 @@ const GathCrewBox = styled.div`
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
+
   ${media.lessThan('medium')`
     width: 738px
   `}
@@ -311,12 +312,13 @@ const MapBox = styled.div`
 `;
 
 const MapBoxAddres = styled.div`
-  background-color: var(--color-mainviolet--25);
+  background-color: var(--color-darkwhite);
   width: 25rem;
   height: 3rem;
   margin: 0.5rem;
   text-align: center;
   padding: 1rem;
+  font-family: "BlackHanSans-Regular"
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `;
 
@@ -336,6 +338,14 @@ const MeetingTimeBox = styled.div`
   text-align: center;
   font-size: 1rem;
 `;
+
+const ComMapBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 
 // styled-component Boundary
 const Oneroom = () => {
@@ -635,15 +645,17 @@ const Oneroom = () => {
           </>
         )}
       </OneroomContainer>
-      <Comments roomId={params.room_id} />
-      <MapBox>
-        <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
-        <Roommap
-          latitude={roomDetail.latitude}
-          longitude={roomDetail.longitude}
-          draggable={false}
-        />
-      </MapBox>
+        <ComMapBox>
+          <Comments roomId={params.room_id} />
+          <MapBox>
+            <MapBoxAddres> {roomDetail.address} </MapBoxAddres>
+            <Roommap
+              latitude={roomDetail.latitude}
+              longitude={roomDetail.longitude}
+              draggable={false}
+            />
+          </MapBox>
+        </ComMapBox>     
     </>
   );
 };

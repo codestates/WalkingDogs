@@ -78,7 +78,7 @@ const Inputlist = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    gap: 2px;
+    gap: 6px;
 `
 
 const SearchBox = styled.div`
@@ -147,26 +147,6 @@ const sizeList = [
 const sizes = sizeList.map((size)=>{
   return <option key={size} value={size}>{size}</option>
 })
-
-// const BreedBox = (props) => {
-
-//   const handleChange = (e) => {
-//     console.log(e.target.value);
-//   }
-//   return(
-//     <Select onChange={(e)=>handleChange(e)}>
-//         {props.breedList.map((breed)=> {
-//           <option
-//             key={breed.id} 
-//             value={breed.id}
-//             defaultValue={props.defaultValue === breed.id}
-//             >
-//               {breed.breed}
-//           </option>
-//         })}
-//     </Select>
-//   )
-// }
 
 // styled-component Boundary
 

@@ -5,19 +5,20 @@ import media from 'styled-media-query'
 
 
 const InputWrapper = styled.label`
-    height:3.2rem;
+    height:3.5rem;
+    border-radius: 1rem;
     background-color: var(--color-darkwhite);
     flex-direction: row;
     ${media.greaterThan('medium')`
         min-width: ${(props) => {
-            if(props.sort === '지역') return '20rem';
+            if(props.sort === '지역') return '10rem';
             if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '5rem';
                 return '6.5rem';
         }};
 
         max-width: ${(props) => {
-            if(props.sort === '지역') return '32rem';
+            if(props.sort === '지역') return '20rem';
             if(props.sort === '날짜') return '15rem';
             if(props.sort === '시간') return '8rem';
                 return '10rem';
@@ -56,8 +57,9 @@ const InputArea = styled.div`
 `
 
 const Name = styled.div`
-    margin: 0 1rem;
-    font-size: 0.9rem;
+    margin: 0.1rem 1rem;
+    font-size: 1.5rem;
+    font-family: "BlackHanSans";
     color: black;
     flex: 0 0 1;
 `
