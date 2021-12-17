@@ -303,6 +303,7 @@ const handleSign = async (e) => {
         try {
           const res = await user.loginApi(signInputValue);
           if (res.status === 200) {
+            console.log(res)
             localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
             dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
             dispatch(modalOffAction());

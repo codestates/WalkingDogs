@@ -14,12 +14,12 @@ import Modal from './Components/Modal';
 import Signs from './Components/Signs'; 
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
-import { signinAction } from './store/actions';
+import { signinAction, signoutAction } from './store/actions';
 import Maps from './Pages/Maps'
 import RoomCreate from './Components/RoomCreate'
 import PwChange from './Components/PwChange'
 import auth from './api/auth';
-import users from './api/users';
+import check from './api/check';
 
 function App() {
   const [cookies, , removeCookie] = useCookies([]);
@@ -46,7 +46,9 @@ function App() {
 
     // console.log(result)
     localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
-    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    delete userData.cookies;
+    dispatch(signinAction(userData));
   }
 
   useEffect(async () => {
@@ -56,28 +58,56 @@ function App() {
       await getAccessToken(url)
     }
 
-    if(cookies.accessToken){
-      await users.checkApi()
+    const userData = localStorage.getItem('userData');
+
+    if(userData) {
+      const localData = JSON.parse(userData);
+      await check.checkApi({
+        cookies: localData.cookies,
+      })
       .then(res => {
         if(res.data.data) {
           // 로그인 작업을 실시
           localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
-          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
         }
         else {
           // 원래 쓰던거 사용
-          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
         }
       })
       .catch(err => {
-        // 서버가 터졌을 때,
         localStorage.clear();
         removeCookie('accessToken')
         removeCookie('refreshToken')
-        // 서버가 응답을 제대로 줬지만 400일 때,
-        window.location.assign('http://localhost:3000')
+        dispatch(signoutAction())
       })
     }
+
+    // await users.checkApi()
+    // .then(res => {
+    //   if(res.data.data) {
+    //     // 로그인 작업을 실시
+    //     localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+    //     dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+    //   }
+    //   else {
+    //     // 원래 쓰던거 사용
+    //     dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+    //   }
+    // })
+    // .catch(err => {
+    //   // 서버가 터졌을 때,
+    //   localStorage.clear();
+    //   removeCookie('accessToken')
+    //   removeCookie('refreshToken')
+    //   dispatch(signoutAction())
+    //   // 서버가 응답을 제대로 줬지만 400일 때,
+    // })
   }, [])
 
   useEffect(() => {

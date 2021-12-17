@@ -47,6 +47,10 @@ module.exports = async (req, res) => {
           data: {
             image: copy.dataValues.image,
             username: copy.dataValues.username,
+            cookies: {
+              accessToken,
+              refreshToken,
+            }
           },
           message: 'ok',
         });

@@ -9,6 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import user from '../api/users';
 
 import {FaTimesCircle, FaPlusCircle} from 'react-icons/fa'
+import check from '../api/check';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
+
 // 남은 것
 // image 추가 버튼, image 추가 로직
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
@@ -239,6 +243,7 @@ const Mypagechg = () => {
   const { isPasswordChgModal } = useSelector(
     ({ modalReducer }) => modalReducer
   );
+  const [ , , removeCookie] = useCookies();
 
   const [choice, setChoice] = useState({
     name: '',
@@ -413,7 +418,38 @@ const Mypagechg = () => {
     e.target.textContent = '';
   };
 
-  useEffect(() => {
+  useEffect(async () => {
+    const userData = localStorage.getItem('userData');
+
+    if(userData) {
+      const localData = JSON.parse(userData);
+      await check.checkApi({
+        cookies: localData.cookies,
+      })
+      .then(res => {
+        if(res.data.data) {
+          // 로그인 작업을 실시
+          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+        else {
+          // 원래 쓰던거 사용
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+      })
+      .catch(err => {
+        localStorage.clear();
+        removeCookie('accessToken');
+        removeCookie('refreshToken');
+        dispatch(signoutAction());
+        window.location.assign('http://localhost:3000')
+      })
+    }
+
     const initFunction = async () => {
       window.scrollTo(0,0);
       const result = await mypage.dogListApi();

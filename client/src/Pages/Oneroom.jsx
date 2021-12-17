@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
 import roomApi from '../api/room';
 import mypage from '../api/mypage';
 import media from 'styled-media-query';
+import check from '../api/check';
+import { useDispatch } from 'react-redux';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
 // import { useDispatch } from 'react-redux';
 // import useDeepCompareEffect from 'use-deep-compare-effect';
 
@@ -351,7 +355,9 @@ const ComMapBox = styled.div`
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
-
+  
+  const [, , removeCookie] = useCookies();
+  const dispatch = useDispatch();
   const [roomDetail, setRoomDetail] = useState({}); // 방 정보
   const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
   const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
@@ -359,9 +365,9 @@ const Oneroom = () => {
   const [errMsg, setErrMsg] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const history = useHistory();
   // const [isOpenCom, setIsOpenCom] = useState(false);
   // const [noDog, setNoDog] = useState(true);
-  // const dispatch = useDispatch();
 
   const handleButtonClickJoin = async () => {
     const request_time = new Date();
@@ -503,6 +509,38 @@ const Oneroom = () => {
 
     const initFunction = async () => {
       window.scrollTo(0, 0);
+
+      const userData = localStorage.getItem('userData');
+
+      if(userData) {
+        const localData = JSON.parse(userData);
+        await check.checkApi({
+          cookies: localData.cookies,
+        })
+        .then(res => {
+          if(res.data.data) {
+            // 로그인 작업을 실시
+            localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+          else {
+            // 원래 쓰던거 사용
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+        })
+        .catch(err => {
+          localStorage.clear();
+          removeCookie('accessToken');
+          removeCookie('refreshToken');
+          dispatch(signoutAction());
+          window.location.assign('http://localhost:3000')
+        })
+      }
+
       const resRoom = await roomApi.roomDetailApi(params.room_id);
       // console.log(resRoom);
   

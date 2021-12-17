@@ -21,8 +21,6 @@ module.exports = {
   // },
 
   sendAccessToken: (res, accessToken) => {
-    const now = new Date();
-    const expires = now.setHours(now.getHours() + 1);
     return res.cookie('accessToken', accessToken, {
       secure: true,
       sameSite: 'none',
@@ -31,8 +29,6 @@ module.exports = {
   },
 
   sendRefreshToken: (res, refreshToken) => {
-    const now = new Date();
-    const expires = now.setDate(now.getDate() + 7);
     return res.cookie('refreshToken', refreshToken, {
       secure: true,
       sameSite: 'none',
@@ -42,8 +38,6 @@ module.exports = {
 
   isAuthorized: async req => {
     // const { generateAccessToken, generateRefreshToken } = require('./tokenFunctions')
-    console.log('req.cookies: ', req.cookies);
-    console.log('req.file: ', req.file);
     const generateAccessToken = data => {
       return sign(data, process.env.ACCESS_SECRET, { expiresIn: '1h' });
     };
@@ -130,6 +124,7 @@ module.exports = {
       return null;
     }
 
+    console.log('return 직전 : ', result)
     return { ...result };
   },
 };
