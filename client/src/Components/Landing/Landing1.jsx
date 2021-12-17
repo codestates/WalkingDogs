@@ -21,14 +21,14 @@ const Landing1Container = styled.div`
 `
 
 const Landing1Script = styled.span`
+  
   background-color: #ffffffc0;
-  font-size: 45px;
+  font-size: 2rem;
   margin-right: 34.1rem;
   height: 10vh;
   
   >.script-suggest {
-    font-family: "PoorStory-Regular"
-    font-size: 7rem
+    font-size: 5rem
   }
 
   ${media.lessThan("medium")`
@@ -50,9 +50,9 @@ const Landing1Image = styled.img`
 const Landing1 = () => {
 
   useEffect(() => {
-    const timeline = gsap.timeline({default: { duration: 1}})
-    timeline
-      .from('.script-box', {x:'100%', ease: 'linear', opacity: 0.01})   
+    const tl = gsap.timeline({default: { duration: 2}})
+    tl.from('.script-box', {x:'100%', ease: 'ease-in-out'})
+    tl.to('.script-box', {opacity:1})   
   }, [])
 
   return (
@@ -61,7 +61,7 @@ const Landing1 = () => {
         <Landing1Script className="script-box">
           <p classname='scripts'>혼자 산책할때마다<br/></p>
           <p classname='scripts'>외로울 텐데...<br/><br/></p>
-          <p classname='script-suggest'>근처 친구들이 있다면 더 좋겠죠?</p>
+          <span classname='script-suggest'>근처 친구들이 있다면 더 좋겠죠?</span>
         </Landing1Script>
 
         {/* <Landing1Image className="landing1_image" src='img/Joy__Original.gif'>

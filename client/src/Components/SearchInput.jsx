@@ -12,7 +12,7 @@ const InputWrapper = styled.label`
     ${media.greaterThan('medium')`
         min-width: ${(props) => {
             if(props.sort === '지역') return '10rem';
-            if(props.sort === '날짜') return '15rem';
+            if(props.sort === '날짜') return '10rem';
             if(props.sort === '시간') return '5rem';
                 return '6.5rem';
         }};

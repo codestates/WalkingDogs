@@ -32,7 +32,7 @@ const RoomBox = styled.div`
   align-items: center;
   margin: 15px;
   border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px gray;
+  box-shadow: 1px 1px 1px 1px lightgray;
 `;
 
 const RoomBtnBox = styled.div`
@@ -63,14 +63,16 @@ const RoominfoBox = styled.div`
   background-color: var(--color-mainviolet--25);
 `;
 
-export const UsernameBox = styled.div`
-  min-width: 30%;
+const UsernameBox = styled.div`
+  min-width: 3rem;
   height: 30px;
-  margin: 10px;
+  margin: 0.3rem 1rem;
   text-align: center;
+  border-radius: 10px;
+  background-color: var(--color-darkwhite);
 `;
 
-export const ContentsBox = styled.div`
+const ContentsBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,8 +96,7 @@ export const AllianceBox = styled.div`
   margin: 10px;
 `;
 
-export const OtherUserImg = styled.img`
-  border: 1px solid #000000;
+ const MyDogImgs = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -289,14 +290,14 @@ const GathCrewBox = styled.div`
   align-items: center;
   width: 20rem;
   height: 55px;
-  margin: 5px 10px;
+  margin: 1rem 2rem;
   cursor: pointer;
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
 
   ${media.lessThan('medium')`
-    width: 738px
+      width: 738px;
   `}
 `;
 
@@ -317,6 +318,7 @@ const MapBoxAddres = styled.div`
   margin: 0.5rem;
   text-align: center;
   padding: 1rem;
+  font-size: 1.3rem;
   font-family: "BlackHanSans-Regular"
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `;
@@ -548,7 +550,7 @@ const Oneroom = () => {
                 <GathCrewBox>
                   {roomDetail.dogs !== undefined &&
                     roomDetail.dogs.map((el) => {
-                      return <OtherUserImg key={el.id} src={el.image} />;
+                      return <MyDogImgs key={el.id} src={el.image} />;
                     })}
                 </GathCrewBox>
               </AllianceBox>

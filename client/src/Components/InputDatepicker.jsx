@@ -35,7 +35,7 @@ const Container = styled.div`
       -ms-text-align-last: center;
       -moz-text-align-last: center;
       padding: 0 1rem;
-      width: 100%;
+      width: auto;
       height: 2rem;
       ::placeholder {
         color: black;

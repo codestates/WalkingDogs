@@ -96,6 +96,7 @@ const GlobalStyles = createGlobalStyle`
         --color-mainviolet--75: #5F6FCB;
         --color-mainviolet--50: #556FCB;
         --color-mainviolet--25: #506FCB;
+        --color-mainviolet--10: #a29bfe;
         --color-red: #FF5252;
         --color-red--25: #FFD4D4;
         --color-red--10: #FFEDED;
@@ -104,8 +105,9 @@ const GlobalStyles = createGlobalStyle`
         --color-green: #278400;
         --color-green--10: #E9F2E5;
         --color-blue: #2762F4;
-        --color-black: #3A3A42; 
+        --color-black: #3d3d3d; 
         --color-darkgray: #62626A;
+        --color-hotstone: #aaa69d;
         --color-gray: #919196; 
         --color-lightgray: #DCDCE0; 
         --color-palegray: #EEF2F6;
@@ -113,6 +115,7 @@ const GlobalStyles = createGlobalStyle`
         --color-white: #FCFCFF;
         --color-shadow: #1D1D2133;
         --color-modalbg: #1D1D21E5;
+        --color-lightpurple: #786fa6;
     }
 `;
 

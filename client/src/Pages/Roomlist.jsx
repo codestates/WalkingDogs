@@ -9,10 +9,10 @@ import { createGatherRoomModalOnAction, initPosAction, signinModalOnAction } fro
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import map from '../api/map';
-// import AllButtons from '../Components/AllButtons'
-// import { useHistory } from 'react-router';
-// import useDeepCompareEffect from 'use-deep-compare-effect'
-// import room from '../api/room';
+
+import Loading from '../Components/Loading';
+import {gsap} from 'gsap';
+
 
 const RoomlistContainer = styled.div`
     width: 100%;
@@ -70,11 +70,12 @@ const CardList = styled.div`
     width: 100%;
     display: grid;
     flex-wrap: row;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill,minmax(19rem, auto));
-    grid-gap: 1rem;
-    justify-content: space-evenly;
-    padding: 1rem 3rem;
+    margin: auto 4rem;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fill,minmax(17rem, auto));
+    grid-gap: 3rem;
+    /* justify-content: space-evenly; */
+    padding: 1.2rem 10rem;
     background-image: url(${(props) => props.url});
 `
 
@@ -290,6 +291,7 @@ const handleSubmit = async (data) => {
     }, 1000)
 }
 
+
 // useDeepCompareEffect(()=> {
 //     setTimeout(() => {
 //         setIsListLoading(false)
@@ -321,12 +323,12 @@ const handleSubmit = async (data) => {
                     </LocationBox>
                     {isListLoading ? (
                         <IsListLoadingBox>
-                            Loading
+                            <Loading/>
                         </IsListLoadingBox>
                     ) : rooms.length ? (
                         <CardList>
                             {rooms.map((el) => {
-                                return <Roomcard key={el.id} listKey={el.id} room={{ ...el }}/>
+                                return <Roomcard className='card' key={el.id} listKey={el.id} room={{ ...el }}/>
                             })}
                         </CardList>
                     ) : (

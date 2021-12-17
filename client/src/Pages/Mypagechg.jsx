@@ -2,24 +2,13 @@ import React, { useEffect, useState } from 'react';
 import mypage from '../api/mypage';
 import {
   passwordChgModalOnAction,
-  // modalOffAction,
   updateInfoAction,
 } from '../store/actions';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import user from '../api/users';
 
-// import media from 'styled-media-query';
-// import PropTypes from 'prop-types';
-// import { css } from 'styled-components';
-// import { useHistory } from 'react-router-dom';
-// import AllButtons from '../Components/AllButtons';
-
-// import axios from 'axios';
-// import { eachYearOfInterval, previousTuesday } from 'date-fns/esm';
-// 순상 : 강아지 list 쪽 CSS 스타일 임시로 넣어놓았습니다.
-// 순상 : CSS 수정 부탁드립니다. ( contents 정렬 )
-
+import {FaTimesCircle, FaPlusCircle} from 'react-icons/fa'
 // 남은 것
 // image 추가 버튼, image 추가 로직
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
@@ -33,186 +22,33 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  input {
-    border: 1px solid red;
-  }
 `;
 
 const PasswordChgBtn = styled.button`
   border: 0.5px solid white;
-  background-color: #646fcb;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 25px;
-`;
-
-const ProfileChgBtn = styled.button`
-  border: 0.5px solid white;
-  background-color: #646fcb;
-  color: white;
+  background-color: var(--color-darkwhite);
+  color: black;
   border-radius: 10px;
   cursor: pointer;
   font-size: 1.8rem;
 `;
 
-// const ImageEditInput = styled.div`
-//   align-items: left;
-//   border: 1px solid red;
-//   padding: 0rem 0.5rem;
-//   flex-direction: row;
-//   border-radius: 0.3rem;
-//   width: 11.5rem;
-//   label {
-//     border: 1px solid black;
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     width: 10rem;
-//     height: 2rem;
-//     color: black;
-//     list-style: none;
-//     cursor: pointer;
-//     margin: 4px;
-//   }
-// `;
-
-// const InfoChgContainer = styled.div`
-//   flex-direction: column;
-//   justify-content: center;
-//   border: 2px solid green;
-//   width: 28rem;
-//   height: 40rem;
-//   margin-bottom: 0.5rem;
-// `;
-
-// width: 24rem;
-// height: 24rem;
-// border-radius: 100%;
-// margin: 1rem;
-// border: 2px solid red;
-
-const NicknameBox = styled.label`
-  border: 1px solid red;
+const ProfileChgBtn = styled.button`
+  border: 0.5px solid white;
+  background-color: var(--color-darkwhite);
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.8rem;
+  gap: 1rem;
 `;
 
 const BtnContainer = styled.div`
-  justify-content: center;
+  justify-content: space-evenly;
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
 `;
-
-// const StyledDefaultProfile = styled.img`
-//   width: 24rem;
-//   height: 24rem;
-//   border-radius: 100%;
-//   margin: 1rem;
-//   border: 1px solid gray;
-//   aspect-ratio: 1;
-//   ${media.lessThan('medium')`
-//     margin: auto 2.5em 2rem 2.5rem;
-//   `}
-// `;
-
-// const EditDetails = styled.details`
-//   position: relative;
-//   width: 7rem;
-//   height: 1.2rem;
-//   margin: 1px;
-//   border: 1px solid gray;
-//   ${media.lessThan('medium')`
-//     margin-top: 1rem;
-//     margin-left: -7rem;
-//   `}
-// `;
-
-// const EditTooltip = styled.div`
-//   width: 1rem;
-//   height: 1rem;
-//   border: 0.6rem solid transparent;
-//   border-bottom-color: var(--color-maingreen--100);
-//   margin-left: 0.5rem;
-//   margin-bottom: -0.2rem;
-//   div {
-//     position: absolute;
-//     margin: -0.3rem auto auto -0.48rem;
-//     border: 0.45rem solid transparent;
-//     border-bottom-color: var(--color-darkwhite);
-//     width: 0.8rem;
-//     height: 0.8rem;
-//     z-index: 99;
-//   }
-// `;
-
-// const EditSummary = styled.summary`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 0.3rem;
-//   font-size: 1rem;
-//   font-family: Jua;
-//   width: 7rem;
-//   height: 1.5rem;
-//   color: black;
-//   background-color: var(--color-mainviolet-100);
-//   list-style: none;
-//   cursor: pointer;
-//   border-radius: 0.5rem;
-//   margin-bottom: -0.5rem;
-// `;
-
-// .myinfo_chg_img{
-//   position: relative;
-//   display: flex;
-//   align-items: center;
-//   border: 1px solid red;
-//   margin: 10px 10px;
-//   width: 50%;
-//   height: 50%;
-//   padding: 0px;
-//   width: 25rem;
-//   height: 25rem;
-//   border-radius: 50%;
-//   overflow: hidden;
-// }
-
-// .myinfo_img{
-//   position: absolute;
-//   max-width: 100%;
-//   height: auto;
-//   display: block;
-// }
-
-// .myinfo_chg_img_btn{
-//   position: absolute;
-//   width: 25rem;
-//   height: 25rem;
-//   border-radius: 50%;
-//   z-index: 10;
-// }
-// .myinfo_chg_img_btn:hover{
-//   background-color: rgba(128, 128, 128, 0.1);
-// }
-
-// const ChangeImage = styled.div`
-//   position: relative;
-//   display: flex;
-//   align-items: center;
-//   margin: 10px 10px;
-//   width: 50%;
-//   height: 50%;
-//   padding: 0px;
-//   width: 25rem;
-//   height: 25rem;
-//   border-radius: 50%;
-//   overflow: hidden;
-// `;
-
-// const ImageAddButton = styled.button`
-//   position: absolute;
-//   width: 25rem;
-//   height: 25rem;
-//   border-radius: 50%;
-//   z-index: 10;
-// `;
 
 const ProfileContainer = styled.div`
   position: relative;
@@ -250,7 +86,6 @@ const DogProfileContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid red;
   margin: 10px 10px;
   width: 50%;
   height: 50%;
@@ -280,60 +115,127 @@ const DogImageAddFile = styled.input`
 
 const DogList = styled.div`
   text-align: center;
-  justify-content: center;
+  gap: 1.1rem;
   display: flex;
   align-items: center;
+  width: auto;
+  span  {
+    padding: 0.3rem 0.3rem;
+    font-size: ${(props)=>{
+      if(props.className === 'dogbreed') return '0.6rem'
+      if(props.className === 'dogsize') return '0.6rem'
+        return '1.5rem';
+    }}
+    background: var(--color-darkwhite);
+    border-radius: 10px;
+  }
+  button{
+    font-size: 1.5rem;
+    gap: 1rem;
+  }
 `;
 
-// const ImageEditBox = () => {
-//   const [seletedFile, setSelectedFile] = useState(null);
+const InputChgContainer = styled.div`
+  border-radius: 1rem;
+  background-color: var(--color-mainviolet--100);
+  margin: 0;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+`
 
-//   // const handleFileChange = (e) => {
-//   //   setSelectedFile(e.target.file[0]);
-//   // };
+const Label = styled.label`
+  width: ${(props)=>{
+    if(props.className === 'username') return '13rem';
+    if(props.className === 'petname')  return '10rem';
+    return "10rem";
+  }}
+  height: 6rem;
+  text-align: center;
+  margin: 1.2rem;
+  font-size: ${(props) => {
+    if(props.className === 'username') return '1.4rem';
+    if(props.className === 'petname') return '1.1rem';
+    if(props.className === 'breed') return '1.4rem';
+    return "1.4rem";
+  }};
+`
 
-//   // const handleFileUpload = () => {
-//   //   const formData = new FormData();
+const DogInfoBox = styled.div`
+  border-bottom: 1.1rem solid var(--color-darkwhite);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
 
-//   //   formData.append('userfile', seletedFile, seletedFile.name);
-//   // };
+  select {
+    align-self: center;
+    width: 10vw;
+    height: 2rem;
+    font-size:1.1rem;
+    justify-content: space-between;
+  }
+  .radio_box{
+    font-size: 1.2rem;
+  }
+  .select_box{
+    display: flex;
+    justify-content: space-evenly;
+  }
+`
 
-//   return (
-//     <EditDetails>
-//       <EditSummary>이미지 불러오기</EditSummary>
-//       <details-menu role="menu">
-//         <ImageEditInput>
-//           <label>
-//             이미지 업로드
-//             <input
-//               id="photo"
-//               type="file"
-//               style={{ display: 'none' }}
-//               accept="image/*, video/mp4"
-//             />
-//           </label>
-//           <label tabIndex="0" role="menuitem">
-//             기본사진으로 되돌리기
-//           </label>
-//         </ImageEditInput>
-//       </details-menu>
-//     </EditDetails>
-//   );
-// };
+const NicknameBox = styled.div`
+    border-bottom: 1rem solid var(--color-darkwhite);
+    width:auto;
+    height:8vh;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const Input = styled.input`
+  border: 1px solid var(--color-hotstone);
+  width: 20vw;
+  height: auto;
+  align-self: center;
+  background: var(--color-darkwhite);
+`
+
+const RadioBox = styled.div`
+  display: flex;
+  justify-content:center;
+  border-radius: 1rem; 
+  width: 15rem;
+  height: auto;
+  align-items: space-between;
+  align-self: center;
+  background: var(--color-darkwhite);
+  input{
+    display: inline-block;
+    font-size: 2rem;
+  }
+`
+
+const DogListBox = styled.div`
+  width: auto;
+  border-bottom: 1rem solid var(--color-darkwhite);
+  display: flex;
+  justify-content: space-evenly;
+  background: yellowgreen;
+  span{
+    background: var(--color-darkwhite);
+  }
+`
+
+
 
 //styled-component Boundary
 const Mypagechg = () => {
   const [infos, setInfos] = useState({ userName: '', dogs: [], image: '' });
   const [files, setFiles] = useState('');
   const { image } = useSelector(({ authReducer }) => authReducer);
-  // const { image, username } = useSelector(({ authReducer }) => authReducer);
-
-  // const [photo, setPhoto] = useState('');
-  // const [isChgMode, setIsChgMode] = useState(false);
-  // const [pwChgMode, setPwChgMode] = useState(false);
-  // const [isMypage, setIsMyPage] = useState(false);
-  // const [dogFiles, setDogFiles] = useState({});
-
   const { isPasswordChgModal } = useSelector(
     ({ modalReducer }) => modalReducer
   );
@@ -529,9 +431,7 @@ const Mypagechg = () => {
   return (
     <>
       <Container className="container">
-
         <ProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_img`).click(); }} >
-
           <ProfileImage className="myinfo_img" src={files ? files : image} />
           <ImageAddFile
             id="add_img"
@@ -544,31 +444,43 @@ const Mypagechg = () => {
           />
         </ProfileContainer>
 
-        <div className="myinfo_chg_input_container">
-          <div className="myinfo_chg_box">
-            <NicknameBox className="myinfo_chg_username">닉네임</NicknameBox>
-            <input
-              type="text"
-              className="myinfo_chg_username_input"
-              onChange={(e) => handleChangeNameField(e)}
-              style={{ border: '1px solid black' }}
-            />
-            <br />
-            <label className="myinfo_chg_petname">강아지 이름</label>
-            <input
-              type="text"
-              className="myinfo_chg_petname"
-              onChange={(e) => handleChangeNameField(e)}
-              style={{ border: '1px solid black' }}
-            />
-            <br />
-            <label className="myinfo_chg_petbreef">견종</label>
-            <select name="size" onChange={(e) => handleClickOpts(e)}>
-              {sizeOptions}
-            </select>
-            <select name="breed" onChange={(e) => handleClickOpts(e)}>
-              {options}
-            </select>
+
+
+        <InputChgContainer className="myinfo_chg_input_container"> 
+              <NicknameBox>
+              <div className="username_box">
+                    <Label className="username">닉네임</Label>
+                    <Input
+                      type="text"
+                      className="username_input"
+                      onChange={(e) => handleChangeNameField(e)}
+                    />
+                  </div>
+              </NicknameBox>
+          
+          
+          <DogInfoBox>
+            <div className='petinfo_name'>
+              <Label className="petname">강아지 이름</Label>
+              <Input
+                type="text"
+                className="petname_input"
+                onChange={(e) => handleChangeNameField(e)}
+              />
+            </div>
+            <div className='petinfo_breed'>
+              <div className='select_box'>
+              <Label className="petbreed">견종</Label>
+                  <select name="size" onChange={(e) => handleClickOpts(e)}>
+                  {sizeOptions}
+                  </select>
+                
+                  <select name="breed" onChange={(e) => handleClickOpts(e)}>
+                  {options}
+                </select>
+              </div>
+            <RadioBox className='radio_box'>
+              <span> 중성화 여부: </span>
             <input
               type="radio"
               name="neutering"
@@ -584,16 +496,18 @@ const Mypagechg = () => {
               onChange={(e) => handleRadioClick(e)}
               checked={choice.neutering ? false : true}
             />
-            X<button onClick={handleClickAdd}>추가</button>
-            <div
-              className="dogs_container"
-              style={{ height: '400px', overflow: 'auto' }}
-            >
+            X
+            </RadioBox>
+            </div>
+            <button onClick={handleClickAdd}>
+              <FaPlusCircle/>
+            </button>
+          </DogInfoBox>
+              
               {infos.dogs.map((el, idx) => {
                 return (
-                  <li
+                  <DogListBox
                     key={idx}
-                    style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
                     <DogProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}>
                       <DogProfileImage
@@ -612,18 +526,17 @@ const Mypagechg = () => {
                     </DogProfileContainer>
                     {/* <img src={dogImage} width={100} height={100}/> */}
                     <DogList>
-                      <span>{el.name}</span>
-                      <span>{el.breed}</span>
-                      <span>{el.size}</span>
-                      <span>{el.neutering ? '중성화 O' : '중성화 X'}</span>
+                      <span className='dogname'>{el.name}</span>
+                      <span className='dogbreed'>{el.breed}</span>
+                      <span className='dogsize'>{el.size}</span>
+                      <span className='dogneut'>{el.neutering ? '중성화 O' : '중성화 X'}</span>
                       <button onClick={() => handleDiscardBtnClick(idx)}>
-                        X
+                        <FaTimesCircle/>
                       </button>
                     </DogList>
-                  </li>
+                  </DogListBox>
                 );
               })}
-            </div>
             <BtnContainer className="profile_btn_container">
               <ProfileChgBtn
                 className="profile_chg_btn"
@@ -640,8 +553,7 @@ const Mypagechg = () => {
                 </PasswordChgBtn>
               )}
             </BtnContainer>
-          </div>
-        </div>
+        </InputChgContainer>
       </Container>
     </>
   );

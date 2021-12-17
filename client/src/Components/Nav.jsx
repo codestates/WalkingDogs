@@ -25,7 +25,7 @@ const HeaderStyle = styled.header`
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
-  width: 100%;
+  width: auto;
   z-index: 10;
   ${media.lessThan("medium")`
     padding: 1rem;
@@ -91,6 +91,7 @@ ${({isLogin}) =>
 
 const StyleNavLink = styled(NavLink)`
   display: flex;
+  justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -99,12 +100,7 @@ const StyleNavLink = styled(NavLink)`
   transition: background-color, color 300ms ease-out;
   color: var(--color-darkwhite);
   width: 5rem;
-  :hover{
-    color: var(--color-darkwhite);
-    box-shadow: 1px 1px lightgray;
-    padding-top: 0.2rem;
-
-  }
+  box-shadow: 1px 1px lightgray;
   ${media.lessThan("medium")`
     padding: 1rem;
     font-size: 1.68rem;
@@ -353,10 +349,6 @@ function Nav() {
       history.push("/")
     }
   };
-
-  useEffect(() => {
-    gsap.from('header', {duration: 1, y: "-100%"})
-  }, [])
 
   return (
       <HeaderStyle>

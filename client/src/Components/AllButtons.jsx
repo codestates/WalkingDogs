@@ -50,7 +50,7 @@ const AllButtons = ({ type, className, color, bgColor ,onClick, disabled, childr
 
 AllButtons.defaultProps = {
     color: '#000000',
-    bgColor: "var(--color-darkwhite)",
+    bgColor: "",
     onClick:null,
     disabled: false,
     children:null,

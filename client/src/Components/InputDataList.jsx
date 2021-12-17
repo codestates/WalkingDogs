@@ -17,19 +17,18 @@ const Container = styled.div`
     -ms-text-align-last: center;
     -moz-text-align-last: center;
     margin-bottom: 0.6rem;
-    padding: 0 1rem;
+    padding:auto;
     width: 100%;
     ::placeholder {
-      color: var(--color-gray);
+      color: var(--color-hotstone);
       font-family: Interop-Light;
     }
     outline: none;
-    font-size: 14px;
+    font-size: 17px;
   }
   .datalist-items {
-    min-width: calc(100% + 4rem);
+    min-width: calc(auto + 4rem);
     max-height: 15rem;
-    margin-left: -1.8rem;
     background-color: var(--color-white);
     border-radius: 1rem;
     border: none;

@@ -8,14 +8,18 @@ const Container = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 80px;
-    margin: 10px 0px;
+    width: 30rem;
+    height: 6vh;
+    margin: 0.8rem 0px;
     padding: 10px;
     border-radius: 10px;
     list-style: none;
     background-color: var(--color-darkwhite);
     li {
         font-size: 1.1rem;
+    }
+    :hover{
+        s
     }
 `
 
@@ -53,6 +57,12 @@ const InfoContainer = styled.div`
     flex-direction: column;
     width: auto;
     height: auto;
+    span{
+        width: 16rem;
+        margin: 0.2rem;
+    }
+    >.room-address{
+    }
 `
 
 // styled-component Boundary
@@ -73,8 +83,8 @@ const Myroomlist = ({ listKey, room }) => {
                     <LeaderImage src={room.user.image}/>
                 </ImageContainer>
                 <InfoContainer>
-                    <span>모임 이름:{room.title}</span>
-                    <span>위치: {room.address}</span>
+                    <span className='room-title'>모임 이름:{room.title}</span>
+                    <span className='room-address'>위치: {room.address}</span>
                 </InfoContainer>
                 <LeaveButton onClick={(e) => handleDelete(e)}>
                     <span className="material-icons" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
