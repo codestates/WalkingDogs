@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import PropTypes, { instanceOf } from 'prop-types';
-import roomApi from '../api/room';
 import media from 'styled-media-query';
 import Roommap from './Roommap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const Container = styled.div`
   position: relative;
@@ -255,15 +252,15 @@ const Count = styled.div`
   }
 `;
 
+// const CountBox =  styled.div`
+//   width: auto;
+//   display: flex;
+// `
 
-const CountBox =  styled.div`
-  width: auto;
-  display: flex;
-`
+// const CountCheck = styled.div`
+//   text-align: center;
+// `;
 
-const CountCheck = styled.div`
-  text-align: center;
-`;
 const AlertMessage = styled.div`
   margin-top: 10px;
   text-align: center;
@@ -311,9 +308,9 @@ const RoomSearch = ({
   selectedDogs,
   setSelectedDogs,
 }) => {
-  const [clickedSize, setClickedSize] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [count, setCount] = useState(0);
+  // const [clickedSize, setClickedSize] = useState(false);
+  // const [date, setDate] = useState(new Date());
+  // const [count, setCount] = useState(0);
   const { position } = useSelector(({ posReducer }) => posReducer);
 
   // useEffect(() => {
@@ -342,11 +339,11 @@ const RoomSearch = ({
     { id: 15, times: `22시` },
   ];
 
-  const size = [
-    { id: 1, sizeType: '소' },
-    { id: 2, sizeType: '중' },
-    { id: 3, sizeType: '대' },
-  ];
+  // const size = [
+  //   { id: 1, sizeType: '소' },
+  //   { id: 2, sizeType: '중' },
+  //   { id: 3, sizeType: '대' },
+  // ];
   /* '🌞오전' , '🌗오후', '🌑저녁'*/
 
   useEffect(() => {
@@ -389,7 +386,7 @@ const RoomSearch = ({
       const dummyOptions = [...selectedOptions];
       dummyOptions[1] = selectedDate;
 
-      setDate(selectedDate);
+      // setDate(selectedDate);
       setSelectedOptions([...dummyOptions]);
     } else if (step === 3) {
       setIsOnSearch(false);
@@ -444,9 +441,9 @@ const RoomSearch = ({
     setSelectedOptions([...dummyOptions]);
   };
 
-  const handleInputAddress = e => {
-    setInputValue(e.target.value);
-  };
+  // const handleInputAddress = e => {
+  //   setInputValue(e.target.value);
+  // };
 
   const handleInputTitle = e => {
     const dummyOptions = [...selectedOptions];
@@ -579,17 +576,17 @@ const RoomSearch = ({
   );
 };
 
-RoomSearch.propTypes = {
-  step: PropTypes.number.isRequired, // 숫자 props
-  isOnSearch: PropTypes.bool.isRequired, // boolean type
-  setIsOnSearch: PropTypes.func.isRequired,
-  inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-    .isRequired,
-  setInputValue: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool.isRequired,
-  setIsSelected: PropTypes.func.isRequired,
-  selectedOptions: PropTypes.array.isRequired,
-  setSelectedOptions: PropTypes.func.isRequired,
-};
+// RoomSearch.propTypes = {
+//   step: PropTypes.number.isRequired, // 숫자 props
+//   isOnSearch: PropTypes.bool.isRequired, // boolean type
+//   setIsOnSearch: PropTypes.func.isRequired,
+//   inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+//     .isRequired,
+//   setInputValue: PropTypes.func.isRequired,
+//   isSelected: PropTypes.bool.isRequired,
+//   setIsSelected: PropTypes.func.isRequired,
+//   selectedOptions: PropTypes.array.isRequired,
+//   setSelectedOptions: PropTypes.func.isRequired,
+// };
 
 export default RoomSearch;

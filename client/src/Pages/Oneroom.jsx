@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Roommap from '../Components/Roommap';
 import Comments from '../Components/Comments';
-import room from '../api/room';
+import roomApi from '../api/room';
 import mypage from '../api/mypage';
-import { useDispatch, useSelector } from 'react-redux';
-import useDeepCompareEffect from 'use-deep-compare-effect';
 import media from 'styled-media-query';
+import check from '../api/check';
+import { useDispatch } from 'react-redux';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
+// import { useDispatch } from 'react-redux';
+// import useDeepCompareEffect from 'use-deep-compare-effect';
 
 const OneroomContainer = styled.div`
   width: auto;
@@ -32,7 +36,7 @@ const RoomBox = styled.div`
   align-items: center;
   margin: 15px;
   border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px gray;
+  box-shadow: 1px 1px 1px 1px lightgray;
 `;
 
 const RoomBtnBox = styled.div`
@@ -63,14 +67,16 @@ const RoominfoBox = styled.div`
   background-color: var(--color-mainviolet--25);
 `;
 
-export const UsernameBox = styled.div`
-  min-width: 30%;
+const UsernameBox = styled.div`
+  min-width: 3rem;
   height: 30px;
-  margin: 10px;
+  margin: 0.3rem 1rem;
   text-align: center;
+  border-radius: 10px;
+  background-color: var(--color-darkwhite);
 `;
 
-export const ContentsBox = styled.div`
+const ContentsBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,8 +100,7 @@ export const AllianceBox = styled.div`
   margin: 10px;
 `;
 
-export const OtherUserImg = styled.img`
-  border: 1px solid #000000;
+ const MyDogImgs = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -289,14 +294,14 @@ const GathCrewBox = styled.div`
   align-items: center;
   width: 20rem;
   height: 55px;
-  margin: 5px 10px;
+  margin: 1rem 2rem;
   cursor: pointer;
   background-color: var(--color-darkwhite);
   border-radius: 1rem;
   justify-content: space-around;
 
   ${media.lessThan('medium')`
-    width: 738px
+      width: 738px;
   `}
 `;
 
@@ -317,6 +322,7 @@ const MapBoxAddres = styled.div`
   margin: 0.5rem;
   text-align: center;
   padding: 1rem;
+  font-size: 1.3rem;
   font-family: "BlackHanSans-Regular"
   box-shadow: 1.5px 1.5px var(--color-darkgray);
 `;
@@ -349,8 +355,9 @@ const ComMapBox = styled.div`
 // styled-component Boundary
 const Oneroom = () => {
   const params = useParams();
-
-  const [isOpenCom, setIsOpenCom] = useState(false);
+  
+  const [, , removeCookie] = useCookies();
+  const dispatch = useDispatch();
   const [roomDetail, setRoomDetail] = useState({}); // 방 정보
   const [myDogs, setMyDogs] = useState([]); // 유저의 강아지 목록
   const [selectedDogs, setSelectedDogs] = useState([]); // 유저가 데리고 가기를 선택한 강아지 목록
@@ -358,12 +365,13 @@ const Oneroom = () => {
   const [errMsg, setErrMsg] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const history = useHistory();
+  // const [isOpenCom, setIsOpenCom] = useState(false);
   // const [noDog, setNoDog] = useState(true);
-  const dispatch = useDispatch();
 
   const handleButtonClickJoin = async () => {
     const request_time = new Date();
-    const result = await room.joinRoomApi(
+    const result = await roomApi.joinRoomApi(
       params.room_id,
       [...myDogs.filter((_, idx) => selectedDogs[idx])],
       request_time
@@ -392,7 +400,7 @@ const Oneroom = () => {
   };
 
   const handleClickReqCancel = async () => {
-    const result = await room.cancelRoomApi(params.room_id);
+    const result = await roomApi.cancelRoomApi(params.room_id);
 
     if (result.status === 200) {
       setRoomDetail(
@@ -409,11 +417,11 @@ const Oneroom = () => {
       // 서버에 permission true
       // 서버에서 200
       // roomDetail 새로 받아옴.
-      await room
+      await roomApi
         .reqPermissionApi(id, params.room_id, true)
         .then(async (result) => {
           if (result.status === 200) {
-            const resRoom = await room.roomDetailApi(params.room_id);
+            const resRoom = await roomApi.roomDetailApi(params.room_id);
             console.log(resRoom);
 
             setRoomDetail(Object.assign({}, { ...resRoom.data.data }));
@@ -427,11 +435,11 @@ const Oneroom = () => {
       // 서버에 permission false
       // 서버에서 200
       // roomDetail 새로 받아옴.
-      await room
+      await roomApi
         .reqPermissionApi(id, params.room_id, false)
         .then(async (result) => {
           if (result.status === 200) {
-            const resRoom = await room.roomDetailApi(params.room_id);
+            const resRoom = await roomApi.roomDetailApi(params.room_id);
             console.log(resRoom);
 
             setRoomDetail(Object.assign({}, { ...resRoom.data.data }));
@@ -472,7 +480,7 @@ const Oneroom = () => {
   };
 
   const handleClickLeave = async () => {
-    const result = await room.deleteRoomApi(params.room_id);
+    const result = await roomApi.deleteRoomApi(params.room_id);
     if (result.status === 200) {
       setRoomDetail(
         Object.assign(
@@ -484,9 +492,9 @@ const Oneroom = () => {
     }
   };
 
-  const handleOpenComment = () => {
-    setIsOpenCom(!isOpenCom);
-  };
+  // const handleOpenComment = () => {
+  //   setIsOpenCom(!isOpenCom);
+  // };
 
   const handleSetRoomDetail = (info) => {
     setRoomDetail(info);
@@ -497,31 +505,56 @@ const Oneroom = () => {
     const time_array = meeting_time.split('T')[1].split('.')[0].split(':');
     setTime(time_array[0] + ':' + time_array[1]);
   };
-  useEffect(async () => {
-    window.scrollTo(0, 0);
-    const resRoom = await room.roomDetailApi(params.room_id);
-    console.log(resRoom);
+  useEffect(() => {
 
-    // setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
-    handleSetRoomDetail(Object.assign({}, { ...resRoom.data.data }));
-    const resDog = await mypage.dogListApi();
-    console.log(resDog);
+    const initFunction = async () => {
+      window.scrollTo(0, 0);
 
-    setMyDogs([...resDog.data.dogs]);
-    setSelectedDogs(new Array(resDog.data.dogs.length).fill(false));
+      const userData = localStorage.getItem('userData');
 
-    // 들어오는 데이터
+      if(userData) {
+        const localData = JSON.parse(userData);
+        await check.checkApi({
+          cookies: localData.cookies,
+        })
+        .then(res => {
+          if(res.data.data) {
+            // 로그인 작업을 실시
+            localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+          else {
+            // 원래 쓰던거 사용
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+        })
+        .catch(err => {
+          localStorage.clear();
+          removeCookie('accessToken');
+          removeCookie('refreshToken');
+          dispatch(signoutAction());
+          window.location.assign('https://walkingdogs.link')
+        })
+      }
 
-    // address: "address"
-    // dogs: (2) [{…}, {…}]
-    // image: "./test.img"
-    // latitude: "37.57335637182507"
-    // longitude: "-126.65122044622483"
-    // title: "room23"
-    // username: "name10"
-    // users: (3) [{…}, {…}, {…}]
-    // isJoined: false,
-    // isJoinRequested: true,
+      const resRoom = await roomApi.roomDetailApi(params.room_id);
+      // console.log(resRoom);
+  
+      // setRoomDetail(Object.assign({}, { ...resRoom.data.data }))
+      handleSetRoomDetail(Object.assign({}, { ...resRoom.data.data }));
+      const resDog = await mypage.dogListApi();
+      // console.log(resDog);
+  
+      setMyDogs([...resDog.data.dogs]);
+      setSelectedDogs(new Array(resDog.data.dogs.length).fill(false));
+    }
+
+    initFunction();
+
   }, []);
 
   return (
@@ -555,7 +588,7 @@ const Oneroom = () => {
                 <GathCrewBox>
                   {roomDetail.dogs !== undefined &&
                     roomDetail.dogs.map((el) => {
-                      return <OtherUserImg key={el.id} src={el.image} />;
+                      return <MyDogImgs key={el.id} src={el.image} />;
                     })}
                 </GathCrewBox>
               </AllianceBox>

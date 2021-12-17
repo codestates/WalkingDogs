@@ -8,33 +8,34 @@ import Landingpage from './Pages/Landingpage'
 import Roomlist from './Pages/Roomlist';
 import Footer from './Components/Footer'
 import Oneroom from './Pages/Oneroom'
-import {BrowserRouter as Brouter, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter as Brouter, Route, Switch, Redirect, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Modal from './Components/Modal';
 import Signs from './Components/Signs'; 
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
-import { signinAction } from './store/actions';
+import { signinAction, signoutAction } from './store/actions';
 import Maps from './Pages/Maps'
 import RoomCreate from './Components/RoomCreate'
 import PwChange from './Components/PwChange'
-
 import auth from './api/auth';
-import users from './api/users';
+import check from './api/check';
 
 function App() {
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-  const { isLogin } = useSelector(({authReducer})=> authReducer);
+  const history = useHistory();
+  const [cookies, , removeCookie] = useCookies([]);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
-          isCreateDetailModal, 
-          isSigninModal, 
-          isSignupModal,
-          isPasswordChgModal,
-          currentGatherInfo} = useSelector(({modalReducer}) => modalReducer);
-  const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
-  const dispatch = useDispatch();
-
+    isCreateDetailModal, 
+    isSigninModal, 
+    isSignupModal,
+    isPasswordChgModal,
+    // currentGatherInfo,
+  } = useSelector(({modalReducer}) => modalReducer);
+    const isModal = isCreateGatherModal || isCreateDetailModal|| isSigninModal || isSignupModal || isPasswordChgModal;
+    const dispatch = useDispatch();
+    
+    // const { isLogin } = useSelector(({authReducer})=> authReducer);
   const getAccessToken = async (url) => {
     const where = url.searchParams.get('where')
     const authorizationCode = url.searchParams.get('code')
@@ -44,9 +45,10 @@ function App() {
     else
       result = await auth.kakaoApi(authorizationCode)
 
-    console.log(result)
+    // console.log(result)
     localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
-    dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    dispatch(signinAction(userData));
   }
 
   useEffect(async () => {
@@ -55,29 +57,59 @@ function App() {
     if(authorizationCode) {
       await getAccessToken(url)
     }
-
-    if(cookies.accessToken){
-      await users.checkApi()
-      .then(res => {
-        if(res.data.data) {
-          // 로그인 작업을 실시
-          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
-          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
-        }
-        else {
-          // 원래 쓰던거 사용
-          dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
-        }
-      })
-      .catch(err => {
-        // 서버가 터졌을 때,
-        localStorage.clear();
-        removeCookie('accessToken')
-        removeCookie('refreshToken')
-        // 서버가 응답을 제대로 줬지만 400일 때,
-        window.location.assign('http://localhost:3000')
-      })
+    else {
+      const userData = localStorage.getItem('userData');
+  
+      if(userData) {
+        const localData = JSON.parse(userData);
+        await check.checkApi({
+          cookies: localData.cookies,
+        })
+        .then(res => {
+          if(res.data.data) {
+            // 로그인 작업을 실시
+            localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+          else {
+            // 원래 쓰던거 사용
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            delete userData.cookies;
+            dispatch(signinAction(userData));
+          }
+        })
+        .catch(err => {
+          localStorage.clear();
+          removeCookie('accessToken')
+          removeCookie('refreshToken')
+          dispatch(signoutAction())
+        })
+      }
     }
+
+
+    // await users.checkApi()
+    // .then(res => {
+    //   if(res.data.data) {
+    //     // 로그인 작업을 실시
+    //     localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+    //     dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))));
+    //   }
+    //   else {
+    //     // 원래 쓰던거 사용
+    //     dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
+    //   }
+    // })
+    // .catch(err => {
+    //   // 서버가 터졌을 때,
+    //   localStorage.clear();
+    //   removeCookie('accessToken')
+    //   removeCookie('refreshToken')
+    //   dispatch(signoutAction())
+    //   // 서버가 응답을 제대로 줬지만 400일 때,
+    // })
   }, [])
 
   useEffect(() => {
@@ -107,7 +139,6 @@ function App() {
       document.documentElement.style.removeProperty("--vh", `${vh}px`);
     }
   }, [currentHeight]);
-
 
   return (
     <Brouter>

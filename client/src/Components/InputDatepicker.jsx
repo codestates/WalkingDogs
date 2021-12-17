@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -35,7 +35,7 @@ const Container = styled.div`
       -ms-text-align-last: center;
       -moz-text-align-last: center;
       padding: 0 1rem;
-      width: 100%;
+      width: auto;
       height: 2rem;
       ::placeholder {
         color: black;
@@ -200,12 +200,6 @@ const ClearBtn = styled.button`
 
 // styled component boundary
 const InputDatepicker = ({placeholder, selectedDate, setSelectedDate}) => {
-
-const [date, setDate] = useState(new Date());
-
-    const handleClearClick = () => {
-      setSelectedDate("");
-    }
 
     const handleClickDiscard = () => {
       setSelectedDate('');

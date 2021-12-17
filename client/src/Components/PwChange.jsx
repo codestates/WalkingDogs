@@ -1,18 +1,13 @@
-import React ,{ useEffect, useState }from 'react'
+import React ,{ useState }from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import media from 'styled-media-query'
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash/debounce';
-import { useHistory } from 'react-router-dom';
 import {
   modalOffAction,
-  updateInfoAction,
 } from '../store/actions';
 
 import AllButtons from './AllButtons';
-import mypageApi from '../api/mypage';
-import { IoConstructOutline } from 'react-icons/io5';
+import mypage from '../api/mypage';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
 
@@ -95,7 +90,6 @@ const ErrorMessage = styled.div`
 
 const PwChange = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const [inputValue, setInputValue] = useState({
         old_password:'',
         new_password:'',
@@ -163,7 +157,7 @@ const PwChange = () => {
     const handleConfirm = async (e) => {
       // e.preventDefault();
        try {
-          const res = await mypageApi.passwordApi(inputValue);
+          const res = await mypage.passwordApi(inputValue);
           if(res.status === 200) {
             setErrMsg("");
             handleTypeChange();

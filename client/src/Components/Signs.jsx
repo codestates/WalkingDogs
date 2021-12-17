@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
@@ -6,8 +6,8 @@ import { useHistory } from 'react-router-dom';
 import {
   modalOffAction,
   signinAction,
-  signinModalOnAction,
-  signupModalOnAction,
+  // signinModalOnAction,
+  // signupModalOnAction,
 } from '../store/actions';
 
 import {SiKakaotalk} from 'react-icons/si';
@@ -15,7 +15,8 @@ import {FcGoogle} from 'react-icons/fc';
 
 import AllButtons from './AllButtons'
 
-import userApi from '../api/users';
+import user from '../api/users';
+
 require('dotenv').config();
 
 const Form = styled.form`
@@ -133,28 +134,28 @@ export const OAuthContainer = styled.div`
 // `
 
 
-const FlexGuideContainer = styled.div`
+// const FlexGuideContainer = styled.div`
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: darkgray;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   color: darkgray;
 
-  *{
-    display: flex;
-    align-items: center;
-    :first-child {
-      flex: 1.75 0 0;
-      justify-content: end;
-      padding-right: 1rem;
-    }
-    :last-child {
-      flex: 1 0 0;
-      justify-content: start;
-      padding-right: 1rem;
-    }
-  }
-`;
+//   *{
+//     display: flex;
+//     align-items: center;
+//     :first-child {
+//       flex: 1.75 0 0;
+//       justify-content: end;
+//       padding-right: 1rem;
+//     }
+//     :last-child {
+//       flex: 1 0 0;
+//       justify-content: start;
+//       padding-right: 1rem;
+//     }
+//   }
+// `;
 
 const FlexContainer = styled.div`
   display: flex;
@@ -218,14 +219,14 @@ const Signs = ({ type }) => {
   const [errMsg, setErrMsg] = useState('');
   const [isOnVerification, setIsOnVerification] = useState(false);
 
-  const handleTypeChange = () => {
-    if (type === '로그인') {
-      dispatch(modalOffAction);
-      dispatch(signupModalOnAction);
-    }
-    dispatch(modalOffAction);
-    dispatch(signinModalOnAction);
-  };
+  // const handleTypeChange = () => {
+  //   if (type === '로그인') {
+  //     dispatch(modalOffAction);
+  //     dispatch(signupModalOnAction);
+  //   }
+  //   dispatch(modalOffAction);
+  //   dispatch(signinModalOnAction);
+  // };
 
   const handleInputChange = debounce(async e => {
     const { name, value } = e.target;
@@ -300,7 +301,7 @@ const handleSign = async (e) => {
         delete signInputValue.passwordConfirm;
         delete signInputValue.userName;
         try {
-          const res = await userApi.loginApi(signInputValue);
+          const res = await user.loginApi(signInputValue);
           if (res.status === 200) {
             localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
             dispatch(signinAction(JSON.parse(localStorage.getItem('userData'))))
@@ -319,7 +320,7 @@ const handleSign = async (e) => {
         delete signInputValue.passwordConfirm;
         try {
           console.log('signInputValue : ', signInputValue)
-          const res = await userApi.signupApi(signInputValue);
+          const res = await user.signupApi(signInputValue);
           res.status === 201 && setIsOnVerification(true)
         } catch (error) {
           setErrMsg('정보를 확인해 주세요.');
@@ -417,11 +418,11 @@ const handleSign = async (e) => {
             {type === '로그인' ? '로그인' : '회원가입'}
           </Button>
         <FlexContainer>
-          <Button className='google'  onClick={(e) => handleSignGoogle(e)}>
+          <Button type='button' className='google'  onClick={(e) => handleSignGoogle(e)}>
             <FcGoogle/>
               구글
             </Button>
-          <Button className='kakao'  onClick={(e) => handleSignKakao(e)}>
+          <Button type='button' className='kakao'  onClick={(e) => handleSignKakao(e)}>
             <SiKakaotalk/>
 
             카카오

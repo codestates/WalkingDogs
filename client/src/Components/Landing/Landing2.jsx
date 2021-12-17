@@ -1,34 +1,13 @@
-import React ,{useEffect, useState}from "react";
+import React, { useEffect }from "react";
 import styled, {keyframes} from 'styled-components'
-
-const boxRightFade = keyframes`
-  from  {
-    opacity: 0;
-    margin-right:0;
-    }
-  to  {
-    margin-right: 10rem;
-  }
-`
-
-const imageLeftFade = keyframes`
-  from{
-    opacity: 0;
-    margin-left:0;
-  }
-
-  to{
-    margin-left: 6.5rem;
-  }
-`
-
+import {gsap} from 'gsap';
+import media from 'styled-media-query'
 
 const Landing2Container = styled.div`
   display:flex;
-  justify-content:space-between;
-  align-items:center;
+  justify-content: flex-start;
   width : auto;
-  height: 50rem;
+  height: 75vh;
   height: calc(var(--vh, 1vh) * 110);
   background-position: center;
   background-size: cover;
@@ -37,27 +16,34 @@ const Landing2Container = styled.div`
   *{
     margin: 0;
   }
-`
-
-const Landing2Image = styled.div`
-  border: 2px solid var(--color-black);
-  width : 39rem;
-  height : 39rem;
-  border-radius: 29rem;
-  margin-left: 6.5rem;
-  animation: ${imageLeftFade} 3s ease-in-out; 
+  ${media.lessThan("medium")`
+    /* screen width is less than 768px (medium) */
+    height: 55vh;
+  `}
 `
 
 const Landing2Script = styled.span`
   background-color: #ffffff65;
-  font-size: 2.5rem;
-  margin-right: 10rem;
+  font-size: 2.3rem;
+  margin-right: 7rem;
+  height: 8vh;
   font-family: BlackHanSans;
-  animation: ${boxRightFade} 3s ease-in-out; 
+  >.script-title{
+    font-size: 4rem;
+  }
+  
+  ${media.lessThan("medium")`
+    height: 10vh;
+    font-size: 1rem;
+    >.script-title{
+      font-size:2.7rem;
+    }
+  `}
 `
 
 const Title = styled.p`
   font-family: "BlackHanSans";
+  font-size
 `
 
 // const 
@@ -65,19 +51,36 @@ const Title = styled.p`
 // styled-component Boundary
 
 const Landing2 = () => {
+
+
+  useEffect(() => {
+    const timeline = gsap.timeline({default: { duration: 1}})
+    timeline
+      .from('.script-box', {x:'-20%', ease: 'linear'})
+      .from('.script-1', {x:'-80%', stragger:.5})
+  }, [])
+
   return (
     <>
     <Landing2Container>
-      <Landing2Image></Landing2Image>
-      <Landing2Script>
-          <Title> 오늘 산책은 누구랑?</Title>
-          <br/><br/>
-          <p>우리 아이는 다른 아이들과 산책하는 걸 좋아해</p>
-          <br/><br/>
-          <p>그런데, 산책할때마다 지나치는것 뿐...</p>
-          <br />
-          <br />
-          같이 산책할 친구를 찾아볼까?
+      {/* <Landing2Image></Landing2Image> */}
+      <Landing2Script className="script-box">
+          <p className='script-title'> 
+          오늘 산책은 누구랑?
+          </p>
+              <br/><br/>
+          <p className='scripts'>
+            우리 아이는 다른 아이들과 산책하는 걸 좋아해
+            </p>
+              <br/><br/>
+          <p className='scripts'>
+            그런데, 산책할때마다 지나치는것 뿐...
+            </p>
+              <br />
+              <br />
+          <p className='scripts'>
+            같이 산책할 친구를 찾아볼까?
+          </p>
       </Landing2Script>
     </Landing2Container>
     </>

@@ -6,6 +6,10 @@ import Myfriendlist from "../Components/Myfriendlist";
 import {Link} from 'react-router-dom'
 import mypage from "../api/mypage";
 import styled from 'styled-components';
+import check from '../api/check';
+import { useDispatch } from 'react-redux';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
 
 
 // import {authReducer, } from '../store/actions';
@@ -13,20 +17,32 @@ import styled from 'styled-components';
 
 const MypageContainer = styled.div`
     width: auto;
-    height: 33rem;
-    margin: 2px 2px;
+    height: auto;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 0 4rem;
+    gap: 2rem;
     span {
-        display: table-cell;
+        display: flex;
         vertical-align:middle;
+        justify-content: center;
     }
 `;
 
-const Span = styled.span`
+const WrapBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: auto;
+    height: auto;
+`
+
+const BoxTitle = styled.span`
     background-color: var(--color-darkwhite);
     text-align: center;
-    width: auto;
+    display: flex;
+    width: 8rem;
     padding: 5px;
     border-radius: 10rem;
     line-height: 20px;
@@ -37,9 +53,9 @@ const MypageInfo = styled.div`
     justify-content: space-around;
     align-items: center;
     margin: 10px 10px;
-    padding: 10px;
-    width: 30rem;
-    height: 20rem;
+    padding: 2rem;
+    width: 40rem;
+    height: 20vh;
     border-radius: 10px;
     box-shadow: 1px 1px grey;
     background-color: var(--color-mainviolet--25);
@@ -62,56 +78,66 @@ const Img = styled.img`
 `
 
 const Profile = styled.div`
-    align-self: stretch;
+    align-self: center;
     border-radius: 10px;
     margin: 5px 10px;
     width: 15rem;
     list-style: none;
     box-shadow: 1px 1px lightgray;
     background-color: var(--color-darkwhite);
-`
-
-const Li = styled.li`
-    display: flex;
+    div {
+        display: flex;
     justify-content: center;
     align-items: center;
     height: 90%;
     padding: 10px 10px;
-    font-size: 18px;
+    font-size: 3rem;
+    }
 `
 
 const ExRoomList = styled.div`
-    justify-content: center;
     align-items: center;
     margin: 10px;
-    width: 40%;
-    height: 20rem;
-    padding: 10px;
+    width: 40rem;
+    height: auto;
+    padding: 2rem;
     border-radius: 10px;
     background-color: var(--color-mainviolet--25);
+    display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     overflow-y: auto;
+    span{
+        width: 100%;
+    }
 `
 
 const FriendsList = styled.div`
     justify-content: center;
     align-items: center;
     margin: 10px;
-    width: 40%;
-    height: 20rem;
+    width: auto;
+    height: auto;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--color-mainviolet--25);
     flex-direction: column;
     justify-content: space-around;
     overflow-y: auto;
+    display: flex;
+    span    {
+        border-radius: 10px;
+        background-color: var(--color-darkwhite);
+        width: auto;
+        padding: 0.5rem;
+        font-size: 1.1rem;
+    }
 `
 
 const SettingButton = styled.button`
     display: flex;
     justify-content: center;
-    align-self: flex-start;
+    align-self: center;
     align-items: center;
     width: 3rem;
     height: 3rem;
@@ -126,38 +152,71 @@ const Mypage = () => {
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
     const [username, setUserName] = useState('');
-    const [images, setImages] = useState([]);
+    const dispatch = useDispatch();
+    const [,, removeCookie] = useCookies();
 
     const getUserData = async () => {
+        const userData = localStorage.getItem('userData');
+
+        if(userData) {
+            const localData = JSON.parse(userData);
+            await check.checkApi({
+            cookies: localData.cookies,
+            })
+            .then(res => {
+                console.log(res.data.data)
+            if(res.data.data) {
+                // 로그인 작업을 실시
+                localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                delete userData.cookies;
+                dispatch(signinAction(userData));
+            }
+            else {
+                // 원래 쓰던거 사용
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                delete userData.cookies;
+                dispatch(signinAction(userData));
+            }
+            })
+            .catch(err => {
+                localStorage.clear();
+                removeCookie('accessToken');
+                removeCookie('refreshToken');
+                dispatch(signoutAction());
+                window.location.assign('https://walkingdogs.link')
+            })
+        }
+
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
         const parsedData = JSON.parse(localStorage.getItem('userData'));
         const { image, username } = parsedData
-
+        
         setProfileImg(image);
         setUserName(username);
         setDogs([ ...resDogList.data.dogs ]);
         setRooms([ ...resRoomList.data.rooms ]);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         window.scrollTo(0,0);
-        getUserData();
+        await getUserData();
     }, [])
 
     return (
     
         <MypageContainer>
+            <WrapBox>
             <MypageInfo>
                 <ImgBox>
                     <Img className="profile_img" src={profileImg}/>
                 </ImgBox>
 
                 <Profile>
-                    <Span className='myinfo_title' style={{flex: '1'}}> My Information</Span>
-                    <Li>
+                    <div>
                         {username}
-                    </Li>
+                    </div>
                 </Profile>
                 
                 <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
@@ -167,23 +226,26 @@ const Mypage = () => {
                 </SettingButton>
             </MypageInfo>
             
-            <ExRoomList className="myinfo_roomlist">
-                <Span className="roomlist_title">
-                    참가한 모임 목록
-                </Span>
-                {rooms.map((el, idx) => 
-                    <Myroomlist listKey={el.id} room={el} image={images[idx]}/>
-                )}
-            </ExRoomList>
-
             <FriendsList className="myfrend_list">
-                <Span className="myfriendlist_title">
+                <span className="myfriendlist_title">
                     함께한 친구들 목록
-                </Span>
+                </span>
                 {dogs.map((el) => 
                     <Myfriendlist listKey={el.id} dog={el}/>
                 )}
             </FriendsList>
+            </WrapBox>
+          
+
+            <ExRoomList className="myinfo_roomlist">
+                <span className="roomlist_title">
+                    참가한 모임 목록
+                </span>
+                {rooms.map((el, idx) => 
+                    <Myroomlist listKey={el.id} room={el} />
+                )}
+            </ExRoomList>
+
 
         </MypageContainer>
     );

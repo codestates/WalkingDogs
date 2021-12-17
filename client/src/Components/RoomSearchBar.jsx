@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components'
 import media from 'styled-media-query'
 import SearchInput from "./SearchInput";
@@ -6,15 +6,10 @@ import InputDatepicker from "./InputDatepicker";
 import InputDataList from "./InputDataList";
 import InputTotalNum from './InputTotalNum'
 import InputCheckbox from "./InputCheckbox";
-import {useDispatch} from 'react-redux'
-import { searchGatherAction } from "../store/actions";
-import roomApi from '../api/room';
 import AllButtons from './AllButtons'
-
-
-
-import {FcSearch} from 'react-icons/fc'
 import useDeepCompareEffect from "use-deep-compare-effect";
+// import {useDispatch} from 'react-redux'
+// import {FcSearch} from 'react-icons/fc'
 
 const InputContainer = styled.form`
   margin-bottom: 2rem;
@@ -51,46 +46,11 @@ const InputContainer = styled.form`
   }
 `
 
-const Placeholder = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 0.5rem;
-  position: relative;
-  #placeholder-icon {
-    flex: 0 0 auto;
-    color: var(--color-maingreen--100);
-  }
-  #placeholder-text {
-    flex: 1 1 auto;
-    line-height: 3rem;
-    color: var(--color-gray);
-    font-family: Interop-Light;
-    font-size: 1.25rem;
-    display: inline;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-`;
-
 const Inputlist = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     gap: 6px;
-`
-
-const SearchBox = styled.div`
-  border: 1px solid black;
-  width: 28rem;
-  justify-content: space-between;
-  ${media.greaterThan("medium")`
-    max-width: ${(props) => {
-      if(props.name === '지역') return '28rem'
-      if(props.name === '날짜') return '20rem'
-      return "10rem";
-    }};
-  `}
 `
 
 
@@ -135,10 +95,6 @@ background-color: transparent;
 }
 `;
 
-const SearchIcon = styled(FcSearch)`
-  width: ${(prop) => prop.size}rem;
-`
-
 const sizeList = [
   '전체', '소형', '중형', '대형'
 ];
@@ -151,7 +107,7 @@ const sizes = sizeList.map((size)=>{
 
 const RoomSearchBar = ({ handleSubmit }) => {
   
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [addressInput, setAddressInput] = useState([]);
   const [timeInput, setTimeInput] = useState("");
   const [dateInput, setDateInput] = useState("");
@@ -185,13 +141,14 @@ const RoomSearchBar = ({ handleSubmit }) => {
   }
 
     useEffect(()=>{
-      console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
-      setSearchable(addressInput);
+      // console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
+      setSearchable(timeInput || dateInput || totalNumInput || sizeInput);
     }, [timeInput, dateInput, totalNumInput, sizeInput])
 
     useDeepCompareEffect(() => {
-      console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
-    }, [addressInput])
+      // console.log('add : ', addressInput, '\ntime : ', timeInput, '\ndate: ', dateInput, '\ntotalNum : ', totalNumInput, '\nsize : ', sizeInput);
+      setSearchable(addressInput);
+    }, [addressInput]);
 
     return(
         <InputContainer className='input-container'onSubmit={handleSubmit}>

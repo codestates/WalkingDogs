@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import room from '../api/room';
 import PropTypes from 'prop-types';
-import UserIcon from './UserIcon';
 import { signinModalOnAction } from '../store/actions';
+import {gsap} from 'gsap';
+
+
+
 
 const CardContainer = styled.div`
 
-    border: 1.2rem solid var(--color-mainviolet--25);
+    border: 0.2rem solid var(--color-lightpurple);
     border-radius: 1rem;
-    background-color: var(--color-mainviolet--darkwhite);
+    background-color: var(--color-darkwhite);
     filter: drop-shadow(2px 2px 6px lightgray);
     padding: 1.25rem;
     display: flex;
@@ -19,7 +20,7 @@ const CardContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    min-width: 18rem;
+    min-width: 13rem;
     > * {
         margin-bottom: 1.15rem;
     }
@@ -36,13 +37,6 @@ const CardContainer = styled.div`
     :hover{
         box-shadow: 1px 1px lightgray;
     }
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: auto;
 `;
 
 const ImageBox = styled.div`
@@ -69,14 +63,17 @@ const Roominfo = styled.div`
 
 const AddressesBox = styled.div`
 
-    width: 12rem;
-    height: 30px;
-    margin: 5px;
-    display: inline-block;
+    width: 14rem;
+    height: 4.3rem;
+    margin: 0.2rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
     align-items: center;
     text-align: center;
     border-radius: 10px;
-    background-color: var(--color-darkwhite);
+    background-color: var(--color-mainviolet--50);
+    color: var(--color-darkwhite);
 `
 
 const LeaderImage = styled.img`
@@ -89,27 +86,47 @@ const LeaderImage = styled.img`
 
 const RoomTitleBox = styled.div`
   width: 13rem;
-  height: 2.5rem;
-  margin: 3px;
+  height: 2.1rem;
+  margin: 0.5rem;
   text-align: center;
   border-radius: 10px;
+  font-size: 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: var(--color-darkwhite);
+  background-color: var(--color-mainviolet--50);
+  color: var(--color-darkwhite);
 `;
 
 const TimeBox = styled.div`
   width: 13rem;
-  height: 2.5rem;
-  margin: 3px;
+  height: 2.7rem;
+  margin: 0.3rem;
+  padding: 0.1rem;
   text-align: center;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: var(--color-darkwhite);
+  background-color: var(--color-mainviolet--10);
+  color: var(--color-darkwhite);
+  
+  >.date{
+    text-align: space-evenly;
+    border-radius: 1rem;
+    color: var(--color-black);
+    font-weight: bold;
+    margin: 0.1rem;
+  }
+
+  >.time{
+    margin-top: 0.1rem;
+    text-align: center;
+    font-weight: bold;
+  }
 `;
+
+
 const NumberBox = styled.div`
   width: 13rem;
   height: 2.5rem;
@@ -119,7 +136,7 @@ const NumberBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: var(--color-darkwhite);
+  background-color: var(--color-hotstone);
 `;
 //styled-component boundary
 
@@ -129,13 +146,13 @@ const Roomcard = ({ listKey, room }) => {
   const [time, setTime] = useState('');
 
   const { isLogin } = useSelector(({ authReducer }) => authReducer);
-  const { isCreateGatherModal } = useSelector(
-    ({ modalReducer }) => modalReducer
-  );
+  // const { isCreateGatherModal } = useSelector(
+  //   ({ modalReducer }) => modalReducer
+  // );
   const dispatch = useDispatch();
-  const handleGathDetailRoomModalOn = () => {
+  // const handleGathDetailRoomModalOn = () => {
     // if(!isCreateGatherModal) dispatch(createGatherRoomDetailModalOnAction(gathering));
-  };
+  // };
 
   const handleRoomInfo = (meeting_time) => {
     setDate(meeting_time.split('T')[0]);
@@ -155,6 +172,7 @@ const Roomcard = ({ listKey, room }) => {
 
   return (
     <CardContainer
+      className="cardContainer"
       key={listKey}
       onClick={() => {
         if (isLogin) window.location.assign(`/room/${listKey}`);
@@ -171,8 +189,8 @@ const Roomcard = ({ listKey, room }) => {
         <AddressesBox> {room.address} </AddressesBox>
         <RoomTitleBox>{room.title}</RoomTitleBox>
         <TimeBox>
-          <div>모이는 날짜: {date}</div>
-          <div>모이는 시간: {time}</div>
+          <div className='date'>모이는 날짜: {date}</div>
+          <div className='time'>모이는 시간: {time}</div>
         </TimeBox>
         <NumberBox>정원: {room.member_limit}명</NumberBox>
       </Roominfo>

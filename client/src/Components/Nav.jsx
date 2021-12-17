@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react"
+import React, { useState, useEffect } from "react"
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 import { useHistory } from 'react-router';
-import styled, {css , keyframes} from 'styled-components';
+import styled, { css } from 'styled-components';
 import media from 'styled-media-query';
 import UserIcon from './UserIcon';
 import { signinModalOnAction,
@@ -11,7 +11,8 @@ import { signinModalOnAction,
          signupModalOnAction } from "../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import userApi from '../api/users'
+import user from '../api/users';
+import {gsap} from "gsap";
 
 
 
@@ -24,7 +25,7 @@ const HeaderStyle = styled.header`
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
-  width: 100%;
+  width: auto;
   z-index: 10;
   ${media.lessThan("medium")`
     padding: 1rem;
@@ -90,6 +91,7 @@ ${({isLogin}) =>
 
 const StyleNavLink = styled(NavLink)`
   display: flex;
+  justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -98,11 +100,7 @@ const StyleNavLink = styled(NavLink)`
   transition: background-color, color 300ms ease-out;
   color: var(--color-darkwhite);
   width: 5rem;
-  :hover{
-    color: var(--color-darkwhite);
-    box-shadow: 1px 1px lightgray;
-    padding-top: 0.2rem;
-  }
+  box-shadow: 1px 1px lightgray;
   ${media.lessThan("medium")`
     padding: 1rem;
     font-size: 1.68rem;
@@ -183,6 +181,7 @@ const MobileHambergerBtn = styled.button`
 const NonUserBtn = styled.button`
   border: 0.5px solid white;
   background-color: var(--color-mainviolet--100);
+  padding: 0.5rem .8rem;
   color: white;
   border-radius: 10px;
   cursor: pointer;
@@ -207,7 +206,7 @@ const NonUserBtn = styled.button`
     `}
 `;
 
-const NonUserBtns = styled.button`
+const NonUserBtns = styled.div`
   .nav-btn-signin{
     border: 0.5px solid white;
     background-color: #646fcb;
@@ -343,7 +342,7 @@ function Nav() {
     const storageKey = document.cookie.split('; ')
             .find(row => row.startsWith('accessToken'))
             .split('=')[1]
-    const res = await userApi.logoutApi();
+    const res = await user.logoutApi();
     if(res.status === 200) {
       localStorage.removeItem(storageKey)
       dispatch(signoutAction());
@@ -351,13 +350,9 @@ function Nav() {
     }
   };
 
-  useEffect(() => {
-    console.log(image)
-  }, [])
-
   return (
       <HeaderStyle>
-            <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
+            <NavbarTitle onClick={() => window.location.assign('https://walkingdogs.link')}>
               <NavTitleImg 
                 src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/WalkingDogsTitleLogo.png'
                 alt='WalkingDogsTitleLogo'

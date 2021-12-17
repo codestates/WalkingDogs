@@ -57,7 +57,7 @@ const PopperInner = styled.div`
 `;
 
 const PopperInput = styled.input`
-  max-width: calc(100% - 4rem);
+  max-width: calc(80% - 4rem);
   text-align-last: center;
   text-align: center;
   -ms-text-align-last: center;
@@ -69,21 +69,21 @@ const PopperInput = styled.input`
     `};
 `;
 
-const PopperWaring = styled.input`
-  max-width: calc(100% - 4rem);
-  text-align: center;
-  ${(props) =>
-    props.disabled &&
-    css`
-      color: var(--color-gray);
-    `};
-`;
+// const PopperWaring = styled.input`
+//   max-width: calc(100% - 4rem);
+//   text-align: center;
+//   ${(props) =>
+//     props.disabled &&
+//     css`
+//       color: var(--color-gray);
+//     `};
+// `;
 
 const PlusBtn = styled(FiPlus)`
   flex: 0 0 auto;
   color: var(--color-gray);
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0.25rem;
   border-radius: 50%;
   border: 1px solid var(--color-gray);
@@ -97,8 +97,8 @@ const PlusBtn = styled(FiPlus)`
 const MinusBtn = styled(FiMinus)`
   flex: 0 0 auto;
   color: var(--color-gray);
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0.25rem;
   border-radius: 50%;
   border: 1px solid var(--color-gray);
