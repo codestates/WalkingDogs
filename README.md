@@ -16,9 +16,71 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-12-16-16_02_29](https://user-images.githubusercontent.com/71960647/146323790-6e74aa1c-1984-4644-a6ef-244cbb5f1188.png)
 
 
-## Final App View (프로젝트 후 넣을 예정)
+## 💻 Final App View
+<details>
+<summary>랜딩 페이지 (앱 소개)</summary>
+<div markdown="1">
+  
+</div>
+</details>
 
-## TEAM CodeButlers
+---
+
+<details>
+<summary>회원가입, 로그인, 로그아웃</summary>
+<div markdown="1">       
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>마이 페이지 & 마이페이지 편집</summary>
+<div markdown="1">       
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>모임 목록 페이지</summary>
+<div markdown="1">       
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>모임 만들기</summary>
+<div markdown="1">       
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>지도로 찾기</summary>
+<div markdown="1">
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>하나의 모임 페이지</summary>
+<div markdown="1">       
+
+</div>
+</details>
+
+---
+
+## 🐶 TEAM CodeButlers
 |Role|Name|Position|Github|
 |----|----|--------|------|
 |팀장|박종환|Back-end|[jhpark9007](https://github.com/jhpark9007)|
@@ -27,10 +89,8 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 |팀원|이진희|Front-end|[JinHeeZeeniiLee](https://github.com/JinHeeZeeniiLee)|
 
 ## More Info
-[API Documents](https://0402abcd.gitbook.io/walkingdogs-api/reference/api-reference)
+💡 [API Documents](https://0402abcd.gitbook.io/walkingdogs-api/reference/api-reference)
 
-[Team Notion](https://circular-stitch-570.notion.site/CodeButlers-WalkingDogs-8e1788a6fe494819b61950c82709ced0)
+💡 [Team Notion](https://circular-stitch-570.notion.site/CodeButlers-WalkingDogs-8e1788a6fe494819b61950c82709ced0)
 
-[Wiki](https://github.com/codestates/WalkingDogs/wiki)
-
-FlowChart (추후에 시간이 되면 넣을 예정)
+💡 [Wiki](https://github.com/codestates/WalkingDogs/wiki)
