@@ -20,7 +20,7 @@ const Landing3Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 70vh;
+  height: 85vh;
   background-position: center;
   background-size: cover;
   background-image:  url('img/1638945650734.jpeg');
