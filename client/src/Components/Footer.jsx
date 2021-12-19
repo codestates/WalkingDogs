@@ -36,7 +36,7 @@ const Li = styled.li`
 
 const MemberBox = styled.div`
   list-style: none;
-  margin-right: 7rem;
+  margin-right: 10rem;
   text-align: center;
 `
 
@@ -68,7 +68,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterLogo>
-        <Image src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/mainlogo.png'/>
+        <Image src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/1639588144013_logo_transparent.png'/>
       </FooterLogo>
 
       <FooterIntro>

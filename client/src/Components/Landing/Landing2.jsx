@@ -7,7 +7,7 @@ const Landing2Container = styled.div`
   display:flex;
   justify-content: flex-start;
   width : auto;
-  height: 75vh;
+  height: 85vh;
   height: calc(var(--vh, 1vh) * 110);
   background-position: center;
   background-size: cover;
