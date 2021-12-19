@@ -8,8 +8,12 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import user from '../api/users';
 
-import {FaTimesCircle, FaPlusCircle, FaPlus} from 'react-icons/fa'
-import {FiCircle,FiX } from 'react-icons/fi'
+import { FaTimesCircle, FaPlusCircle, FaPlus, FaStickyNote } from 'react-icons/fa'
+import { FiCircle, FiX } from 'react-icons/fi'
+import check from '../api/check';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
+
 // 남은 것
 // image 추가 버튼, image 추가 로직
 // 패스워드 변경 모달 (모달 완성 시 순상 호출 부탁드립니다.)
@@ -17,6 +21,7 @@ import {FiCircle,FiX } from 'react-icons/fi'
 
 const Container = styled.div`
   border: 5rem solid var(--color-mainviolet--100);
+  border-top: none;
   border-bottom: none;
   width: auto;
   height: 100vh;
@@ -149,10 +154,9 @@ const InputChgContainer = styled.div`
   justify-content: space-around;
   display: flex;
   width: 40vw;
-  height: 40vh;
+  height: auto;
   flex-direction: column;
   gap: 3rem;
-  box-shadow: 1px 2px lightgray;
 `
 
 const Label = styled.label`
@@ -240,6 +244,7 @@ const RadioBox = styled.div`
 const DogListBox = styled.div`
   width: auto;
   display: flex;
+  margin-top: 10px;
   justify-content: space-evenly;
   background: yellowgreen;
   border-radius: 1rem;
@@ -272,6 +277,14 @@ const RadBtnWrap = styled.div`
   justify-content: space-around;
 `
 
+const DogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 300px;
+  overflow-y: auto;
+`
+
 
 //styled-component Boundary
 const Mypagechg = () => {
@@ -281,6 +294,7 @@ const Mypagechg = () => {
   const { isPasswordChgModal } = useSelector(
     ({ modalReducer }) => modalReducer
   );
+  const [ , , removeCookie] = useCookies();
 
   const [choice, setChoice] = useState({
     name: '',
@@ -321,9 +335,9 @@ const Mypagechg = () => {
     const field = e.target;
     const data = e.target.value;
 
-    if (field.className === 'myinfo_chg_username_input') {
+    if (field.classList.contains('username_input')) {
       setInfos(Object.assign({ ...infos }, { userName: data }));
-    } else if (field.className === 'myinfo_chg_petname') {
+    } else if (field.classList.contains('petname_input')) {
       setChoice(Object.assign({ ...choice }, { name: data }));
     }
   };
@@ -336,7 +350,7 @@ const Mypagechg = () => {
       choice.size !== '' &&
       choice.size !== '--크기를 선택하세요--'
     )
-      setInfos(Object.assign({ ...infos }, { dogs: [...infos.dogs, choice] }));
+      setInfos(Object.assign({ ...infos }, { dogs: [...infos.dogs, { ...choice, image: 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/dog-head-profile.jpg'} ] }));
     else {
       alert('강아지 이름, 크기, 견종을 전부 입력하였는지 확인해주세요.');
     }
@@ -367,9 +381,12 @@ const Mypagechg = () => {
       })
     );
 
+    const userData = JSON.parse(localStorage.getItem('userData'))
+
     localStorage.setItem(
       'userData',
       JSON.stringify({
+        ...userData,
         username: result.data.data.username,
         image: result.data.data.image
       })
@@ -455,7 +472,38 @@ const Mypagechg = () => {
     e.target.textContent = '';
   };
 
-  useEffect(() => {
+  useEffect(async () => {
+    const userData = localStorage.getItem('userData');
+
+    if(userData) {
+      const localData = JSON.parse(userData);
+      await check.checkApi({
+        cookies: localData.cookies,
+      })
+      .then(res => {
+        if(res.data.data) {
+          // 로그인 작업을 실시
+          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+        else {
+          // 원래 쓰던거 사용
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+      })
+      .catch(err => {
+        localStorage.clear();
+        removeCookie('accessToken');
+        removeCookie('refreshToken');
+        dispatch(signoutAction());
+        window.location.assign('https://walkingdogs.link')
+      })
+    }
+
     const initFunction = async () => {
       window.scrollTo(0,0);
       const result = await mypage.dogListApi();
@@ -487,8 +535,6 @@ const Mypagechg = () => {
           />
         </ProfileContainer>
 
-
-
         <InputChgContainer className="myinfo_chg_input_container"> 
               <NicknameBox>
               <div className="username_box">
@@ -501,8 +547,7 @@ const Mypagechg = () => {
                     />
                   </div>
               </NicknameBox>
-          
-          
+
           <DogInfoBox>
             <div className='petinfo_name'>
               <Label className="petname">강아지 이름</Label>
@@ -556,16 +601,17 @@ const Mypagechg = () => {
             </RadBtnWrap>
           </DogInfoBox>
               
+            <DogContainer>
               {infos.dogs.map((el, idx) => {
                 return (
                   <DogListBox
-                    key={idx}
+                  key={idx}
                   >
                     <DogProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}>
                       <DogProfileImage
                         className="myinfo_img"
                         src={infos.dogs[idx].image}
-                      />
+                        />
                       <DogImageAddFile
                         id={`add_dog_img_${idx}`}
                         className="myinfo_chg_img_btn"
@@ -574,7 +620,7 @@ const Mypagechg = () => {
                         onMouseOver={(e) => handleMouseOverOnImg(e)}
                         onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
                         onChange={(e) => handleDogImage(e, idx)}
-                      />
+                        />
                     </DogProfileContainer>
                     {/* <img src={dogImage} width={100} height={100}/> */}
                     <DogList>
@@ -589,6 +635,8 @@ const Mypagechg = () => {
                   </DogListBox>
                 );
               })}
+            </DogContainer>
+
             <BtnContainer className="profile_btn_container">
               <ProfileChgBtn
                 className="profile_chg_btn"

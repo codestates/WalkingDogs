@@ -56,20 +56,20 @@ import media from 'styled-media-query'
 // styled-component Boundary
 const Landingpage = () => {
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray(".landing-components").forEach((Landing1, Landing2, Landing3, i) => {
-      ScrollTrigger.create({
-        trigger: Landing1, Landing2, Landing3,
-        start:"top top",
-        pin:true,
-        pinSpacing: false,
-      });
-    });
-    ScrollTrigger.create({
-      snap: 1/ 4
-    })
-  },[])
+  // useEffect(() => {
+  //   gsap.registerPlugin(ScrollTrigger);
+  //   gsap.utils.toArray(".landing-components").forEach((Landing1, Landing2, Landing3, i) => {
+  //     ScrollTrigger.create({
+  //       trigger: Landing1, Landing2, Landing3,
+  //       start:"top top",
+  //       pin:true,
+  //       pinSpacing: false,
+  //     });
+  //   });
+  //   ScrollTrigger.create({
+  //     snap: 1/ 4
+  //   })
+  // }, [])
 
   return (
     <>

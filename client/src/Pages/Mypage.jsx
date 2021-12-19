@@ -6,6 +6,10 @@ import Myfriendlist from "../Components/Myfriendlist";
 import {Link} from 'react-router-dom'
 import mypage from "../api/mypage";
 import styled from 'styled-components';
+import check from '../api/check';
+import { useDispatch } from 'react-redux';
+import { signinAction, signoutAction } from '../store/actions';
+import { useCookies } from 'react-cookie';
 
 
 // import {authReducer, } from '../store/actions';
@@ -148,22 +152,56 @@ const Mypage = () => {
     const [rooms, setRooms] = useState([]);
     const [profileImg, setProfileImg] = useState('');
     const [username, setUserName] = useState('');
+    const dispatch = useDispatch();
+    const [,, removeCookie] = useCookies();
 
     const getUserData = async () => {
+        const userData = localStorage.getItem('userData');
+
+        if(userData) {
+            const localData = JSON.parse(userData);
+            await check.checkApi({
+            cookies: localData.cookies,
+            })
+            .then(res => {
+                console.log(res.data.data)
+            if(res.data.data) {
+                // 로그인 작업을 실시
+                localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                delete userData.cookies;
+                dispatch(signinAction(userData));
+            }
+            else {
+                // 원래 쓰던거 사용
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                delete userData.cookies;
+                dispatch(signinAction(userData));
+            }
+            })
+            .catch(err => {
+                localStorage.clear();
+                removeCookie('accessToken');
+                removeCookie('refreshToken');
+                dispatch(signoutAction());
+                window.location.assign('https://walkingdogs.link')
+            })
+        }
+
         const resDogList = await mypage.dogListApi();
         const resRoomList = await mypage.myroomApi();
         const parsedData = JSON.parse(localStorage.getItem('userData'));
         const { image, username } = parsedData
-
+        
         setProfileImg(image);
         setUserName(username);
         setDogs([ ...resDogList.data.dogs ]);
         setRooms([ ...resRoomList.data.rooms ]);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         window.scrollTo(0,0);
-        getUserData();
+        await getUserData();
     }, [])
 
     return (
@@ -181,11 +219,11 @@ const Mypage = () => {
                     </div>
                 </Profile>
                 
-                <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
-                    <Link to="/mypagechange" style={{color:'black'}}>
+                <Link to="/mypagechange" style={{color:'black'}}>
+                    <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
                         <FontAwesomeIcon icon={ faCog } />
-                    </Link>
-                </SettingButton>
+                    </SettingButton>
+                </Link>
             </MypageInfo>
             
             <FriendsList className="myfrend_list">

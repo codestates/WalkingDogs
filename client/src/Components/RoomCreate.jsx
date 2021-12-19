@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { modalOffAction } from '../store/actions';
+import { createGatherRoomModalOnAction, modalOffAction } from '../store/actions';
 import { useDispatch } from 'react-redux';
 import RoomSearch from './RoomSearch'
 import roomApi from '../api/room'
@@ -8,8 +8,6 @@ import mypage from '../api/mypage'
 import AllButtons from './AllButtons';
 import media from 'styled-media-query'
 import {BsArrowLeftCircleFill, BsArrowRightCircleFill} from 'react-icons/bs'
-
-
 
 
 const CreateRoomContainer = styled.div`
@@ -83,7 +81,6 @@ const StyledBtn = styled(AllButtons)`
 
 // styled-component Boundary
 const RoomCreate = () => {
-
     const [step, setStep] = useState(1);
     const [ask, setAsk] = useState("모이는 곳의 주소는 어디인가요?")
     const [isOnSearch, setIsOnSearch] = useState(false);

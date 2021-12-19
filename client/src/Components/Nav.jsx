@@ -352,7 +352,7 @@ function Nav() {
 
   return (
       <HeaderStyle>
-            <NavbarTitle onClick={() => window.location.assign('http://localhost:3000')}>
+            <NavbarTitle onClick={() => window.location.assign('https://walkingdogs.link')}>
               <NavTitleImg 
                 src='https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/WalkingDogsTitleLogo.png'
                 alt='WalkingDogsTitleLogo'
