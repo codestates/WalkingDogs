@@ -14,7 +14,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 - 동적인 애니메이션을 적극 활용하여 다채로운 유저 경험을 제공합니다.
 
 ## Tech Stack
-![image](https://cdn.discordapp.com/attachments/912245935197802554/914735636496408577/2021-11-29_1.32.05.png)
+![Web App Reference Architecture (1)](https://user-images.githubusercontent.com/76935838/146517391-5c60a826-26e9-4808-b38b-7f42bdfec2a6.png)
 
 ## [DB Schema](https://dbdiagram.io/d/619c2ad102cf5d186b6315ef)
 ![screencapture-dbdiagram-io-d-619c2ad102cf5d186b6315ef-2021-12-16-16_02_29](https://user-images.githubusercontent.com/71960647/146323790-6e74aa1c-1984-4644-a6ef-244cbb5f1188.png)
