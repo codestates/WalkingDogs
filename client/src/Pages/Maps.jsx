@@ -162,21 +162,59 @@ const Maps = () => {
                 const path = [kakaoMap.getCenter(), el.getPosition()];
                 const line = new kakao.maps.Polyline({ path });
                 const dist = line.getLength();
-    
+                
                 if(dist > 1500)
-                    el.setMap(null)
+                el.setMap(null)
             })
         }
-
+        
         const initFunction = async () => {
             window.scrollTo(0,0);
+            
             const container = document.querySelector('#map')
             const options = {
                 center: new kakao.maps.LatLng(position.latitude, position.longitude),
                 level: 4,
             };
-
+    
             kakaoMap = new kakao.maps.Map(container, options);
+
+            const result = await map.locationApi({ latitude: position.latitude, longitude: position.longitude })
+            
+            setRooms([ ...result.data.rooms ]);
+
+            result.data.rooms.forEach(el => {
+                const marker = new kakao.maps.Marker({
+                    map: kakaoMap,
+                    position: new kakao.maps.LatLng(el.latitude, el.longitude),
+                    title: el.title,
+                })
+                markers.push(marker)
+    
+                const infoWindow = new kakao.maps.InfoWindow({
+                    content: el.title // 인포윈도우에 표시할 내용
+                });
+    
+                const mouseOver = (map, marker, infoWindow) => {
+                    return () => { infoWindow.open(map, marker) }
+                }
+    
+                const mouseOut = (infoWindow) => {
+                    return () => { infoWindow.close() }
+                }
+    
+                kakao.maps.event.addListener(marker, 'mouseover', mouseOver(kakaoMap, marker, infoWindow));
+                kakao.maps.event.addListener(marker, 'mouseout', mouseOut(infoWindow));
+            })
+
+            markers.forEach(el => {
+                const path = [kakaoMap.getCenter(), el.getPosition()];
+                const line = new kakao.maps.Polyline({ path });
+                const dist = line.getLength();
+                
+                if(dist > 1500)
+                el.setMap(null)
+            })
             
             const markerPosition = new kakao.maps.LatLng(position.latitude, position.longitude);
             

@@ -8,7 +8,7 @@ import Landingpage from './Pages/Landingpage'
 import Roomlist from './Pages/Roomlist';
 import Footer from './Components/Footer'
 import Oneroom from './Pages/Oneroom'
-import {BrowserRouter as Brouter, Route, Switch, Redirect, useHistory} from 'react-router-dom';
+import {BrowserRouter as Brouter, Route, Switch, Redirect} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Modal from './Components/Modal';
 import Signs from './Components/Signs'; 
@@ -22,7 +22,6 @@ import auth from './api/auth';
 import check from './api/check';
 
 function App() {
-  const history = useHistory();
   const [cookies, , removeCookie] = useCookies([]);
   const [currentHeight, setCurrentHeight] = useState(window.innerHeight);
   const {isCreateGatherModal, 
@@ -57,38 +56,36 @@ function App() {
     if(authorizationCode) {
       await getAccessToken(url)
     }
-    else {
-      const userData = localStorage.getItem('userData');
-  
-      if(userData) {
-        const localData = JSON.parse(userData);
-        await check.checkApi({
-          cookies: localData.cookies,
-        })
-        .then(res => {
-          if(res.data.data) {
-            // 로그인 작업을 실시
-            localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            delete userData.cookies;
-            dispatch(signinAction(userData));
-          }
-          else {
-            // 원래 쓰던거 사용
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            delete userData.cookies;
-            dispatch(signinAction(userData));
-          }
-        })
-        .catch(err => {
-          localStorage.clear();
-          removeCookie('accessToken')
-          removeCookie('refreshToken')
-          dispatch(signoutAction())
-        })
-      }
-    }
 
+    const userData = localStorage.getItem('userData');
+
+    if(userData) {
+      const localData = JSON.parse(userData);
+      await check.checkApi({
+        cookies: localData.cookies,
+      })
+      .then(res => {
+        if(res.data.data) {
+          // 로그인 작업을 실시
+          localStorage.setItem('userData', JSON.stringify({ ...res.data.data }))
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+        else {
+          // 원래 쓰던거 사용
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          delete userData.cookies;
+          dispatch(signinAction(userData));
+        }
+      })
+      .catch(err => {
+        localStorage.clear();
+        removeCookie('accessToken')
+        removeCookie('refreshToken')
+        dispatch(signoutAction())
+      })
+    }
 
     // await users.checkApi()
     // .then(res => {

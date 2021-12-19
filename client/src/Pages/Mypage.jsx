@@ -219,11 +219,11 @@ const Mypage = () => {
                     </div>
                 </Profile>
                 
-                <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
-                    <Link to="/mypagechange" style={{color:'black'}}>
+                <Link to="/mypagechange" style={{color:'black'}}>
+                    <SettingButton className="mypage_profile_change_btn" style={{ backgroundColor: 'white'}}>
                         <FontAwesomeIcon icon={ faCog } />
-                    </Link>
-                </SettingButton>
+                    </SettingButton>
+                </Link>
             </MypageInfo>
             
             <FriendsList className="myfrend_list">
