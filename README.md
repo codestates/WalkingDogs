@@ -21,8 +21,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>랜딩 페이지 (앱 소개)</summary>
 <div markdown="1">
-  <img src='https://user-images.githubusercontent.com/71960647/146718520-67b6d05f-222c-44cf-a347-6b30f8efd54d.gif'/>
-
+  <img src='https://user-images.githubusercontent.com/71960647/146722084-4a901bac-45e5-4b33-9197-9126ae9707b0.gif'/>  
 </div>
 </details>
 
@@ -44,9 +43,9 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>마이 페이지 & 마이페이지 편집</summary>
 <div markdown="1">       
-  <img src='https://user-images.githubusercontent.com/71960647/146718698-a68b91e5-2f7a-4546-94a8-c12ee2719ef1.gif'/>  
-  <img src='https://user-images.githubusercontent.com/71960647/146718778-d3152476-c0cc-49bc-a19e-1b3e953056c0.gif'/>  
-  <img src='https://user-images.githubusercontent.com/71960647/146718857-c0f3dd28-0f18-45af-8ef2-6ba64f183e6e.gif'/>
+  <img src='https://user-images.githubusercontent.com/71960647/146722157-e960d334-5094-4891-a4fb-a95d82ef2db4.gif'/>  
+  <img src='https://user-images.githubusercontent.com/71960647/146722169-7856364f-0c68-4f31-8191-758e5f72f99b.gif'/> 
+  <img src='https://user-images.githubusercontent.com/71960647/146722181-502a8ae8-c3f5-45a4-ac71-c1c751266cfa.gif'/> 
 </div>
 </details>
 
@@ -73,7 +72,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>지도로 찾기</summary>
 <div markdown="1">
-  <img src='https://user-images.githubusercontent.com/71960647/146718959-4e4fd7ee-1adf-42ac-908f-9685879da2ad.gif'/>
+  <img src='https://user-images.githubusercontent.com/71960647/146722296-55d81b65-e564-4fa7-9eb7-fb32bc7b9cfb.gif'/>
 </div>
 </details>
 
