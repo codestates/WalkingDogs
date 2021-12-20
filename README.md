@@ -64,7 +64,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>모임 만들기</summary>
 <div markdown="1">       
-
+  <img src="https://user-images.githubusercontent.com/81749794/146720867-c90d1f04-6f56-46f2-b0fc-6201e36500a5.gif"/>
 </div>
 </details>
 
@@ -82,7 +82,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>하나의 모임 페이지</summary>
 <div markdown="1">       
-
+  <img src="https://user-images.githubusercontent.com/81749794/146720958-dab21efd-1dfc-4911-83b5-a62015324400.gif"/>
 </div>
 </details>
 
