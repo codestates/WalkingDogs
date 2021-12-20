@@ -41,6 +41,11 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <summary>마이 페이지 & 마이페이지 편집</summary>
 <div markdown="1">       
 
+  <img src='https://user-images.githubusercontent.com/71960647/146718698-a68b91e5-2f7a-4546-94a8-c12ee2719ef1.gif'/>
+  
+
+  
+  
 </div>
 </details>
 
