@@ -31,7 +31,11 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>회원가입, 로그인, 로그아웃</summary>
 <div markdown="1">       
-
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364191577346068/c8467cef7bc79555.gif"/>
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364192193904660/06c17326070a1d84.gif"/>
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364191917088798/7dbcdeb59b94acb3.gif"/>
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364192474947604/978b664256d6cd77.gif"/>
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364191292145674/4ae3f9e60bc21479.gif"/>
 </div>
 </details>
 
@@ -49,9 +53,9 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 ---
 
 <details>
-<summary>모임 목록 페이지</summary>
+<summary>모임 검색 및 목록 페이지</summary>
 <div markdown="1">       
-
+  <img src="https://cdn.discordapp.com/attachments/913024312733204493/922364193141825586/7925857ccbf8da28.gif"/>
 </div>
 </details>
 
