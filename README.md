@@ -21,7 +21,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>랜딩 페이지 (앱 소개)</summary>
 <div markdown="1">
-  ![랜딩페이](https://user-images.githubusercontent.com/71960647/146718520-67b6d05f-222c-44cf-a347-6b30f8efd54d.gif)
+  <img src='https://user-images.githubusercontent.com/71960647/146718520-67b6d05f-222c-44cf-a347-6b30f8efd54d.gif'/>
 
 </div>
 </details>
