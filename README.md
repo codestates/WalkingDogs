@@ -69,7 +69,7 @@ WalkingDogs(워킹독스)는 강아지의 산책 경험을 더 풍부하게 하�
 <details>
 <summary>지도로 찾기</summary>
 <div markdown="1">
-
+  <img src='https://user-images.githubusercontent.com/71960647/146718959-4e4fd7ee-1adf-42ac-908f-9685879da2ad.gif'/>
 </div>
 </details>
 
