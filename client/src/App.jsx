@@ -47,7 +47,6 @@ function App() {
     // console.log(result)
     localStorage.setItem('userData', JSON.stringify({ ...result.data.data }))
     const userData = JSON.parse(localStorage.getItem('userData'));
-    delete userData.cookies;
     dispatch(signinAction(userData));
   }
 

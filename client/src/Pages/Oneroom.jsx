@@ -537,7 +537,7 @@ const Oneroom = () => {
           removeCookie('accessToken');
           removeCookie('refreshToken');
           dispatch(signoutAction());
-          window.location.assign('http://localhost:3000')
+          window.location.assign('https://walkingdogs.link')
         })
       }
 

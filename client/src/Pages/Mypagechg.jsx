@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import user from '../api/users';
 
-import {FaTimesCircle, FaPlusCircle} from 'react-icons/fa'
+import { FaTimesCircle, FaPlusCircle, FaPlus, FaStickyNote } from 'react-icons/fa'
+import { FiCircle, FiX } from 'react-icons/fi'
 import check from '../api/check';
 import { signinAction, signoutAction } from '../store/actions';
 import { useCookies } from 'react-cookie';
@@ -19,13 +20,15 @@ import { useCookies } from 'react-cookie';
 // 전체 스타일링 (중요도 낮음)
 
 const Container = styled.div`
-  border: 2rem solid var(--color-mainviolet--100);
+  border: 5rem solid var(--color-mainviolet--100);
+  border-top: none;
   border-bottom: none;
   width: auto;
-  height: 60rem;
+  height: 100vh;
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-evenly;
 `;
 
 const PasswordChgBtn = styled.button`
@@ -52,19 +55,22 @@ const BtnContainer = styled.div`
   display: flex;
   gap: 1rem;
   padding: 0.5rem;
+  background-color: var(--color-mainviolet--100);
+  border-radius: 1rem;
 `;
 
 const ProfileContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid red;
+  justify-content:center;
+  border: 1px solid var(--color-hotstone);
   margin: 10px 10px;
   width: 50%;
   height: 50%;
   padding: 0px;
-  width: 25rem;
-  height: 25rem;
+  width: 25rem !important;
+  height: 25rem !important;
   border-radius: 50%;
   overflow: hidden;
 `;
@@ -119,33 +125,38 @@ const DogImageAddFile = styled.input`
 
 const DogList = styled.div`
   text-align: center;
-  gap: 1.1rem;
-  display: flex;
+  gap: 0.5rem;
   align-items: center;
   width: auto;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0.2rem, auto));
   span  {
-    padding: 0.3rem 0.3rem;
+    padding: 5px 5px;
+    width: 5rem;
     font-size: ${(props)=>{
-      if(props.className === 'dogbreed') return '0.6rem'
-      if(props.className === 'dogsize') return '0.6rem'
-        return '1.5rem';
-    }}
+      if(props.className === 'dogbreed') return '0.2rem'
+      else if(props.className === 'dogsize') return '0.3rem'
+        else return '1rem';
+    }};
     background: var(--color-darkwhite);
     border-radius: 10px;
-  }
+  };
   button{
     font-size: 1.5rem;
     gap: 1rem;
-  }
+  };
 `;
 
 const InputChgContainer = styled.div`
   border-radius: 1rem;
-  background-color: var(--color-mainviolet--100);
   margin: 0;
+  padding: 0.5rem;
   justify-content: space-around;
   display: flex;
+  width: 40vw;
+  height: auto;
   flex-direction: column;
+  gap: 3rem;
 `
 
 const Label = styled.label`
@@ -166,43 +177,45 @@ const Label = styled.label`
 `
 
 const DogInfoBox = styled.div`
-  border-bottom: 1.1rem solid var(--color-darkwhite);
-  padding: 0.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
-
-  select {
-    align-self: center;
-    width: 10vw;
-    height: 2rem;
-    font-size:1.1rem;
-    justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  background: var(--color-mainviolet--100);
+  button{
+    width:auto;
+    size: 2rem;
   }
   .radio_box{
     font-size: 1.2rem;
   }
-  .select_box{
-    display: flex;
-    justify-content: space-evenly;
-  }
 `
 
 const NicknameBox = styled.div`
-    border-bottom: 1rem solid var(--color-darkwhite);
     width:auto;
     height:8vh;
     padding: 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 1rem;
+    background: var(--color-mainviolet--100);
 `
 
 const Input = styled.input`
   border: 1px solid var(--color-hotstone);
-  width: 20vw;
-  height: auto;
+  width: ${(props)=> {
+    if(props.name === 'petname') return "28.5vw"
+      return "30vw";
+  }};
+  height: ${(props)=> {
+    if(props.name === 'petname') return "2rem";
+      return '3rem';
+  }};
+  border-radius: 0.3rem;
   align-self: center;
   background: var(--color-darkwhite);
 `
@@ -210,29 +223,67 @@ const Input = styled.input`
 const RadioBox = styled.div`
   display: flex;
   justify-content:center;
+  gap: 1rem;
   border-radius: 1rem; 
-  width: 15rem;
-  height: auto;
-  align-items: space-between;
+  padding: 0.5rem;
+  height: 3vh;
+  align-items: center;
   align-self: center;
   background: var(--color-darkwhite);
-  input{
+  input {
     display: inline-block;
-    font-size: 2rem;
+  }
+  .radio{
+    display: flex;
+    width: 2.5rem;
+    align-items: center;
+    justify-content: space-around;
   }
 `
 
 const DogListBox = styled.div`
   width: auto;
-  border-bottom: 1rem solid var(--color-darkwhite);
   display: flex;
+  margin-top: 10px;
   justify-content: space-evenly;
   background: yellowgreen;
+  border-radius: 1rem;
   span{
     background: var(--color-darkwhite);
   }
 `
 
+const PetInfoBreed = styled.div`
+  display: flex;
+  width: auto;
+  height: auto;
+  gap: 1rem;
+  select {
+    align-self: center;
+    width: 10vw;
+    height: 2rem;
+    font-size:1.1rem;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .select_box{
+    display: flex;
+    justify-content: space-evenly;
+  }
+`
+const RadBtnWrap = styled.div`
+  display: flex;
+  width: 25rem;
+  justify-content: space-around;
+`
+
+const DogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 300px;
+  overflow-y: auto;
+`
 
 
 //styled-component Boundary
@@ -284,9 +335,9 @@ const Mypagechg = () => {
     const field = e.target;
     const data = e.target.value;
 
-    if (field.className === 'myinfo_chg_username_input') {
+    if (field.classList.contains('username_input')) {
       setInfos(Object.assign({ ...infos }, { userName: data }));
-    } else if (field.className === 'myinfo_chg_petname') {
+    } else if (field.classList.contains('petname_input')) {
       setChoice(Object.assign({ ...choice }, { name: data }));
     }
   };
@@ -299,7 +350,7 @@ const Mypagechg = () => {
       choice.size !== '' &&
       choice.size !== '--크기를 선택하세요--'
     )
-      setInfos(Object.assign({ ...infos }, { dogs: [...infos.dogs, choice] }));
+      setInfos(Object.assign({ ...infos }, { dogs: [...infos.dogs, { ...choice, image: 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/dog-head-profile.jpg'} ] }));
     else {
       alert('강아지 이름, 크기, 견종을 전부 입력하였는지 확인해주세요.');
     }
@@ -330,9 +381,12 @@ const Mypagechg = () => {
       })
     );
 
+    const userData = JSON.parse(localStorage.getItem('userData'))
+
     localStorage.setItem(
       'userData',
       JSON.stringify({
+        ...userData,
         username: result.data.data.username,
         image: result.data.data.image
       })
@@ -446,7 +500,7 @@ const Mypagechg = () => {
         removeCookie('accessToken');
         removeCookie('refreshToken');
         dispatch(signoutAction());
-        window.location.assign('http://localhost:3000')
+        window.location.assign('https://walkingdogs.link')
       })
     }
 
@@ -469,6 +523,7 @@ const Mypagechg = () => {
       <Container className="container">
         <ProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_img`).click(); }} >
           <ProfileImage className="myinfo_img" src={files ? files : image} />
+            <FaPlus className='faPlus' size='3rem' style={{cursor: 'pointer'}}/>
           <ImageAddFile
             id="add_img"
             className="myinfo_chg_img_btn"
@@ -480,33 +535,32 @@ const Mypagechg = () => {
           />
         </ProfileContainer>
 
-
-
         <InputChgContainer className="myinfo_chg_input_container"> 
               <NicknameBox>
               <div className="username_box">
                     <Label className="username">닉네임</Label>
                     <Input
                       type="text"
+                      name='Nickname'
                       className="username_input"
                       onChange={(e) => handleChangeNameField(e)}
                     />
                   </div>
               </NicknameBox>
-          
-          
+
           <DogInfoBox>
             <div className='petinfo_name'>
               <Label className="petname">강아지 이름</Label>
               <Input
                 type="text"
+                name='petname'
                 className="petname_input"
                 onChange={(e) => handleChangeNameField(e)}
               />
             </div>
-            <div className='petinfo_breed'>
-              <div className='select_box'>
+            <PetInfoBreed className='petinfo_breed'>
               <Label className="petbreed">견종</Label>
+              <div className='select_box'>
                   <select name="size" onChange={(e) => handleClickOpts(e)}>
                   {sizeOptions}
                   </select>
@@ -515,41 +569,49 @@ const Mypagechg = () => {
                   {options}
                 </select>
               </div>
+            </PetInfoBreed>
+            <RadBtnWrap>
+              
             <RadioBox className='radio_box'>
               <span> 중성화 여부: </span>
-            <input
-              type="radio"
-              name="neutering"
-              value={true}
-              onChange={(e) => handleRadioClick(e)}
-              checked={choice.neutering ? true : false}
-            />
-            O
-            <input
-              type="radio"
-              name="neutering"
-              value={false}
-              onChange={(e) => handleRadioClick(e)}
-              checked={choice.neutering ? false : true}
-            />
-            X
-            </RadioBox>
+            <div className='radio'>
+              <input
+                type="radio"
+                name="neutering"
+                value={true}
+                onChange={(e) => handleRadioClick(e)}
+                checked={choice.neutering ? true : false}
+              />
+              <FiCircle/>
             </div>
+            <div className='radio'>
+              <input
+                type="radio"
+                name="neutering"
+                value={false}
+                onChange={(e) => handleRadioClick(e)}
+                checked={choice.neutering ? false : true}
+              />
+              <FiX size='large'/>
+            </div>
+            </RadioBox>
             <button onClick={handleClickAdd}>
-              <FaPlusCircle/>
+              <FaPlusCircle size='2.2rem' style={{cursor: 'pointer'}}/>
             </button>
+            </RadBtnWrap>
           </DogInfoBox>
               
+            <DogContainer>
               {infos.dogs.map((el, idx) => {
                 return (
                   <DogListBox
-                    key={idx}
+                  key={idx}
                   >
                     <DogProfileContainer className="myinfo_chg_img" onClick={() => { document.body.querySelector(`#add_dog_img_${idx}`).click() }}>
                       <DogProfileImage
                         className="myinfo_img"
                         src={infos.dogs[idx].image}
-                      />
+                        />
                       <DogImageAddFile
                         id={`add_dog_img_${idx}`}
                         className="myinfo_chg_img_btn"
@@ -558,7 +620,7 @@ const Mypagechg = () => {
                         onMouseOver={(e) => handleMouseOverOnImg(e)}
                         onMouseLeave={(e) => handleMouseLeaveOnImg(e)}
                         onChange={(e) => handleDogImage(e, idx)}
-                      />
+                        />
                     </DogProfileContainer>
                     {/* <img src={dogImage} width={100} height={100}/> */}
                     <DogList>
@@ -566,13 +628,15 @@ const Mypagechg = () => {
                       <span className='dogbreed'>{el.breed}</span>
                       <span className='dogsize'>{el.size}</span>
                       <span className='dogneut'>{el.neutering ? '중성화 O' : '중성화 X'}</span>
-                      <button onClick={() => handleDiscardBtnClick(idx)}>
-                        <FaTimesCircle/>
-                      </button>
                     </DogList>
+                      <button onClick={() => handleDiscardBtnClick(idx)}>
+                        <FaTimesCircle size='2rem'/>
+                      </button>
                   </DogListBox>
                 );
               })}
+            </DogContainer>
+
             <BtnContainer className="profile_btn_container">
               <ProfileChgBtn
                 className="profile_chg_btn"
@@ -583,6 +647,7 @@ const Mypagechg = () => {
 
               {!isPasswordChgModal && (
                 <PasswordChgBtn
+                  className="password_chg_btn"
                   onClick={() => dispatch(passwordChgModalOnAction())}
                 >
                   비밀번호 변경
@@ -596,11 +661,3 @@ const Mypagechg = () => {
 };
 
 export default Mypagechg;
-
-// ImageEditBox.propTypes = {
-//   setInfos: PropTypes.func,
-//   setPhoto: PropTypes.func,
-//   image: PropTypes.string
-// };
-
-//setInfos, setPhoto, image
