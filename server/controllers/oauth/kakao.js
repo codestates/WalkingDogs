@@ -2,6 +2,8 @@ const { user } = require('../../models');
 const {
   generateAccessToken,
   generateRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
 } = require('../tokenFunctions');
 const axios = require('axios');
 require('dotenv').config();
@@ -84,18 +86,11 @@ module.exports = async (req, res) => {
         refreshToken = generateRefreshToken(userInfo.dataValues);
       }
 
-      res.cookie('accessToken', accessToken, {
-        secure: true,
-        sameSite: 'none',
-        expiresIn: '1h',
-      });
-      res.cookie('refreshToken', refreshToken, {
-        secure: true,
-        sameSite: 'none',
-        expiresIn: '7d',
-      });
+      sendAccessToken(res, accessToken);
+      sendRefreshToken(res, refreshToken);
+
       return res.status(200).json({
-        data: { image, username },
+	data: { image, username, cookies: { accessToken, refreshToken } },
         message: 'successfully logined',
       });
     }
