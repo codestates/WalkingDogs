@@ -22,6 +22,7 @@ module.exports = {
 
   sendAccessToken: (res, accessToken) => {
     return res.cookie('accessToken', accessToken, {
+      domain: '.walkingdogs.link',
       secure: true,
       sameSite: 'none',
       expiresIn: '1h',
@@ -30,6 +31,7 @@ module.exports = {
 
   sendRefreshToken: (res, refreshToken) => {
     return res.cookie('refreshToken', refreshToken, {
+      domain: '.walkingdogs.link',
       secure: true,
       sameSite: 'none',
       expiresIn: '7d',
