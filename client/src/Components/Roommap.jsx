@@ -110,12 +110,19 @@ const Roommap = ({ latitude, longitude, setSelectedOptions, draggable = true }) 
             marker.setPosition(latlng);
             infoWindow.setPosition(latlng);
           });
-          
-          // 드래그가 종료 되었을 때, (중심 좌표의 주소 반환하기)
-          kakao.maps.event.addListener(kakaoMap, 'dragend', debounce(async () => {
-            latlng = kakaoMap.getCenter();
+        
+        // 드래그가 종료 되었을 때, (중심 좌표의 주소 반환하기)
+        kakao.maps.event.addListener(kakaoMap, 'dragend', debounce(async () => {
+          let address
+          const latlng = kakaoMap.getCenter();
     
-          address = await coord2Address(latlng.getLat(), latlng.getLng())
+          const geoCoder = new kakao.maps.services.Geocoder(); // 카카오 주소-좌표 변환 객체 생성  
+          geoCoder.coord2Address(latlng.getLon(), latlng.getLat(), (result, status) => {
+            if(status === kakao.maps.services.Status.OK){
+              address = result
+              // ...
+            }
+          })
           console.log(address)
           setSelectedOptions(
             [
@@ -127,7 +134,12 @@ const Roommap = ({ latitude, longitude, setSelectedOptions, draggable = true }) 
             ]
           )
     
-          infoElement.textContent = `${address[0].road_address === null ? address[0].address.address_name : address[0].road_address.address_name}`
+          infoElement.textContent = `
+          ${address[0].road_address === null ?
+            address[0].address.address_name
+            :
+            address[0].road_address.address_name}
+          `
         }, 500))
       }
     }

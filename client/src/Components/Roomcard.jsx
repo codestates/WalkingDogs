@@ -9,11 +9,10 @@ import {gsap} from 'gsap';
 
 
 const CardContainer = styled.div`
-
     border: 0.2rem solid var(--color-lightpurple);
     border-radius: 1rem;
     background-color: var(--color-darkwhite);
-    filter: drop-shadow(2px 2px 6px lightgray);
+    /* filter: drop-shadow(2px 2px 6px lightgray); */
     padding: 1.25rem;
     display: flex;
     flex-direction: column;

@@ -10,19 +10,7 @@ require('dotenv').config();
 module.exports = async (req, res) => {
   console.log('checkAPI')
   try {
-    const decoded = await isAuthorized(req);
-
-    const userInfo = await user.findOne({
-      where: {
-        id: decoded.id,
-      },
-    });
-
-    if(!userInfo) {
-      return res.status(401).json({ message: 'unauthorized' })
-    }
-
-    // console.log(decoded);
+    const decoded = await isAuthorized({ ...req.body.cookies });
     if (decoded === null) {
       // 3. 그냥 다 이상이 있을 때,
       res.clearCookie('accessToken', {
@@ -40,11 +28,8 @@ module.exports = async (req, res) => {
       sendAccessToken(res, decoded.accessToken);
       sendRefreshToken(res, decoded.refreshToken);
 
-      delete decoded.accessToken;
-      delete decoded.refreshToken;
-
       res.status(200).json({
-        data: { user_image: decoded.image, username: decoded.username },
+        data: { image: decoded.image, username: decoded.username, cookies: { accessToken: decoded.accessToken, refreshToken: decoded.refreshToken } },
         message: 'ok',
       });
     } else {

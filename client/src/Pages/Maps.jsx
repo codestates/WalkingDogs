@@ -33,7 +33,7 @@ const MapContainer = styled.div`
 `
 
 const RoomList = styled.div`
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0);
     box-sizing: content-box;
     display: flex;
     flex-direction: column;
@@ -53,6 +53,7 @@ const RoomList = styled.div`
         right: 21rem;
         width: 21rem;
         height: 85vh;
+        padding: 1rem;
         margin: ${(props) => (props.listView ? "0rem 0rem" : "0rem -21rem")};
         > div:first-child {
         margin-top: 0.8rem;
@@ -103,16 +104,22 @@ const KakaoMap = styled.div`
 //     background-color: white;
 // `
 
-const StyledRoomcard = styled(Roomcard)`
-    
-    `
+const CardContainer = styled.div`
+    border: 5px solid ${(props) => { 
+            console.log(props.focused)
+            return props.focused ? 'black' : 'transparent'
+        }};
+    border-radius: 1.4rem;
+`
 
 // styled-component Boundary
 const Maps = () => {
 
-    const { position } = useSelector(({ posReducer }) => posReducer);
-    const [rooms, setRooms] = useState([]);
+    const { position } = useSelector(({ posReducer }) => posReducer)
+    const [rooms, setRooms] = useState([])
     const markers = []
+    const [focused, setFocused] = useState(null)
+    let circle
     let kakaoMap
     
     // const dispatch = useDispatch();
@@ -127,6 +134,9 @@ const Maps = () => {
         //     setListView(true);
         // }
         
+    // const toggleCircle = () => {
+        
+    // }
         
     useEffect(() => {
         const searchRooms = async (position) => {
@@ -143,15 +153,21 @@ const Maps = () => {
                 markers.push(marker)
     
                 const infoWindow = new kakao.maps.InfoWindow({
-                    content: el.title // 인포윈도우에 표시할 내용
+                    content: `<span style='padding: 5px;'>${el.title}</span>`, // 인포윈도우에 표시할 내용
                 });
     
                 const mouseOver = (map, marker, infoWindow) => {
-                    return () => { infoWindow.open(map, marker) }
+                    return () => {
+                        infoWindow.open(map, marker)
+                        setFocused(el.id)
+                    }
                 }
     
                 const mouseOut = (infoWindow) => {
-                    return () => { infoWindow.close() }
+                    return () => {
+                        infoWindow.close()
+                        setFocused(null)
+                    }
                 }
     
                 kakao.maps.event.addListener(marker, 'mouseover', mouseOver(kakaoMap, marker, infoWindow));
@@ -192,17 +208,23 @@ const Maps = () => {
                 markers.push(marker)
     
                 const infoWindow = new kakao.maps.InfoWindow({
-                    content: el.title // 인포윈도우에 표시할 내용
+                    content: `<span style='padding: 5px;'>${el.title}</span>`, // 인포윈도우에 표시할 내용
                 });
     
                 const mouseOver = (map, marker, infoWindow) => {
-                    return () => { infoWindow.open(map, marker) }
+                    return () => {
+                        infoWindow.open(map, marker)
+                        setFocused(el.id)
+                    }
                 }
     
                 const mouseOut = (infoWindow) => {
-                    return () => { infoWindow.close() }
+                    return () => {
+                        infoWindow.close()
+                        setFocused(null)
+                    }
                 }
-    
+
                 kakao.maps.event.addListener(marker, 'mouseover', mouseOver(kakaoMap, marker, infoWindow));
                 kakao.maps.event.addListener(marker, 'mouseout', mouseOut(infoWindow));
             })
@@ -218,38 +240,57 @@ const Maps = () => {
             
             const markerPosition = new kakao.maps.LatLng(position.latitude, position.longitude);
             
-            const marker = new kakao.maps.Marker({
+            const imageSource = 'https://walkingdogs.s3.ap-northeast-2.amazonaws.com/original/center_marker.png'  // 이미지 서버에 넣고 주소 대체
+            const imageSize = new kakao.maps.Size(50, 50)
+            const imageOption = { offset: new kakao.maps.Point(25, 25) }
+
+            const markerImg = new kakao.maps.MarkerImage(imageSource, imageSize, imageOption)
+        
+            const centerMarker = new kakao.maps.Marker({
+                image: markerImg,
                 position: markerPosition,
+                zIndex: 10,
             })
     
-            // const circle = new kakao.maps.Circle({
-                //     center : new kakao.maps.LatLng(position.latitude, position.longitude),  // 원의 중심좌표 입니다 
-            //     radius: 1000, // 미터 단위의 원의 반지름입니다 
-            //     strokeWeight: 5, // 선의 두께입니다 
-            //     strokeColor: '#75B8FA', // 선의 색깔입니다
-            //     strokeOpacity: 0.4, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            //     strokeStyle: 'solid', // 선의 스타일 입니다
-            //     fillColor: '#CFE7FF', // 채우기 색깔입니다
-            //     fillOpacity: 0.2  // 채우기 불투명도 입니다   
-            // });
+            circle = new kakao.maps.Circle({
+                center : new kakao.maps.LatLng(position.latitude, position.longitude),  // 원의 중심좌표 입니다 
+                radius: 1500, // 미터 단위의 원의 반지름입니다 
+                strokeWeight: 3, // 선의 두께입니다 
+                strokeColor: '#75B8FA', // 선의 색깔입니다
+                strokeOpacity: 0.4, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle: 'solid', // 선의 스타일 입니다
+                fillColor: '#CFE7FF', // 채우기 색깔입니다
+                fillOpacity: 0.2  // 채우기 불투명도 입니다   
+            });
             
-            marker.setMap(kakaoMap);
-            // circle.setMap(kakaoMap);
+            centerMarker.setMap(kakaoMap);
+            circle.setMap(kakaoMap);
     
             const zoomControl = new kakao.maps.ZoomControl();
             kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.LEFT);
-    
+
+            kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
+                kakaoMap.getLevel() < 4 ? circle.setMap(null) : circle.setMap(kakaoMap)
+            });
+
             kakao.maps.event.addListener(kakaoMap, 'center_changed', () => {
                 const latlng = kakaoMap.getCenter(); // .Ma : 위도, .La: 경도
     
-                // circle.setPosition(latlng)
-                marker.setPosition(latlng)
+                circle.setPosition(latlng)
+                centerMarker.setPosition(latlng)
             })
+
+            kakao.maps.event.addListener(kakaoMap, 'dragstart', () => {
+                
+                circle.setMap(null)
+
+            });
     
             kakao.maps.event.addListener(kakaoMap, 'dragend', debounce(() => {
                 
-                searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })
-                
+                searchRooms({ latitude: kakaoMap.getCenter().Ma.toFixed(6), longitude: kakaoMap.getCenter().La.toFixed(6) })                
+                kakaoMap.getLevel() < 4 ? circle.setMap(null) : circle.setMap(kakaoMap)
+
             }, 200))
         }
         
@@ -264,7 +305,18 @@ const Maps = () => {
               <RoomList>
                 {/* <StyledRoomCard/> */}
                 {rooms.map((el) => {
-                    return <StyledRoomcard key={el.id} listKey={el.id} room={{ ...el }} />
+                    return (
+                        (
+                            el.id === focused ?
+                            <CardContainer id={`card${el.id}`} focused={true}>
+                                <Roomcard key={el.id} listKey={el.id} room={{ ...el }} />
+                            </CardContainer>
+                            :
+                            <CardContainer id={`card${el.id}`} focused={false}>
+                                <Roomcard key={el.id} listKey={el.id} room={{ ...el }} />
+                            </CardContainer>
+                        )
+                    )
                 })}
               </RoomList>
               {/* <RadiusBtn onClick={handleButtonClickRadiusToggle}>반경 표시</RadiusBtn> */}

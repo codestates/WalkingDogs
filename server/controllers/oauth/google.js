@@ -2,6 +2,8 @@ const { user } = require('../../models');
 const {
   generateAccessToken,
   generateRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
 } = require('../tokenFunctions');
 // require("dotenv").config();
 
@@ -77,20 +79,17 @@ module.exports = async (req, res) => {
         const newAccessToken = generateAccessToken(currentUser.dataValues);
         const newRefreshToken = generateRefreshToken(currentUser.dataValues);
 
-        res.cookie('accessToken', newAccessToken, {
-          secure: true,
-          sameSite: 'none',
-          expiresIn: '1h',
-        });
-        res.cookie('refreshToken', newRefreshToken, {
-          secure: true,
-          sameSite: 'none',
-          expiresIn: '7d',
-        });
+        sendAccessToken(res, newAccessToken);
+        sendRefreshToken(res, newRefreshToken);
+
         return res.status(200).json({
           data: {
             username: currentUser.dataValues.username,
             image: currentUser.dataValues.image,
+            cookies: {
+              accessToken: newAccessToken,
+              refreshToken: newRefreshToken,
+            }
           },
           message: 'ok',
         });
@@ -113,21 +112,17 @@ module.exports = async (req, res) => {
         const newAccessToken = generateAccessToken(userInfo.dataValues);
         const newRefreshToken = generateRefreshToken(userInfo.dataValues);
 
-        res.cookie('accessToken', newAccessToken, {
-          secure: true,
-          sameSite: 'none',
-          expiresIn: '1h',
-        });
-        res.cookie('refreshToken', newRefreshToken, {
-          secure: true,
-          sameSite: 'none',
-          expiresIn: '7d',
-        });
+        sendAccessToken(res, newAccessToken);
+        sendRefreshToken(res, newRefreshToken);
 
         return res.status(200).json({
           data: {
-            username: userInfo.dataValues.username,
-            image: userInfo.dataValues.image,
+            username: currentUser.dataValues.username,
+            image: currentUser.dataValues.image,
+            cookies: {
+              accessToken: newAccessToken,
+              refreshToken: newRefreshToken,
+            }
           },
           message: 'ok',
         });
