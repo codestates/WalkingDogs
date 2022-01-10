@@ -146,6 +146,16 @@ const SettingButton = styled.button`
     padding: 5px;
 `
 
+const WithDrawalBtn = styled.button`
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
 //styled-component Boundary
 const Mypage = () => {
     const [dogs, setDogs] = useState([]);
@@ -199,6 +209,10 @@ const Mypage = () => {
         setRooms([ ...resRoomList.data.rooms ]);
     };
 
+    const handleWithDrawal = () => {
+        // ! 여기서 withdrawalApi 사용
+    }
+
     useEffect(async () => {
         window.scrollTo(0,0);
         await getUserData();
@@ -224,6 +238,11 @@ const Mypage = () => {
                         <FontAwesomeIcon icon={ faCog } />
                     </SettingButton>
                 </Link>
+
+                {/* 이 부분은 임시로 작성, 스타일 등은 적용 부탁드립니다. */}
+                <WithDrawalBtn onClick={handleWithDrawal}>
+                    탈퇴
+                </WithDrawalBtn>
             </MypageInfo>
             
             <FriendsList className="myfrend_list">

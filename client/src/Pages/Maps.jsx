@@ -105,10 +105,7 @@ const KakaoMap = styled.div`
 // `
 
 const CardContainer = styled.div`
-    border: 5px solid ${(props) => { 
-            console.log(props.focused)
-            return props.focused ? 'black' : 'transparent'
-        }};
+    border: 5px solid ${(props) => props.focused ? '#2196f3c9' : 'transparent'};
     border-radius: 1.4rem;
 `
 
@@ -158,6 +155,8 @@ const Maps = () => {
     
                 const mouseOver = (map, marker, infoWindow) => {
                     return () => {
+                        const top = document.querySelector(`#card${el.id}`).offsetTop
+                        document.querySelector('#roomList').scrollTo({ top, behavior: 'smooth' })
                         infoWindow.open(map, marker)
                         setFocused(el.id)
                     }
@@ -213,6 +212,8 @@ const Maps = () => {
     
                 const mouseOver = (map, marker, infoWindow) => {
                     return () => {
+                        const top = document.querySelector(`#card${el.id}`).offsetTop
+                        document.querySelector('#roomList').scrollTo({ top, behavior: 'smooth' })
                         infoWindow.open(map, marker)
                         setFocused(el.id)
                     }
@@ -302,7 +303,7 @@ const Maps = () => {
         <>
             <MapContainer>
               <KakaoMap id='map'></KakaoMap>
-              <RoomList>
+              <RoomList id='roomList'>
                 {/* <StyledRoomCard/> */}
                 {rooms.map((el) => {
                     return (
